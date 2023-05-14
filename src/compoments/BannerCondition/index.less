@@ -1,0 +1,33 @@
+.body-theme-light {
+  --banner-img: url('../../assets/light/banner.png');
+}
+
+.body-theme-dark {
+  --banner-img: url('../../assets/dark/banner.png');
+}
+
+.condition-container {
+  padding: 30px 50px 25px 50px;
+
+  // background-image: var(--banner-img);
+  // background-repeat: no-repeat;
+  // background-size: 100% ;
+  .left {
+    .condition-title {
+      font-size: 40px;
+      font-weight: bold;
+      color: var(--text-color2);
+    }
+
+    .ant-select-selector {
+      background-color: transparent !important;
+      border: 0 !important;
+      height: 40px !important;
+
+      .ant-select-selection-placeholder,
+      .ant-select-selection-item {
+        line-height: 40px !important;
+      }
+    }
+  }
+}

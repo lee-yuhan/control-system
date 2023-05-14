@@ -1,0 +1,26 @@
+.body-theme-light {
+  --card-content-border-color: rgba(255, 255, 255, 0.5);
+}
+.body-theme-dark {
+  --card-content-border-color: rgba(25, 75, 252, 0.3);
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .card-content {
+    flex: 1;
+    padding: 10px 20px;
+    border: 1px solid var(--card-content-border-color);
+  }
+  .export-btn {
+    border: 0;
+    background: var(--background-color2);
+    color: var(--text-color1);
+    :hover {
+      color: var(--primary-color);
+    }
+  }
+}
+/* 投影蓝50 */

@@ -1,0 +1,35 @@
+.body-theme-light {
+  --linear-bg: linear-gradient(180deg, #aac5ee 0%, #ebeff4 160px);
+  --banner-img: url('../../assets/light/banner.png');
+}
+
+.body-theme-dark {
+  --linear-bg: #010b3a;
+  --banner-img: url('../../assets/dark/banner.png');
+}
+
+.home-container {
+  background: var(--linear-bg);
+  .home-content {
+    background-image: var(--banner-img);
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    padding-bottom: 20px;
+  }
+  .prev-btn {
+    position: absolute;
+    left: 5px;
+    z-index: 1;
+    width: 40px;
+    top: 50%;
+    cursor: pointer;
+  }
+  .next-btn {
+    position: absolute;
+    right: 12px;
+    width: 40px;
+    top: 50%;
+    z-index: 1;
+    cursor: pointer;
+  }
+}

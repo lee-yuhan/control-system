@@ -1,0 +1,61 @@
+.body-theme-light {
+  --tab-btn-bg: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.06) -55.21%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  --tab-btn-bg-active: linear-gradient(
+    89.59deg,
+    #d2dbf9 0.27%,
+    rgba(210, 219, 249, 0) 99.64%
+  );
+}
+
+.body-theme-dark {
+  --tab-btn-bg: linear-gradient(
+    1.26deg,
+    rgba(255, 255, 255, 0.045) -47.79%,
+    rgba(255, 255, 255, 0.015) 99%
+  );
+  --tab-btn-bg-active: linear-gradient(
+    89.59deg,
+    #0018ad 0.27%,
+    rgba(0, 0, 0, 0) 99.64%
+  );
+}
+
+.cs-tab {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  .cs-tab-item {
+    font-size: 18px;
+    font-weight: 600;
+
+    background: var(--tab-btn-bg);
+    padding: 10px 15px;
+    cursor: pointer;
+    .ant-typography {
+      color: var(--text-color1);
+    }
+    &:first-child {
+      border-top-left-radius: 8px;
+    }
+    &:last-child {
+      border-top-right-radius: 8px;
+    }
+    &.cs-tab-item-active {
+      .ant-typography {
+        color: var(--text-color2);
+      }
+      background: var(--tab-btn-bg-active);
+    }
+    &:hover {
+      color: var(--text-color2);
+    }
+    + .cs-tab-item {
+      border-left: 1px solid var(--divider-color);
+    }
+  }
+}

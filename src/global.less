@@ -1,0 +1,30 @@
+@import '../public/theme.less';
+@import '~antd/dist/reset.css';
+@import '../public/antd.less';
+
+html,
+body,
+#root {
+  height: 100%;
+  color: var(--neutral-color7) !important;
+  background-color: var(--background-color1);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  border: none;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgb(199, 199, 199);
+  border-radius: 5px;
+}
+
+// type = number 样式隐藏 谷歌
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+  appearance: none;
+}
