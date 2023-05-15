@@ -14,3 +14,7 @@ export function getCustomerTypeList() {
 export function getDistrictBureauList() {
   return request(`${API_PREFIX}/selection/district_bureau`);
 }
+// 获取用户权限
+export function getPermission() {
+  return request(`${API_PREFIX}/auth/permission`);
+}

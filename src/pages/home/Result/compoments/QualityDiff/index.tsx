@@ -20,7 +20,7 @@ import { useRequestAid } from '../../hook';
 import moment from 'moment';
 
 const Index = () => {
-  const [tabValue, setTabValue] = useState<string>('aa');
+  const [tabValue, setTabValue] = useState<string>('8');
   const themeChangeTag = useSelector(
     (store: any) => store.common.themeChangeTag,
   );

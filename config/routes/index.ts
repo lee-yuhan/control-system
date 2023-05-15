@@ -1,7 +1,7 @@
 import { ExceptionToIndex } from './common';
 
 export default [
-  // { exact: true, path: "/", redirect: "/home" },
+  { exact: true, path: '/', redirect: '/home' },
   // ...ExceptionToIndex,
   {
     title: '登录',

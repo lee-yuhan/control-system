@@ -85,3 +85,11 @@ interface PpssContextType {
     theme: ThemeType;
   };
 }
+
+declare module 'react-cookies';
+
+type IPermissionList = {
+  code: string;
+  title: string;
+  type: 'MENU' | 'BUTTON';
+}[];

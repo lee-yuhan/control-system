@@ -2,22 +2,27 @@ import { Button, Form, Input } from 'antd';
 import { useState } from 'react';
 import './index.less';
 import logoImg from '@/assets/logo.png';
+import { history, useRequest } from 'umi';
+import { login } from './service';
+import cookie from 'react-cookies';
 
 const Login = () => {
   const [form] = Form.useForm();
-  const handleSubmit = (values) => {
-    console.log('values', values);
 
-    // event.preventDefault();
-    // 做登录验证的操作
-  };
+  const { run: loginRun } = useRequest(login, {
+    manual: true,
+    onSuccess: (res) => {
+      cookie.save('AuthToken', res.token);
+      history.push('/home');
+    },
+  });
 
   return (
     <div className="login-container">
       <h1>系统</h1>
       <Form
         form={form}
-        onFinish={handleSubmit}
+        onFinish={loginRun}
         labelCol={{ span: 6 }}
         style={{ paddingTop: 50, paddingLeft: 30, paddingRight: 30 }}
       >

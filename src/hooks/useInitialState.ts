@@ -7,13 +7,24 @@ export default (): {
   customerTypeList: OptionList;
   // 区局下拉列表
   districtBureauList: OptionList;
+  // 权限列表
+  permissionList: IPermissionList;
+  permissionCodeList: string;
 } => {
   const {
-    initialState: { branchList, customerTypeList, districtBureauList },
+    initialState: {
+      branchList,
+      customerTypeList,
+      districtBureauList,
+      permissionList,
+      permissionCodeList,
+    },
   } = useModel('@@initialState') as any;
   return {
     branchList,
     customerTypeList,
     districtBureauList,
+    permissionList,
+    permissionCodeList,
   };
 };

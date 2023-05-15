@@ -6,7 +6,7 @@ import SerciceRate from './SerciceRate';
 import EvaluationRate from './EvaluationRate';
 
 const Index = () => {
-  const [tabValue, setTabValue] = useState<string>('aa');
+  const [tabValue, setTabValue] = useState<string>('6');
 
   return (
     <CardWrapper
@@ -15,19 +15,19 @@ const Index = () => {
           value={tabValue}
           onChange={setTabValue}
           options={[
-            {
-              id: 'aa',
-              name: '服务十分满意率',
-            },
+            // {
+            //   id: 'aa',
+            //   name: '服务十分满意率',
+            // },
             {
               id: '6',
-              name: '测评满意率',
+              name: '测评',
             },
           ]}
         />
       }
     >
-      {tabValue === 'aa' && <SerciceRate />}
+      {/* {tabValue === 'aa' && <SerciceRate />} */}
       {tabValue === '6' && <EvaluationRate />}
     </CardWrapper>
   );

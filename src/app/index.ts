@@ -1,15 +1,17 @@
 import moment from 'moment';
 import 'moment/locale/zh-cn';
-import type { RequestConfig } from 'umi';
-import { codeMessage } from './config';
+import { ErrorShowType, RequestConfig } from 'umi';
+import { codeMessage, messageDebounce } from './config';
 import { IEVersion } from '@/utils/url';
 import { setTheme } from '@/utils/theme';
 import {
   getBranchList,
   getCustomerTypeList,
   getDistrictBureauList,
+  getPermission,
 } from '@/service/commonServices';
 import { map } from 'lodash';
+import cookie from 'react-cookies';
 
 const noRequestPaths = ['/Login'];
 
@@ -22,6 +24,7 @@ const request: RequestConfig = {
   headers: {
     'Cache-Control': 'no-store',
     Pragma: 'no-store',
+    Authorization: `Basic ${cookie.load('AuthToken')}`,
   },
   validateCache: () => false, // 关闭get请求缓存，ie11登录死循环问题
 
@@ -32,14 +35,35 @@ const request: RequestConfig = {
         return response;
       }
       const error = Error(`${status} ${codeMessage[status]}`);
-      error.name = 'HttpError';
+      error.name = `${status}`;
+
       throw error;
     },
   ],
 
+  errorConfig: {
+    adaptor: (res: any) => {
+      return {
+        success: res?.code === 200,
+        data: res?.data,
+        errorCode: res?.code,
+        errorMessage: res?.message,
+        showType: ErrorShowType.SILENT,
+      };
+    },
+  },
+
   errorHandler: (error: any) => {
-    // if (error?.data?.retCode === 'T302') {
-    //   messageDebounce(error?.data?.retMsg || '登录超时');
+    if (error.name === '401') {
+      cookie.remove('AuthToken');
+      // messageDebounce(error?.message);
+
+      window.location.href = `/Login`;
+    }
+
+    if (error?.data?.code !== '200') {
+      messageDebounce(error?.data?.message ?? '请求出错');
+    }
 
     //   if (error?.data?.data?.redirectUrl) {
     //     window.location.href = `${error?.data?.data?.redirectUrl}`;
@@ -80,16 +104,22 @@ export async function getInitialState() {
   let customerTypeList: OptionList = [];
   let districtBureauList: OptionList = [];
 
+  let permissionList: IPermissionList = [];
+  let permissionCodeList: string[] = [];
+
   if (!isIE && !requestBasePath) {
     try {
-      const [branchListResp, customerTypeListResp, districtBureauListResp] =
-        await Promise.all([
-          getBranchList(),
-          getCustomerTypeList(),
-          getDistrictBureauList(),
-        ]);
-
-      console.log('districtBureauList', branchListResp);
+      const [
+        branchListResp,
+        customerTypeListResp,
+        districtBureauListResp,
+        permissionResp,
+      ] = await Promise.all([
+        getBranchList(),
+        getCustomerTypeList(),
+        getDistrictBureauList(),
+        getPermission(),
+      ]);
 
       branchList = map(branchListResp.data, (value) => ({
         label: value,
@@ -103,14 +133,22 @@ export async function getInitialState() {
         label: value,
         value,
       }));
+
+      permissionList = permissionResp.data;
+      permissionCodeList = map(permissionResp.data, 'code');
     } catch (error: any) {
       console.log('error', error);
-
       // errorHandle(error);
     }
   }
 
-  return { branchList, customerTypeList, districtBureauList };
+  return {
+    branchList,
+    customerTypeList,
+    districtBureauList,
+    permissionList,
+    permissionCodeList,
+  };
 }
 
 export default {

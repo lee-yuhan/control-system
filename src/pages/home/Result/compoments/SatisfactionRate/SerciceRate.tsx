@@ -104,7 +104,7 @@ const Index = () => {
   }, [theme]);
   return (
     <>
-      <CardCondition />
+      {/* <CardCondition /> */}
       <Echarts5 option={option} />
     </>
   );

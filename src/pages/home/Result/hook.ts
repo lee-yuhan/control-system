@@ -1,7 +1,7 @@
 import { useDebounceEffect } from 'ahooks';
 import { useEffect, useState } from 'react';
 import { useRequest, useSelector } from 'umi';
-import { getStatData } from './services';
+import { getStatData } from './service';
 
 export const useRequestAid = (mode: string) => {
   const [params, setParams] = useState({
