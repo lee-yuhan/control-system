@@ -42,6 +42,7 @@ interface Window {
 }
 
 declare const API_PREFIX: string;
+declare const SYSTEM_NAME: string;
 declare const ROUTES: any[];
 declare const SKIN: ThemeType[];
 

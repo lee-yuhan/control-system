@@ -14,7 +14,15 @@ export function getCustomerTypeList() {
 export function getDistrictBureauList() {
   return request(`${API_PREFIX}/selection/district_bureau`);
 }
+
 // 获取用户权限
 export function getPermission() {
   return request(`${API_PREFIX}/auth/permission`);
+}
+
+// 退出
+export function logout() {
+  return request(`${API_PREFIX}/auth/logout`, {
+    method: 'post',
+  });
 }

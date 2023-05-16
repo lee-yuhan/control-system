@@ -83,7 +83,6 @@ const BaseLayout = (props: Props) => {
   //     return <Redirect to="/Exception/403" />;
   //   }
   // }
-  // 乾坤或者只展示内容
   if (onlyContent) {
     return (
       <ConfigProvider space={{ size: 'middle' }} locale={zhCN}>

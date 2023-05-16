@@ -2,9 +2,11 @@
 import { Echarts5 } from '@/compoments/Echarts5';
 import { useMemo } from 'react';
 import { themeEhcartColor } from '@/utils/ehcart';
-import { useSelector } from 'umi';
+import { useRequest, useSelector } from 'umi';
 import { getLocalStorageTheme } from '@/utils/theme';
-import { useRequestAid } from '../../hook';
+import { getStatData } from '../../service';
+import { useDebounceEffect } from 'ahooks';
+import { Spin } from 'antd';
 const Index = () => {
   const themeChangeTag = useSelector(
     (store: any) => store.common.themeChangeTag,
@@ -13,7 +15,23 @@ const Index = () => {
     return getLocalStorageTheme();
   }, [themeChangeTag]);
 
-  const { data } = useRequestAid('6');
+  const { branchName, regionName } = useSelector((store: any) => store.home);
+  const { data, run, loading } = useRequest(getStatData, {
+    manual: true,
+  });
+
+  useDebounceEffect(
+    () => {
+      if (!branchName || !regionName) return;
+      run({
+        branchName,
+        regionName,
+        mode: '6',
+      });
+    },
+    [branchName, regionName],
+    { wait: 300 },
+  );
 
   const option = useMemo(() => {
     return {
@@ -21,7 +39,7 @@ const Index = () => {
         {
           hoverAnimation: false, // 滑动效果隐藏
           silent: true, // 取消滑动高亮效果
-          name: 'Access From',
+          name: '测评',
           type: 'pie',
           radius: [90, 120],
           avoidLabelOverlap: false,
@@ -29,7 +47,13 @@ const Index = () => {
             normal: {
               show: true,
               position: 'center',
-              formatter: '{total|' + 200 + '}' + '\n\r' + '{active|总数}',
+              formatter:
+                '{total|' +
+                (data?.rate ?? 0) +
+                '%' +
+                '}' +
+                '\n\r' +
+                '{active|总数}',
               rich: {
                 total: {
                   fontSize: 42,
@@ -48,13 +72,13 @@ const Index = () => {
           },
           data: [
             {
-              value: 100,
-              name: 'Search Engine',
+              value: 100 * (data?.rate ?? 0),
+              name: '满意比例',
               itemStyle: { color: themeEhcartColor[theme]['--primary-color'] },
             },
             {
-              value: 10,
-              name: 'Direct',
+              value: 100 * (1 - data?.rate ?? 0),
+              name: '其他比例',
               itemStyle: {
                 color: themeEhcartColor[theme]['--background-color1'],
               },
@@ -64,11 +88,11 @@ const Index = () => {
         },
       ],
     };
-  }, [theme]);
+  }, [theme, data]);
   return (
-    <>
+    <Spin spinning={loading}>
       <Echarts5 style={{ height: '100%' }} option={option} />
-    </>
+    </Spin>
   );
 };
 

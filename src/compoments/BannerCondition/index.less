@@ -1,17 +1,24 @@
 .body-theme-light {
+  --linear-bg: linear-gradient(180deg, #aac5ee 0%, #ebeff4 160px);
+
   --banner-img: url('../../assets/light/banner.png');
 }
 
 .body-theme-dark {
+  --linear-bg: #010b3a;
+
   --banner-img: url('../../assets/dark/banner.png');
 }
 
 .condition-container {
+  // background:var(--linear-bg);
+
+  // .condition-box {
   padding: 30px 50px 25px 50px;
 
   // background-image: var(--banner-img);
-  // background-repeat: no-repeat;
-  // background-size: 100% ;
+  background-repeat: no-repeat;
+  background-size: 100%;
   .left {
     .condition-title {
       font-size: 40px;
@@ -30,4 +37,5 @@
       }
     }
   }
+  // }
 }

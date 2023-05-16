@@ -10,7 +10,7 @@ import {
   getDistrictBureauList,
   getPermission,
 } from '@/service/commonServices';
-import { map } from 'lodash';
+import { map, merge, uniqueId } from 'lodash';
 import cookie from 'react-cookies';
 
 const noRequestPaths = ['/Login'];
@@ -21,11 +21,17 @@ const request: RequestConfig = {
   params: {
     _t: IEVersion() === -1 ? undefined : moment().format('X'), // ie浏览器 加时间戳 放置get请求缓存bug
   },
-  headers: {
-    'Cache-Control': 'no-store',
-    Pragma: 'no-store',
-    Authorization: `Basic ${cookie.load('AuthToken')}`,
-  },
+  headers: merge(
+    {
+      'Cache-Control': 'no-store',
+      Pragma: 'no-store',
+    },
+    {
+      ...(cookie.load('AuthToken')
+        ? { Authorization: `Basic ${cookie.load('AuthToken') ?? ''}` }
+        : {}),
+    },
+  ),
   validateCache: () => false, // 关闭get请求缓存，ie11登录死循环问题
 
   responseInterceptors: [
@@ -59,9 +65,7 @@ const request: RequestConfig = {
       // messageDebounce(error?.message);
 
       window.location.href = `/Login`;
-    }
-
-    if (error?.data?.code !== '200') {
+    } else if (error?.data?.code !== '200') {
       messageDebounce(error?.data?.message ?? '请求出错');
     }
 

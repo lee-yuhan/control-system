@@ -4,9 +4,9 @@ import { useState } from 'react';
 import './index.less';
 
 const topColor = [
+  'var(--primary-color)',
   'var(--danger-color)',
-  'var(--danger-color)',
-  'var(--danger-color)',
+  'var(--success-color)',
 ];
 const Index = () => {
   const [type, setType] = useState<string[]>(['a']);

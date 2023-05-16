@@ -30,15 +30,16 @@ const Index = () => {
   };
 
   const menuPermission = useMemo(() => {
-    const result = permissionList?.filter((item) => item.type === 'MENU');
-    return map(result, 'code');
+    // 目前只展示第二屏
+    return ['second-screen'];
+    // const result = permissionList?.filter((item) => item.type === 'MENU');
+    // return map(result, 'code');
   }, [permissionList]);
-
-  console.log('menuPermission', menuPermission);
 
   return (
     <div className="home-container">
       <div className="home-content">
+        {/* <div className='home-bg'></div> */}
         <BannerCondition onValuesChange={onValuesChange} />
 
         {menuPermission?.length > 1 && currPageNum === 1 && (

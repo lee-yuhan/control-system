@@ -1,7 +1,7 @@
 import { useDebounceEffect } from 'ahooks';
 import { useEffect, useState } from 'react';
 import { useRequest, useSelector } from 'umi';
-import { getStatData } from './service';
+import { getLatitudeStatData } from './service';
 
 export const useRequestAid = (mode: string) => {
   const [params, setParams] = useState({
@@ -9,14 +9,15 @@ export const useRequestAid = (mode: string) => {
     custType: '',
   });
   const { branchName, regionName } = useSelector((store: any) => store.home);
-  const { data, run } = useRequest(getStatData, {
+  const { data, run, loading } = useRequest(getLatitudeStatData, {
     manual: true,
   });
 
   useDebounceEffect(
     () => {
       if (
-        (mode !== '6' && (!params?.custType || !params?.latitude)) ||
+        !params?.custType ||
+        !params?.latitude ||
         !mode ||
         !branchName ||
         !regionName
@@ -34,5 +35,5 @@ export const useRequestAid = (mode: string) => {
     { wait: 300 },
   );
 
-  return { data, setParams };
+  return { data, setParams, loading };
 };

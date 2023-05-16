@@ -28,7 +28,7 @@ const Index = () => {
     return getLocalStorageTheme();
   }, [themeChangeTag]);
 
-  const { data, setParams } = useRequestAid(tabValue);
+  const { data, setParams, loading } = useRequestAid(tabValue);
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -48,9 +48,7 @@ const Index = () => {
         ],
       },
       xAxis: {
-        data: map(data, (item) => {
-          return moment(item.latitude).format('M-DD');
-        }),
+        data: map(data, 'latitude'),
       },
       series: [
         {
@@ -110,6 +108,7 @@ const Index = () => {
   }, [theme, data]);
   return (
     <CardWrapper
+      loading={loading}
       header={
         <Tab
           value={tabValue}

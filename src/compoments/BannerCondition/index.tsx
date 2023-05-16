@@ -2,13 +2,17 @@ import { Button, Col, Form, Row, Select, Space } from 'antd';
 import './index.less';
 import { downloadOption } from './config';
 import useInitialState from '@/hooks/useInitialState';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { useMount } from 'ahooks';
 
 const Index: FC<{
   onValuesChange: (changeValues: any, values: any) => void;
 }> = ({ onValuesChange }) => {
   const { districtBureauList, branchList } = useInitialState();
+  const [downloadType, setDownloadType] = useState<number>(
+    downloadOption?.[0]?.value,
+  );
+
   const defaultValues = useMemo(() => {
     return {
       regionName: districtBureauList?.[0]?.value,
@@ -20,10 +24,11 @@ const Index: FC<{
   });
   return (
     <div className="condition-container">
+      {/* <div className="condition-box"> */}
       <Row align="middle" justify="space-between">
         <Col className="left">
           <Space align="center">
-            <span className="condition-title">装维管控平台</span>
+            <span className="condition-title">{SYSTEM_NAME}</span>
             <Form
               layout="inline"
               onValuesChange={onValuesChange}
@@ -38,10 +43,14 @@ const Index: FC<{
               </Form.Item>
               <Form.Item name="branchName">
                 <Select
-                  style={{ width: 110 }}
+                  style={{ minWidth: 110 }}
                   placeholder="请选择支局"
                   options={branchList}
-                />
+                >
+                  {branchList?.map((item) => (
+                    <Select.Option key={item.value}>{item.label}</Select.Option>
+                  ))}
+                </Select>
               </Form.Item>
             </Form>
           </Space>
@@ -50,6 +59,8 @@ const Index: FC<{
           <Space>
             <Select
               placeholder="请选择"
+              value={downloadType}
+              onChange={setDownloadType}
               style={{
                 border: '1px solid var(--select-border)',
               }}
@@ -59,6 +70,7 @@ const Index: FC<{
           </Space>
         </Col>
       </Row>
+      {/* </div> */}
     </div>
   );
 };

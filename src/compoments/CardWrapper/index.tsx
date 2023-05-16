@@ -1,24 +1,32 @@
-import { Button, Row, Col } from 'antd';
-import { PropsWithChildren } from 'react';
+import { Button, Row, Col, Spin, Space } from 'antd';
+import { FC, PropsWithChildren } from 'react';
 import './index.less';
+import React from 'react';
 
 interface IProps extends PropsWithChildren<any> {
   header: React.ReactElement;
+  loading?: boolean;
+  extra?: React.ReactElement;
 }
 
-const Index = (props: IProps) => {
+const Index: FC<IProps> = ({ extra, loading = false, header, children }) => {
   return (
-    <div className="card-container">
-      <div>
-        <Row justify="space-between" wrap={false} align="middle" gutter={8}>
-          <Col flex={1}>{props.header}</Col>
-          <Col>
-            <Button className="export-btn">导出</Button>
-          </Col>
-        </Row>
+    <Spin spinning={loading}>
+      <div className="card-container">
+        <div>
+          <Row justify="space-between" wrap={false} align="middle" gutter={8}>
+            <Col flex={1}>{header}</Col>
+            <Col>
+              <Space size={4}>
+                {extra}
+                <Button className="export-btn">导出</Button>
+              </Space>
+            </Col>
+          </Row>
+        </div>
+        <div className="card-content">{children}</div>
       </div>
-      <div className="card-content">{props.children}</div>
-    </div>
+    </Spin>
   );
 };
 

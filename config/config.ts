@@ -5,15 +5,17 @@ import { extraProxyConfig } from './proxyMap';
 const API_PREFIX = '/control';
 const { NODE_ENV } = process.env;
 const isDev = NODE_ENV === 'development';
+const SYSTEM_NAME = '装维管控平台';
 
 // https://umijs.org/config/
 export default defineConfig({
-  title: '装维管控系统',
+  title: SYSTEM_NAME,
   publicPath: `./`,
   manifest: {},
   define: {
     PROJECT_KEY: 'control',
     API_PREFIX,
+    SYSTEM_NAME,
   },
   metas: [
     {
@@ -48,7 +50,7 @@ export default defineConfig({
     exclude: [],
   },
 
-  chunks: isDev ? ['umi'] : ['vendors', 'umi'],
+  // chunks: isDev ? ['umi'] : ['vendors', 'umi'],
 
   terserOptions: {
     compress: {

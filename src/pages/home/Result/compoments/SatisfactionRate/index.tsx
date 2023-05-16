@@ -1,4 +1,3 @@
-// 满意率
 import CardWrapper from '@/compoments/CardWrapper';
 import Tab from '@/compoments/Tab';
 import { useState } from 'react';
@@ -15,10 +14,6 @@ const Index = () => {
           value={tabValue}
           onChange={setTabValue}
           options={[
-            // {
-            //   id: 'aa',
-            //   name: '服务十分满意率',
-            // },
             {
               id: '6',
               name: '测评',
@@ -27,7 +22,6 @@ const Index = () => {
         />
       }
     >
-      {/* {tabValue === 'aa' && <SerciceRate />} */}
       {tabValue === '6' && <EvaluationRate />}
     </CardWrapper>
   );

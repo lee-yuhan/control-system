@@ -21,19 +21,17 @@ export const baseConfig = {
   legend: {
     left: 2,
     top: 20,
-    itemWidth: 20,
-    itemHeight: 12,
-
-    // data: [
-    //   {
-    //     name: '满意度',
-    //     icon: `image://${legendIcon2}`,
-    //   },
-    //   {
-    //     name: '环比',
-    //     icon: `image://${legendIcon1}`,
-    //   },
-    // ],
+    itemWidth: 18,
+    itemHeight: 8,
+    textStyle: {
+      rich: {
+        a: {
+          verticalAlign: 'middle',
+        },
+      },
+      // // 图例与文字上下居中
+      padding: [0, 0, -3, 0],
+    },
     selectedMode: false,
   },
 };

@@ -15,6 +15,7 @@ import lineIcon5 from '../../../../../assets/icon_line5.png';
 import legendIcon10 from '../../../../../assets/icon_legend10.png';
 import legendIcon3 from '../../../../../assets/icon_legend3.png';
 import * as echarts from 'echarts';
+import { Button } from 'antd';
 
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('aa');
@@ -105,6 +106,7 @@ const Index = () => {
   }, [theme]);
   return (
     <CardWrapper
+      extra={<Button className="export-btn">导入</Button>}
       header={
         <Tab
           value={tabValue}

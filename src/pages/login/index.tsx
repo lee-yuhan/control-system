@@ -13,13 +13,13 @@ const Login = () => {
     manual: true,
     onSuccess: (res) => {
       cookie.save('AuthToken', res.token);
-      history.push('/home');
+      window.location.href = '/home';
     },
   });
 
   return (
     <div className="login-container">
-      <h1>系统</h1>
+      <h1>{SYSTEM_NAME}</h1>
       <Form
         form={form}
         onFinish={loginRun}

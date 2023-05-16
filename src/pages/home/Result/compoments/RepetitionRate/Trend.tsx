@@ -31,7 +31,7 @@ const Index = () => {
   const option = useMemo(() => {
     return merge({}, baseConfig, {
       legend: {
-        itemHeight: 20,
+        itemHeight: 18,
         textStyle: {
           color: themeEhcartColor[theme]['--text-color2'],
         },
@@ -47,9 +47,7 @@ const Index = () => {
         ],
       },
       xAxis: {
-        data: map(data, (item) => {
-          return moment(item.latitude).format('M-DD');
-        }),
+        data: map(data, 'latitude'),
       },
       series: [
         {
