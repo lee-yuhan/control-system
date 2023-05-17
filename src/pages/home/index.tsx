@@ -2,7 +2,7 @@ import BannerCondition from '@/compoments/BannerCondition';
 import Result from './Result';
 import './index.less';
 import { useCallback, useMemo } from 'react';
-import { useDispatch, useSelector } from 'umi';
+import { useDispatch, useRequest, useSelector } from 'umi';
 import { Button, Carousel } from 'antd';
 import { useRef } from 'react';
 
@@ -12,15 +12,24 @@ import { useState } from 'react';
 import Main from './Main';
 import useInitialState from '@/hooks/useInitialState';
 import { map } from 'lodash';
+import { loginRecord } from '@/service/commonServices';
+import { useTimeout } from 'ahooks';
 
 const Index = () => {
   // const { branchName, custType, regionName } = useSelector(
   //   (store: any) => store.home,
   // );
+
   const mRef = useRef<any>(null);
   const dispatch = useDispatch();
   const [currPageNum, setCurrPageNum] = useState<number>(0);
   const { permissionList } = useInitialState();
+  const menuPermission = useMemo(() => {
+    // 目前只展示第二屏
+    return ['second-screen'];
+    // const result = permissionList?.filter((item) => item.type === 'MENU');
+    // return map(result, 'code');
+  }, [permissionList]);
 
   const onValuesChange = (changeValues: any) => {
     dispatch({
@@ -28,13 +37,6 @@ const Index = () => {
       payload: changeValues,
     });
   };
-
-  const menuPermission = useMemo(() => {
-    // 目前只展示第二屏
-    return ['second-screen'];
-    // const result = permissionList?.filter((item) => item.type === 'MENU');
-    // return map(result, 'code');
-  }, [permissionList]);
 
   return (
     <div className="home-container">

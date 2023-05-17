@@ -26,3 +26,11 @@ export function logout() {
     method: 'post',
   });
 }
+
+export function loginRecord(params: { page: number; timer: number }) {
+  return request(`${API_PREFIX}/loginRecord/save`, {
+    method: 'post',
+    params,
+    skipErrorHandler: true,
+  });
+}

@@ -20,12 +20,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <h1>{SYSTEM_NAME}</h1>
-      <Form
-        form={form}
-        onFinish={loginRun}
-        labelCol={{ span: 6 }}
-        style={{ paddingTop: 50, paddingLeft: 30, paddingRight: 30 }}
-      >
+      <Form form={form} onFinish={loginRun} labelCol={{ span: 6 }}>
         <Form.Item
           label="帐号"
           name="username"

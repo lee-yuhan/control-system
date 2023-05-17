@@ -5,8 +5,11 @@ import QualityInspection from './compoments/QualityInspection';
 import RepetitionRate from './compoments/RepetitionRate';
 import AssemblyMaintenanceQuality from './compoments/AssemblyMaintenanceQuality';
 import SatisfactionRate from './compoments/SatisfactionRate';
+import { useLoginRecordAid } from '../hooks';
 
 const Index = () => {
+  // 记录
+  useLoginRecordAid(2);
   return (
     <div
       style={{

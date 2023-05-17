@@ -49,7 +49,7 @@ const Index = () => {
               position: 'center',
               formatter:
                 '{total|' +
-                (data?.rate ?? 0) +
+                (data?.satisfaction ?? 0) +
                 '%' +
                 '}' +
                 '\n\r' +
@@ -72,12 +72,12 @@ const Index = () => {
           },
           data: [
             {
-              value: 100 * (data?.rate ?? 0),
+              value: 100 * (data?.satisfaction ?? 0),
               name: '满意比例',
               itemStyle: { color: themeEhcartColor[theme]['--primary-color'] },
             },
             {
-              value: 100 * (1 - data?.rate ?? 0),
+              value: 100 * (1 - data?.satisfaction ?? 0),
               name: '其他比例',
               itemStyle: {
                 color: themeEhcartColor[theme]['--background-color1'],

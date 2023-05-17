@@ -35,13 +35,13 @@
   }
 }
 
-.ant-btn-primary,
-.ant-btn-primary:hover {
+.ant-btn-primary:not(.ant-btn-dangerous),
+.ant-btn-primary:not(.ant-btn-dangerous):hover {
   background-color: var(--primary-color) !important;
 }
 
-.ant-btn-default:not(:disabled):hover,
-.ant-btn-default:not(:disabled):active {
+.ant-btn-default:not(:disabled, .ant-btn-dangerous):hover,
+.ant-btn-default:not(:disabled, .ant-btn-dangerous):active {
   border-color: #d9d9d9 !important;
   color: var(--primary-color) !important;
 }
