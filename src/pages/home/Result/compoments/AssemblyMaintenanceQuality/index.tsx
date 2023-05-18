@@ -135,7 +135,7 @@ const Index = () => {
         />
       }
     >
-      <CardCondition onValuesChange={setParams} />
+      <CardCondition mode={tabValue} onValuesChange={setParams} />
       <Echarts5 option={option} />
     </CardWrapper>
   );

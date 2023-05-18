@@ -8,7 +8,7 @@ import CardCondition from '../CardCondition';
 import { hiddenXAxis, hiddenYAxis, themeEhcartColor } from '@/utils/ehcart';
 import { baseConfig } from '../../config';
 import { getLocalStorageTheme } from '@/utils/theme';
-import { merge } from 'lodash';
+import { merge, random } from 'lodash';
 import { useSelector } from 'umi';
 import lineIcon2 from '../../../../../assets/icon_line2.png';
 import lineIcon5 from '../../../../../assets/icon_line5.png';
@@ -16,6 +16,7 @@ import legendIcon10 from '../../../../../assets/icon_legend10.png';
 import legendIcon3 from '../../../../../assets/icon_legend3.png';
 import * as echarts from 'echarts';
 import { Button } from 'antd';
+import moment from 'moment';
 
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('aa');
@@ -44,15 +45,17 @@ const Index = () => {
         ],
       },
       xAxis: {
-        data: Array(6)
+        data: Array(7)
           .fill('')
-          .map((_, index) => index),
+          .map((_, index) => moment().clone().add(index).format('MM-DD')),
       },
       series: [
         {
           name: '满意度',
           type: 'line',
-          data: [5, 20, 36, 10, 10, 20],
+          data: Array(7)
+            .fill('')
+            .map((_) => random(0, 100)),
           symbol: `image://${lineIcon2}`,
           symbolSize: 8,
           lineStyle: {
@@ -72,7 +75,9 @@ const Index = () => {
         {
           name: '环比',
           type: 'line',
-          data: [5123, 31220, 336, 11230, 310, 20],
+          data: Array(7)
+            .fill('')
+            .map((_) => random(0, 100)),
           symbol: `image://${lineIcon5}`,
           symbolSize: 8,
           lineStyle: {
@@ -124,7 +129,7 @@ const Index = () => {
         />
       }
     >
-      <CardCondition />
+      <CardCondition mode={tabValue} onValuesChange={() => {}} />
       <Echarts5 option={option} />
     </CardWrapper>
   );

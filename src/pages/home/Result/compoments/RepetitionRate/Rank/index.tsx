@@ -1,6 +1,7 @@
 import LabelsView from '@/compoments/LabelsView';
-import { Progress, Table } from 'antd';
-import { useState } from 'react';
+import { Progress, Row, Space, Table } from 'antd';
+import { random } from 'lodash';
+import { useMemo, useState } from 'react';
 import './index.less';
 
 const topColor = [
@@ -34,7 +35,6 @@ const Index = () => {
     {
       title: '排名',
       dataIndex: 'index',
-
       render: (index: number) => {
         return (
           <div
@@ -50,40 +50,75 @@ const Index = () => {
     },
     {
       title: '名称',
+      dataIndex: 'name',
     },
     {
       title: '区局',
+      dataIndex: 'regionName',
     },
     {
       title: '设备重复数',
+      dataIndex: 'repeatNum',
+      align: 'right',
     },
     {
       title: '设备记录数',
+      dataIndex: 'recordNum',
+      align: 'right',
     },
     {
       title: '重复率（%）',
       dataIndex: 'index',
-
-      render: (index: number) => {
+      width: 120,
+      render: (index: number, record: any) => {
+        const rate = (record.repeatNum / record.recordNum) * 100;
         return (
-          <Progress
-            strokeColor={
-              index < 3 ? topColor[index] : 'var(--background-color3)'
-            }
-            style={{ margin: 0 }}
-            percent={50}
-            showInfo={false}
-          />
+          <Row align="middle" gutter={[8, 8]}>
+            <span
+              style={{
+                fontWeight: 400,
+                marginRight: 8,
+                width: 45,
+                textAlign: 'right',
+              }}
+            >
+              {rate.toFixed(2)}
+            </span>
+            <Progress
+              strokeColor={
+                index < 3 ? topColor[index] : 'var(--background-color3)'
+              }
+              style={{ margin: 0, flex: 1 }}
+              percent={rate}
+              showInfo={false}
+            />
+          </Row>
         );
       },
     },
   ];
 
-  const dataSource = Array(10)
-    .fill('')
-    ?.map((_, index) => ({
-      index,
-    }));
+  const dataSource = useMemo(() => {
+    console.log('type', type);
+    const regionNames = ['宝山', '北区', '东区', '崇明', '奉贤'];
+    const names = [
+      '杨行支局',
+      '张庙支局',
+      '北虹口支局',
+      '中虹口支局',
+      '瑞虹支局',
+    ];
+
+    return Array(10)
+      .fill('')
+      ?.map((_, index) => ({
+        index,
+        name: names[random(0, 4)],
+        regionName: regionNames[random(0, 4)],
+        repeatNum: random(0, 50),
+        recordNum: random(50, 100),
+      }));
+  }, [type?.[0]]);
 
   return (
     <>
@@ -100,6 +135,7 @@ const Index = () => {
         columns={columns}
         dataSource={dataSource}
         pagination={false}
+        scroll={{ x: 'max-content' }}
       />
     </>
   );

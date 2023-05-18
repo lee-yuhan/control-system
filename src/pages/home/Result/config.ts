@@ -3,8 +3,8 @@ import { hiddenXAxis, hiddenYAxis } from '@/utils/ehcart';
 export const baseConfig = {
   grid: {
     top: 65,
-    left: 0,
-    right: 0,
+    left: 10,
+    right: 10,
     bottom: 30,
   },
   xAxis: {
