@@ -46,6 +46,7 @@ const Index: FC<{
                   style={{ minWidth: 110 }}
                   placeholder="请选择支局"
                   options={branchList}
+                  allowClear
                 >
                   {branchList?.map((item) => (
                     <Select.Option key={item.value}>{item.label}</Select.Option>

@@ -11,9 +11,13 @@ const Index: FC<{
   //   const [timeType, setTimeType] = useState<string[]>(['week']);
   const { customerTypeList, gripList } = useInitialState();
 
+  const isSpecial = useMemo(() => {
+    return ['1', '2', '4', '5'].includes(mode);
+  }, [mode]);
+
   const custTypeList = useMemo(() => {
     // mode为1，2，4，5时，只展示以下两个
-    if (['1', '2', '4', '5'].includes(mode)) {
+    if (isSpecial) {
       return [
         {
           label: '政企',
@@ -31,7 +35,7 @@ const Index: FC<{
   const defaultValues = useMemo(() => {
     return {
       latitude: ['0'],
-      // custType: custTypeList?.[0]?.value,
+      custType: isSpecial ? custTypeList?.[0]?.value : undefined,
     };
   }, [custTypeList]);
   useMount(() => {
@@ -47,10 +51,14 @@ const Index: FC<{
       initialValues={defaultValues}
     >
       <Form.Item style={{ marginRight: 0 }} name="custType">
-        <Select placeholder="请选择客户类型" options={custTypeList} />
+        <Select
+          placeholder="请选择客户类型"
+          allowClear={!isSpecial}
+          options={custTypeList}
+        />
       </Form.Item>
       <Form.Item style={{ marginRight: 0 }} name="gridName">
-        <Select placeholder="请选择网格" options={gripList} />
+        <Select placeholder="请选择网格" allowClear options={gripList} />
       </Form.Item>
       <Form.Item style={{ marginRight: 0 }} name="latitude">
         <LabelsView
