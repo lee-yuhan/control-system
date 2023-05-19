@@ -10,6 +10,8 @@ export default (): {
   // 权限列表
   permissionList: IPermissionList;
   permissionCodeList: string;
+  // 网格下拉列表
+  gripList: OptionList;
 } => {
   const {
     initialState: {
@@ -18,6 +20,7 @@ export default (): {
       districtBureauList,
       permissionList,
       permissionCodeList,
+      gripList,
     },
   } = useModel('@@initialState') as any;
   return {
@@ -26,5 +29,6 @@ export default (): {
     districtBureauList,
     permissionList,
     permissionCodeList,
+    gripList,
   };
 };

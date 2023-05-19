@@ -7,6 +7,7 @@ export const useRequestAid = (mode: string) => {
   const [params, setParams] = useState({
     latitude: '',
     custType: '',
+    gridName: '',
   });
   const { branchName, regionName } = useSelector((store: any) => store.home);
   const { data, run, loading } = useRequest(getLatitudeStatData, {
@@ -15,23 +16,24 @@ export const useRequestAid = (mode: string) => {
 
   useDebounceEffect(
     () => {
-      if (
-        !params?.custType ||
-        !params?.latitude ||
-        !mode ||
-        !branchName ||
-        !regionName
-      )
-        return;
+      if (!mode || !regionName) return;
       run({
         branchName,
         custType: params?.custType,
         regionName,
         latitude: params?.latitude,
+        gridName: params?.gridName,
         mode,
       });
     },
-    [branchName, params?.custType, regionName, params?.latitude, mode],
+    [
+      branchName,
+      params?.custType,
+      params?.gridName,
+      regionName,
+      params?.latitude,
+      mode,
+    ],
     { wait: 300 },
   );
 

@@ -9,7 +9,7 @@ const Index: FC<{
   onValuesChange: (values: any) => void;
 }> = ({ mode, onValuesChange }) => {
   //   const [timeType, setTimeType] = useState<string[]>(['week']);
-  const { customerTypeList } = useInitialState();
+  const { customerTypeList, gripList } = useInitialState();
 
   const custTypeList = useMemo(() => {
     // mode为1，2，4，5时，只展示以下两个
@@ -20,8 +20,8 @@ const Index: FC<{
           value: '政企',
         },
         {
-          label: '公共客户',
-          value: '公共客户',
+          label: '公众客户',
+          value: '公众客户',
         },
       ];
     }
@@ -31,7 +31,7 @@ const Index: FC<{
   const defaultValues = useMemo(() => {
     return {
       latitude: ['0'],
-      custType: custTypeList?.[0]?.value,
+      // custType: custTypeList?.[0]?.value,
     };
   }, [custTypeList]);
   useMount(() => {
@@ -49,8 +49,8 @@ const Index: FC<{
       <Form.Item style={{ marginRight: 0 }} name="custType">
         <Select placeholder="请选择客户类型" options={custTypeList} />
       </Form.Item>
-      <Form.Item style={{ marginRight: 0 }}>
-        <Select placeholder="请选择网格" />
+      <Form.Item style={{ marginRight: 0 }} name="gridName">
+        <Select placeholder="请选择网格" options={gripList} />
       </Form.Item>
       <Form.Item style={{ marginRight: 0 }} name="latitude">
         <LabelsView

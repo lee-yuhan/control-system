@@ -16,9 +16,9 @@ const Index: FC<{
   const defaultValues = useMemo(() => {
     return {
       regionName: districtBureauList?.[0]?.value,
-      branchName: branchList?.[0]?.value,
+      // branchName: branchList?.[0]?.value,
     };
-  }, [districtBureauList, branchList]);
+  }, [districtBureauList]);
   useMount(() => {
     onValuesChange?.(defaultValues, defaultValues);
   });

@@ -8,6 +8,7 @@ import {
   getBranchList,
   getCustomerTypeList,
   getDistrictBureauList,
+  getGripList,
   getPermission,
 } from '@/service/commonServices';
 import { map, merge, uniqueId } from 'lodash';
@@ -110,6 +111,7 @@ export async function getInitialState() {
 
   let permissionList: IPermissionList = [];
   let permissionCodeList: string[] = [];
+  let gripList: OptionList = [];
 
   if (!isIE && !requestBasePath) {
     try {
@@ -118,11 +120,13 @@ export async function getInitialState() {
         customerTypeListResp,
         districtBureauListResp,
         permissionResp,
+        gripListResp,
       ] = await Promise.all([
         getBranchList(),
         getCustomerTypeList(),
         getDistrictBureauList(),
         getPermission(),
+        getGripList(),
       ]);
 
       branchList = map(branchListResp.data, (value) => ({
@@ -134,6 +138,11 @@ export async function getInitialState() {
         value,
       }));
       districtBureauList = map(districtBureauListResp.data, (value) => ({
+        label: value,
+        value,
+      }));
+
+      gripList = map(gripListResp.data, (value) => ({
         label: value,
         value,
       }));
@@ -152,6 +161,7 @@ export async function getInitialState() {
     districtBureauList,
     permissionList,
     permissionCodeList,
+    gripList,
   };
 }
 

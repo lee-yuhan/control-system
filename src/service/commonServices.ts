@@ -15,6 +15,11 @@ export function getDistrictBureauList() {
   return request(`${API_PREFIX}/selection/district_bureau`);
 }
 
+// 查询网格下拉列表
+export function getGripList() {
+  return request(`${API_PREFIX}/selection/grip`);
+}
+
 // 获取用户权限
 export function getPermission() {
   return request(`${API_PREFIX}/auth/permission`);
