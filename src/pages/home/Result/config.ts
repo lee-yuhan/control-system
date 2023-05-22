@@ -7,6 +7,7 @@ export const baseConfig = {
     right: 10,
     bottom: 30,
   },
+  animation: false,
   xAxis: {
     ...hiddenXAxis,
   },

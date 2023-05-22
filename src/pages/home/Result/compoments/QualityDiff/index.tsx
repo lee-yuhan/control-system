@@ -1,6 +1,6 @@
 // 质差
 import { Echarts5 } from '@/compoments/Echarts5';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import CardWrapper from '@/compoments/CardWrapper';
 import Tab from '@/compoments/Tab';
 import { useState } from 'react';
@@ -9,14 +9,14 @@ import { hiddenXAxis, hiddenYAxis, themeEhcartColor } from '@/utils/ehcart';
 import lineIcon1 from '../../../../../assets/icon_line1.png';
 import legendIcon1 from '../../../../../assets/icon_legend1.png';
 import lineIcon4 from '../../../../../assets/icon_line4.png';
-
+import lineIcon2 from '../../../../../assets/icon_line2.png';
 import legendIcon9 from '../../../../../assets/icon_legend9.png';
 import { useSelector } from 'umi';
 import { getLocalStorageTheme } from '@/utils/theme';
 import { baseConfig } from '../../config';
 import { map, merge } from 'lodash';
 import * as echarts from 'echarts';
-import { useRequestAid } from '../../hook';
+import { useEchartMouseAid, useRequestAid } from '../../hook';
 import moment from 'moment';
 
 const Index = () => {
@@ -27,6 +27,7 @@ const Index = () => {
   const theme = useMemo(() => {
     return getLocalStorageTheme();
   }, [themeChangeTag]);
+  const mRef = useRef<any>(null);
 
   const { data, setParams, loading } = useRequestAid(tabValue);
 
@@ -55,6 +56,7 @@ const Index = () => {
           name: '满意度',
           type: 'line',
           data: map(data, 'satisfaction'),
+          smooth: true,
           symbol: `image://${lineIcon1}`,
           symbolSize: 8,
           lineStyle: {
@@ -74,9 +76,12 @@ const Index = () => {
         {
           name: '环比',
           type: 'line',
-          data: map(data, 'rate'),
+          data: map(data, ({ rate }) => ({
+            value: rate,
+          })),
           symbol: `image://${lineIcon4}`,
           symbolSize: 8,
+          smooth: true,
           lineStyle: {
             width: 0,
           },
@@ -106,6 +111,9 @@ const Index = () => {
       ],
     });
   }, [theme, data]);
+
+  useEchartMouseAid(mRef, option, lineIcon4, lineIcon2);
+
   return (
     <CardWrapper
       loading={loading}
@@ -127,7 +135,7 @@ const Index = () => {
       }
     >
       <CardCondition mode={tabValue} onValuesChange={setParams} />
-      <Echarts5 option={option} />
+      <Echarts5 ref={mRef} option={option} />
     </CardWrapper>
   );
 };

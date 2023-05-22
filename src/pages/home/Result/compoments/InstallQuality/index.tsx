@@ -1,22 +1,21 @@
 // 安装质量
 import { Echarts5 } from '@/compoments/Echarts5';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import CardWrapper from '@/compoments/CardWrapper';
 import Tab from '@/compoments/Tab';
 import { useState } from 'react';
 import CardCondition from '../CardCondition';
 import { hiddenXAxis, hiddenYAxis, themeEhcartColor } from '@/utils/ehcart';
 import lineIcon1 from '../../../../../assets/icon_line1.png';
+import lineIcon2 from '../../../../../assets/icon_line2.png';
 import legendIcon1 from '../../../../../assets/icon_legend1.png';
 import legendIcon2 from '../../../../../assets/icon_legend2.png';
-
 import { getLocalStorageTheme } from '@/utils/theme';
 import { useSelector } from 'umi';
 import * as echarts from 'echarts';
 import { map, merge } from 'lodash';
 import { baseConfig } from '../../config';
-import { useRequestAid } from '../../hook';
-import moment from 'moment';
+import { useEchartMouseAid, useRequestAid } from '../../hook';
 
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('1');
@@ -27,6 +26,7 @@ const Index = () => {
   const theme = useMemo(() => {
     return getLocalStorageTheme();
   }, [themeChangeTag]);
+  const mRef = useRef<any>();
 
   const { data, setParams, loading } = useRequestAid(tabValue);
 
@@ -96,9 +96,12 @@ const Index = () => {
         {
           name: '环比',
           type: 'line',
-          data: map(data, 'rate'),
+          data: map(data, ({ rate }) => ({
+            value: rate,
+          })),
           symbol: `image://${lineIcon1}`,
           symbolSize: 8,
+          smooth: true,
           lineStyle: {
             color: themeEhcartColor[theme]['--primary-color'],
             width: 3,
@@ -116,6 +119,8 @@ const Index = () => {
       ],
     });
   }, [theme, data]);
+
+  useEchartMouseAid(mRef, option, lineIcon1, lineIcon2);
 
   return (
     <CardWrapper
@@ -142,7 +147,7 @@ const Index = () => {
       }
     >
       <CardCondition mode={tabValue} onValuesChange={setParams} />
-      <Echarts5 option={option} />
+      <Echarts5 ref={mRef} option={option} />
     </CardWrapper>
   );
 };

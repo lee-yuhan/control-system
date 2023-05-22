@@ -1,22 +1,24 @@
 // 质检
 import { Echarts5 } from '@/compoments/Echarts5';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import CardWrapper from '@/compoments/CardWrapper';
 import Tab from '@/compoments/Tab';
 import { useState } from 'react';
 import CardCondition from '../CardCondition';
-import { hiddenXAxis, hiddenYAxis, themeEhcartColor } from '@/utils/ehcart';
+import { themeEhcartColor } from '@/utils/ehcart';
 import { baseConfig } from '../../config';
 import { getLocalStorageTheme } from '@/utils/theme';
 import { merge, random } from 'lodash';
 import { useSelector } from 'umi';
 import lineIcon2 from '../../../../../assets/icon_line2.png';
 import lineIcon5 from '../../../../../assets/icon_line5.png';
+import lineIcon1 from '../../../../../assets/icon_line1.png';
 import legendIcon10 from '../../../../../assets/icon_legend10.png';
 import legendIcon3 from '../../../../../assets/icon_legend3.png';
 import * as echarts from 'echarts';
 import { Button } from 'antd';
 import moment from 'moment';
+import { useEchartMouseAid } from '../../hook';
 
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('aa');
@@ -26,6 +28,8 @@ const Index = () => {
   const theme = useMemo(() => {
     return getLocalStorageTheme();
   }, [themeChangeTag]);
+
+  const mRef = useRef<any>(null);
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -55,9 +59,12 @@ const Index = () => {
           type: 'line',
           data: Array(7)
             .fill('')
-            .map((_) => random(0, 100)),
+            .map((_) => {
+              return { value: random(0, 100) };
+            }),
           symbol: `image://${lineIcon2}`,
           symbolSize: 8,
+          smooth: true,
           lineStyle: {
             color: themeEhcartColor[theme]['--danger-color'],
             width: 3,
@@ -66,7 +73,6 @@ const Index = () => {
             show: true,
             position: 'top',
             color: themeEhcartColor[theme]['--danger-color'],
-            valueAnimation: true,
             formatter: (p: { value: number }) => {
               return `${p.value ?? ''}`;
             },
@@ -75,9 +81,12 @@ const Index = () => {
         {
           name: '环比',
           type: 'line',
+          smooth: true,
           data: Array(7)
             .fill('')
-            .map((_) => random(0, 100)),
+            .map((_) => {
+              return { value: random(0, 100) };
+            }),
           symbol: `image://${lineIcon5}`,
           symbolSize: 8,
           lineStyle: {
@@ -109,6 +118,9 @@ const Index = () => {
       ],
     });
   }, [theme]);
+
+  useEchartMouseAid(mRef, option, lineIcon5, lineIcon1);
+
   return (
     <CardWrapper
       extra={<Button className="export-btn">导入</Button>}
@@ -130,7 +142,7 @@ const Index = () => {
       }
     >
       <CardCondition mode={tabValue} onValuesChange={() => {}} />
-      <Echarts5 option={option} />
+      <Echarts5 ref={mRef} option={option} />
     </CardWrapper>
   );
 };

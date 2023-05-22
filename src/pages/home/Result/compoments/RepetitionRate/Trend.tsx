@@ -64,6 +64,7 @@ const Index = () => {
           // },
           symbol: `image://${lineIcon3}`,
           symbolSize: 8,
+          smooth: true,
           // data: map(data, 'satisfaction'),
           data: Array(7)
             .fill('')
