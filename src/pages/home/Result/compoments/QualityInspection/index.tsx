@@ -6,7 +6,7 @@ import Tab from '@/compoments/Tab';
 import { useState } from 'react';
 import CardCondition from '../CardCondition';
 import { themeEhcartColor } from '@/utils/ehcart';
-import { baseConfig } from '../../config';
+import { baseConfig, satisfactionNameMap } from '../../config';
 import { getLocalStorageTheme } from '@/utils/theme';
 import { merge, random } from 'lodash';
 import { useSelector } from 'umi';
@@ -16,12 +16,26 @@ import lineIcon1 from '../../../../../assets/icon_line1.png';
 import legendIcon10 from '../../../../../assets/icon_legend10.png';
 import legendIcon3 from '../../../../../assets/icon_legend3.png';
 import * as echarts from 'echarts';
-import { Button } from 'antd';
+import { Button, Form } from 'antd';
 import moment from 'moment';
 import { useEchartMouseAid } from '../../hook';
+import LabelsView from '@/compoments/LabelsView';
+
+export const timeOptions = [
+  {
+    id: '1',
+    name: '周维度',
+  },
+  {
+    id: '2',
+    name: '月维度',
+  },
+];
 
 const Index = () => {
-  const [tabValue, setTabValue] = useState<string>('aa');
+  const [tabValue, setTabValue] = useState<string>('10');
+  const [latitude, setLatitude] = useState<string[]>([timeOptions?.[0].id]);
+
   const themeChangeTag = useSelector(
     (store: any) => store.common.themeChangeTag,
   );
@@ -39,7 +53,7 @@ const Index = () => {
         },
         data: [
           {
-            name: '满意度',
+            name: satisfactionNameMap[tabValue],
             icon: `image://${legendIcon3}`,
           },
           {
@@ -55,7 +69,7 @@ const Index = () => {
       },
       series: [
         {
-          name: '满意度',
+          name: satisfactionNameMap[tabValue],
           type: 'line',
           data: Array(7)
             .fill('')
@@ -78,48 +92,48 @@ const Index = () => {
             },
           },
         },
-        {
-          name: '环比',
-          type: 'line',
-          smooth: true,
-          data: Array(7)
-            .fill('')
-            .map((_) => {
-              return { value: random(0, 100) };
-            }),
-          symbol: `image://${lineIcon5}`,
-          symbolSize: 8,
-          lineStyle: {
-            width: 0,
-          },
-          areaStyle: {
-            opacity: 1,
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              {
-                offset: 0,
-                color: themeEhcartColor[theme]['--area-primary-color-start'],
-              },
-              {
-                offset: 1,
-                color: themeEhcartColor[theme]['--area-primary-color-end'],
-              },
-            ]),
-          },
-          label: {
-            show: true,
-            position: 'top',
-            color: themeEhcartColor[theme]['--primary-color'],
-            valueAnimation: true,
-            // formatter: (p: { value: number }) => {
-            //   return `${p.value ?? ''}`;
-            // },
-          },
-        },
+        // {
+        //   name: '环比',
+        //   type: 'line',
+        //   smooth: true,
+        //   data: Array(7)
+        //     .fill('')
+        //     .map((_) => {
+        //       return { value: random(0, 100) };
+        //     }),
+        //   symbol: `image://${lineIcon5}`,
+        //   symbolSize: 8,
+        //   lineStyle: {
+        //     width: 0,
+        //   },
+        //   areaStyle: {
+        //     opacity: 1,
+        //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        //       {
+        //         offset: 0,
+        //         color: themeEhcartColor[theme]['--area-primary-color-start'],
+        //       },
+        //       {
+        //         offset: 1,
+        //         color: themeEhcartColor[theme]['--area-primary-color-end'],
+        //       },
+        //     ]),
+        //   },
+        //   label: {
+        //     show: true,
+        //     position: 'top',
+        //     color: themeEhcartColor[theme]['--primary-color'],
+        //     valueAnimation: true,
+        //     // formatter: (p: { value: number }) => {
+        //     //   return `${p.value ?? ''}`;
+        //     // },
+        //   },
+        // },
       ],
     });
-  }, [theme]);
+  }, [theme, tabValue]);
 
-  useEchartMouseAid(mRef, option, lineIcon5, lineIcon1);
+  // useEchartMouseAid(mRef, option, lineIcon5, lineIcon1);
 
   return (
     <CardWrapper
@@ -130,19 +144,32 @@ const Index = () => {
           onChange={setTabValue}
           options={[
             {
-              id: 'aa',
-              name: '质检真实率',
+              id: '10',
+              name: '工单真实性',
             },
-            {
-              id: 'aa1',
-              name: '质检规范性',
-            },
+            // {
+            //   id: 'aa1',
+            //   name: '质检规范性',
+            // },
           ]}
         />
       }
     >
-      <CardCondition mode={tabValue} onValuesChange={() => {}} />
-      <Echarts5 ref={mRef} option={option} />
+      <Form
+        initialValues={{
+          latitude: timeOptions?.[0].id,
+        }}
+      >
+        <Form.Item style={{ marginRight: 0 }} name="latitude">
+          <LabelsView
+            value={latitude}
+            single
+            dataSource={timeOptions}
+            onChange={setLatitude as any}
+          />
+        </Form.Item>
+      </Form>
+      <Echarts5 option={option} />
     </CardWrapper>
   );
 };

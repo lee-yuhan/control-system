@@ -73,8 +73,13 @@ export const useEchartMouseAid = (
           }
 
           currOption.series[1].data?.forEach((item: any, index: number) => {
-            if (index === xIndex) item.symbol = `image://${hightIcon}`;
-            else item.symbol = `image://${orignIcon}`;
+            if (index === xIndex) {
+              item.symbol = `image://${hightIcon}`;
+              item.symbolSize = 12;
+            } else {
+              item.symbol = `image://${orignIcon}`;
+              item.symbolSize = 8;
+            }
           });
 
           inst.setOption(currOption, true);

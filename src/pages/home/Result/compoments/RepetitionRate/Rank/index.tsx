@@ -132,7 +132,7 @@ const Index = () => {
 
       <Table
         rowClassName="cs-row-top-other"
-        columns={columns}
+        columns={columns as any}
         dataSource={dataSource}
         pagination={false}
         scroll={{ x: 'max-content' }}

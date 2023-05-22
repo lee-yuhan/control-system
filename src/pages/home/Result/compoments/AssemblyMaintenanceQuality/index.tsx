@@ -8,7 +8,7 @@ import CardCondition from '../CardCondition';
 import { hiddenXAxis, hiddenYAxis, themeEhcartColor } from '@/utils/ehcart';
 import { useSelector } from 'umi';
 import { getLocalStorageTheme } from '@/utils/theme';
-import { baseConfig } from '../../config';
+import { baseConfig, satisfactionNameMap } from '../../config';
 import { map, merge } from 'lodash';
 import * as echarts from 'echarts';
 import lineIcon1 from '../../../../../assets/icon_line1.png';
@@ -38,7 +38,7 @@ const Index = () => {
         },
         data: [
           {
-            name: '满意度',
+            name: satisfactionNameMap[tabValue],
             icon: `image://${legendIcon5}`,
           },
           {
@@ -52,7 +52,7 @@ const Index = () => {
       },
       series: [
         {
-          name: '满意度',
+          name: satisfactionNameMap[tabValue],
           type: 'bar',
           data: map(data, 'satisfaction'),
           itemStyle: {
@@ -119,7 +119,7 @@ const Index = () => {
         },
       ],
     });
-  }, [theme, data]);
+  }, [theme, data, tabValue]);
 
   useEchartMouseAid(mRef, option, lineIcon2, lineIcon1);
 

@@ -31,8 +31,21 @@ export const baseConfig = {
         },
       },
       // // 图例与文字上下居中
-      padding: [0, 0, -3, 0],
+      padding: [0, 0, 0, 0],
     },
     selectedMode: false,
   },
+};
+
+export const satisfactionNameMap = {
+  '1': '履约率',
+  '2': '预约率',
+  '3': '退单率',
+  '4': '履约率',
+  '5': '预约率',
+  '6': '测评率',
+  '7': '重复率',
+  '8': '上门率',
+  '9': '满意率',
+  '10': '真实率',
 };

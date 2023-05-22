@@ -14,7 +14,7 @@ import { getLocalStorageTheme } from '@/utils/theme';
 import { useSelector } from 'umi';
 import * as echarts from 'echarts';
 import { map, merge } from 'lodash';
-import { baseConfig } from '../../config';
+import { baseConfig, satisfactionNameMap } from '../../config';
 import { useEchartMouseAid, useRequestAid } from '../../hook';
 
 const Index = () => {
@@ -38,7 +38,7 @@ const Index = () => {
         },
         data: [
           {
-            name: '满意度',
+            name: satisfactionNameMap[tabValue],
             icon: `image://${legendIcon2}`,
           },
           {
@@ -52,7 +52,7 @@ const Index = () => {
       },
       series: [
         {
-          name: '满意度',
+          name: satisfactionNameMap[tabValue],
           type: 'bar',
           data: map(data, 'satisfaction'),
           itemStyle: {
@@ -118,7 +118,7 @@ const Index = () => {
         },
       ],
     });
-  }, [theme, data]);
+  }, [theme, data, tabValue]);
 
   useEchartMouseAid(mRef, option, lineIcon1, lineIcon2);
 

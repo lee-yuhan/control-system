@@ -13,7 +13,7 @@ import lineIcon2 from '../../../../../assets/icon_line2.png';
 import legendIcon9 from '../../../../../assets/icon_legend9.png';
 import { useSelector } from 'umi';
 import { getLocalStorageTheme } from '@/utils/theme';
-import { baseConfig } from '../../config';
+import { baseConfig, satisfactionNameMap } from '../../config';
 import { map, merge } from 'lodash';
 import * as echarts from 'echarts';
 import { useEchartMouseAid, useRequestAid } from '../../hook';
@@ -39,7 +39,7 @@ const Index = () => {
         },
         data: [
           {
-            name: '满意度',
+            name: satisfactionNameMap[tabValue],
             icon: `image://${legendIcon1}`,
           },
           {
@@ -53,7 +53,7 @@ const Index = () => {
       },
       series: [
         {
-          name: '满意度',
+          name: satisfactionNameMap[tabValue],
           type: 'line',
           data: map(data, 'satisfaction'),
           smooth: true,
@@ -110,7 +110,7 @@ const Index = () => {
         },
       ],
     });
-  }, [theme, data]);
+  }, [theme, data, tabValue]);
 
   useEchartMouseAid(mRef, option, lineIcon4, lineIcon2);
 

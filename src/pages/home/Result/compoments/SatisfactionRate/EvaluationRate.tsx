@@ -22,14 +22,14 @@ const Index = () => {
 
   useDebounceEffect(
     () => {
-      if (!branchName || !regionName) return;
+      if (!regionName) return;
       run({
         branchName,
         regionName,
         mode: '6',
       });
     },
-    [branchName, regionName],
+    [regionName, branchName],
     { wait: 300 },
   );
 

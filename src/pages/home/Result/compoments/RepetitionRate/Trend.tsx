@@ -14,7 +14,7 @@ import lineIcon3 from '../../../../../assets/icon_line3.png';
 
 import { useSelector } from 'umi';
 import { getLocalStorageTheme } from '@/utils/theme';
-import { baseConfig } from '../../config';
+import { baseConfig, satisfactionNameMap } from '../../config';
 import { useRequestAid } from '../../hook';
 import moment from 'moment';
 const Index = () => {
@@ -37,7 +37,7 @@ const Index = () => {
         },
         data: [
           {
-            name: '满意度',
+            name: satisfactionNameMap[tabValue],
             icon: `image://${legendIcon4}`,
           },
           {
@@ -56,7 +56,7 @@ const Index = () => {
       },
       series: [
         {
-          name: '满意度',
+          name: satisfactionNameMap[tabValue],
           type: 'line',
           // lineStyle: {
           //   color: themeEhcartColor[theme]['--danger-color'],
@@ -146,7 +146,7 @@ const Index = () => {
         },
       ],
     });
-  }, [theme]);
+  }, [theme, tabValue]);
   return (
     <>
       <CardCondition mode={tabValue} onValuesChange={() => {}} />
