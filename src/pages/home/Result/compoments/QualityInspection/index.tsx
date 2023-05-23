@@ -1,25 +1,28 @@
 // 质检
 import { Echarts5 } from '@/compoments/Echarts5';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import CardWrapper from '@/compoments/CardWrapper';
 import Tab from '@/compoments/Tab';
 import { useState } from 'react';
 import CardCondition from '../CardCondition';
-import { themeEhcartColor } from '@/utils/ehcart';
+import { addClickEvent, themeEhcartColor } from '@/utils/ehcart';
 import { baseConfig, satisfactionNameMap } from '../../config';
 import { getLocalStorageTheme } from '@/utils/theme';
 import { merge, random } from 'lodash';
-import { useSelector } from 'umi';
+import { useRequest, useSelector } from 'umi';
 import lineIcon2 from '../../../../../assets/icon_line2.png';
 import lineIcon5 from '../../../../../assets/icon_line5.png';
 import lineIcon1 from '../../../../../assets/icon_line1.png';
 import legendIcon10 from '../../../../../assets/icon_legend10.png';
 import legendIcon3 from '../../../../../assets/icon_legend3.png';
 import * as echarts from 'echarts';
-import { Button, Form } from 'antd';
+import { Button, Form, message, Upload } from 'antd';
 import moment from 'moment';
 import { useEchartMouseAid } from '../../hook';
 import LabelsView from '@/compoments/LabelsView';
+import { obj2FormData } from '@/utils/tool';
+import { uploadFile } from './service';
+import ModalDetail from './ModalDetail';
 
 export const timeOptions = [
   {
@@ -44,6 +47,7 @@ const Index = () => {
   }, [themeChangeTag]);
 
   const mRef = useRef<any>(null);
+  const dRef = useRef<any>(null);
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -135,9 +139,48 @@ const Index = () => {
 
   // useEchartMouseAid(mRef, option, lineIcon5, lineIcon1);
 
+  // 上传接口
+  const { run: uploadFileRun, loading: uploadFileLoading } = useRequest(
+    uploadFile,
+    {
+      manual: true,
+      onSuccess: (res) => {
+        message.success('导入成功');
+      },
+    },
+  );
+
+  // 上传
+  const upLoadFileprops = {
+    accept: '.xls,.xlsx',
+    showUploadList: false,
+    beforeUpload: (file: File) => {
+      const formData = obj2FormData({
+        file,
+      });
+
+      uploadFileRun(formData);
+      return false;
+    },
+  };
+
+  useEffect(() => {
+    const inst = mRef.current;
+    addClickEvent(inst, (xIndex) => {
+      console.log('xIndex', xIndex);
+      dRef?.current?.showModal();
+    });
+  }, [mRef]);
+
   return (
     <CardWrapper
-      extra={<Button className="export-btn">导入</Button>}
+      extra={
+        <Upload {...upLoadFileprops}>
+          <Button loading={uploadFileLoading} className="export-btn">
+            导入
+          </Button>
+        </Upload>
+      }
       header={
         <Tab
           value={tabValue}
@@ -169,7 +212,9 @@ const Index = () => {
           />
         </Form.Item>
       </Form>
-      <Echarts5 option={option} />
+      <Echarts5 ref={mRef} option={option} />
+
+      <ModalDetail mRef={dRef} />
     </CardWrapper>
   );
 };

@@ -41,3 +41,16 @@ export const themeEhcartColor = {
     '--area-primary-color-end': 'rgba(25, 75, 252,0.03)',
   },
 };
+
+export const addClickEvent = (
+  inst: any,
+  callback?: (xAxisIndex: number) => void,
+) => {
+  inst?.getZr().on('click', (params: any) => {
+    const pointInPixel = [params.offsetX, params.offsetY];
+    if (inst.containPixel({ gridIndex: 'all' }, pointInPixel)) {
+      const xIndex = inst.convertFromPixel({ seriesIndex: 0 }, pointInPixel)[0];
+      callback?.(xIndex);
+    }
+  });
+};
