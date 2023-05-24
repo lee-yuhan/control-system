@@ -53,12 +53,18 @@ const Index: FC<{
       <Form.Item style={{ marginRight: 0 }} name="custType">
         <Select
           placeholder="请选择客户类型"
+          style={{ minWidth: 120 }}
           allowClear={!isSpecial}
           options={custTypeList}
         />
       </Form.Item>
       <Form.Item style={{ marginRight: 0 }} name="gridName">
-        <Select placeholder="请选择网格" allowClear options={gripList} />
+        <Select
+          style={{ minWidth: 120 }}
+          placeholder="请选择网格"
+          allowClear
+          options={gripList}
+        />
       </Form.Item>
       <Form.Item style={{ marginRight: 0 }} name="latitude">
         <LabelsView

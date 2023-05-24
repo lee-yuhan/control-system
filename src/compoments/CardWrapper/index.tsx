@@ -16,12 +16,7 @@ const Index: FC<IProps> = ({ extra, loading = false, header, children }) => {
         <div>
           <Row justify="space-between" wrap={false} align="middle" gutter={8}>
             <Col flex={1}>{header}</Col>
-            <Col>
-              <Space size={4}>
-                {extra}
-                <Button className="export-btn">导出</Button>
-              </Space>
-            </Col>
+            <Col>{extra}</Col>
           </Row>
         </div>
         <div className="card-content">{children}</div>

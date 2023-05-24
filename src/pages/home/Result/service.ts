@@ -27,3 +27,23 @@ export function getStatData(params: {
     params,
   });
 }
+
+// 文件上传
+export const uploadFile = (data: any) => {
+  return request(`${API_PREFIX}/`, {
+    data,
+    method: 'post',
+  });
+};
+
+export const getQualityInspectionData = (params: {
+  branchName: string;
+
+  regionName: string;
+  // 纬度 0：日纬度/1：周维度/2：月纬度
+  latitude: string;
+}) => {
+  return request(`${API_PREFIX}/`, {
+    params,
+  });
+};

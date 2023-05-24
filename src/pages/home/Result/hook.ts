@@ -6,7 +6,7 @@ import { cloneDeep, isNaN, isNil } from 'lodash';
 
 export const useRequestAid = (mode: string) => {
   const [params, setParams] = useState({
-    latitude: '',
+    latitude: [],
     custType: '',
     gridName: '',
   });
@@ -22,7 +22,7 @@ export const useRequestAid = (mode: string) => {
         branchName,
         custType: params?.custType,
         regionName,
-        latitude: params?.latitude,
+        latitude: params?.latitude?.toString(),
         gridName: params?.gridName,
         mode,
       });

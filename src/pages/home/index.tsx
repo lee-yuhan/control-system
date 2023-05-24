@@ -5,6 +5,7 @@ import { useCallback, useMemo } from 'react';
 import { useDispatch, useRequest, useSelector } from 'umi';
 import { Button, Carousel } from 'antd';
 import { useRef } from 'react';
+import { useAccess } from 'umi';
 
 import prev_btn from '@/assets/prev_btn.png';
 import next_btn from '@/assets/next_btn.png';
@@ -23,13 +24,14 @@ const Index = () => {
   const mRef = useRef<any>(null);
   const dispatch = useDispatch();
   const [currPageNum, setCurrPageNum] = useState<number>(0);
-  const { permissionList } = useInitialState();
+  const access = useAccess();
+
   const menuPermission = useMemo(() => {
     // 目前只展示第二屏
     return ['second-screen'];
     // const result = permissionList?.filter((item) => item.type === 'MENU');
     // return map(result, 'code');
-  }, [permissionList]);
+  }, [access]);
 
   const onValuesChange = (changeValues: any) => {
     dispatch({

@@ -17,6 +17,7 @@ import { getLocalStorageTheme } from '@/utils/theme';
 import { baseConfig, satisfactionNameMap } from '../../config';
 import { useRequestAid } from '../../hook';
 import moment from 'moment';
+import { Spin } from 'antd';
 const Index = () => {
   const [tabValue] = useState<string>('7');
   const themeChangeTag = useSelector(
@@ -26,7 +27,7 @@ const Index = () => {
     return getLocalStorageTheme();
   }, [themeChangeTag]);
 
-  // const { data, setParams } = useRequestAid(tabValue);
+  const { data, setParams, loading } = useRequestAid(tabValue);
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -46,14 +47,14 @@ const Index = () => {
           },
         ],
       },
-      // xAxis: {
-      //   data: map(data, 'latitude'),
-      // },
       xAxis: {
-        data: Array(7)
-          .fill('')
-          .map((_, index) => moment().clone().add(index).format('MM-DD')),
+        data: map(data, 'latitude'),
       },
+      // xAxis: {
+      //   data: Array(7)
+      //     .fill('')
+      //     .map((_, index) => moment().clone().add(index).format('MM-DD')),
+      // },
       series: [
         {
           name: satisfactionNameMap[tabValue],
@@ -65,10 +66,10 @@ const Index = () => {
           symbol: `image://${lineIcon3}`,
           symbolSize: 8,
           smooth: true,
-          // data: map(data, 'satisfaction'),
-          data: Array(7)
-            .fill('')
-            .map((_) => random(0, 100)),
+          data: map(data, 'satisfaction'),
+          // data: Array(7)
+          //   .fill('')
+          //   .map((_) => random(0, 100)),
           lineStyle: {
             color: themeEhcartColor[theme]['--area-line-color'],
             width: 1,
@@ -127,10 +128,10 @@ const Index = () => {
         {
           name: '环比',
           type: 'bar',
-          // data: map(data, 'rate'),
-          data: Array(7)
-            .fill('')
-            .map((_) => random(0, 100)),
+          data: map(data, 'rate'),
+          // data: Array(7)
+          //   .fill('')
+          //   .map((_) => random(0, 100)),
           itemStyle: {
             color: themeEhcartColor[theme]['--primary-color'],
           },
@@ -146,12 +147,12 @@ const Index = () => {
         },
       ],
     });
-  }, [theme, tabValue]);
+  }, [theme, tabValue, data]);
   return (
-    <>
-      <CardCondition mode={tabValue} onValuesChange={() => {}} />
+    <Spin spinning={loading}>
+      <CardCondition mode={tabValue} onValuesChange={setParams} />
       <Echarts5 option={option} />
-    </>
+    </Spin>
   );
 };
 

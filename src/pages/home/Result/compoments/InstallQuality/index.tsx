@@ -16,6 +16,7 @@ import * as echarts from 'echarts';
 import { map, merge } from 'lodash';
 import { baseConfig, satisfactionNameMap } from '../../config';
 import { useEchartMouseAid, useRequestAid } from '../../hook';
+import { Button } from 'antd';
 
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('1');
@@ -125,6 +126,7 @@ const Index = () => {
   return (
     <CardWrapper
       loading={loading}
+      extra={<Button className="export-btn">导出</Button>}
       header={
         <Tab
           value={tabValue}

@@ -11,34 +11,42 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
     },
   }));
 
+  const handleDel = () => {
+    Modal.confirm({
+      title: '提示',
+      content: `您将要删除 ?`,
+      onOk: async () => {},
+    });
+  };
+
   const columns = [
     {
-      title: 'CRM编号/112流水号',
+      title: '导入人',
       dataIndex: 'index',
     },
     {
-      title: 'P6号/工单号',
+      title: '导入文件名',
       dataIndex: 'name',
     },
     {
-      title: '区局',
+      title: '导入时间',
       dataIndex: 'regionName',
     },
     {
-      title: '支局',
-      dataIndex: 'repeatNum',
-    },
-    {
-      title: '工单操作类型',
-      dataIndex: 'recordNum',
-    },
-    {
-      title: '完工日期',
-      dataIndex: 'recordNum',
-    },
-    {
-      title: '核查结果',
-      dataIndex: 'recordNum',
+      title: '操作',
+      render: () => {
+        return (
+          <Button
+            danger
+            type="link"
+            size="small"
+            style={{ padding: 0 }}
+            onClick={handleDel}
+          >
+            删除
+          </Button>
+        );
+      },
     },
   ];
 

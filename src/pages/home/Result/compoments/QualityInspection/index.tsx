@@ -16,13 +16,14 @@ import lineIcon1 from '../../../../../assets/icon_line1.png';
 import legendIcon10 from '../../../../../assets/icon_legend10.png';
 import legendIcon3 from '../../../../../assets/icon_legend3.png';
 import * as echarts from 'echarts';
-import { Button, Form, message, Upload } from 'antd';
+import { Button, Form, message, Space, Upload } from 'antd';
 import moment from 'moment';
 import { useEchartMouseAid } from '../../hook';
 import LabelsView from '@/compoments/LabelsView';
 import { obj2FormData } from '@/utils/tool';
-import { uploadFile } from './service';
+import { getQualityInspectionData, uploadFile } from '../../service';
 import ModalDetail from './ModalDetail';
+import ExportDetail from './ExportDetail';
 
 export const timeOptions = [
   {
@@ -38,6 +39,7 @@ export const timeOptions = [
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('10');
   const [latitude, setLatitude] = useState<string[]>([timeOptions?.[0].id]);
+  const { branchName, regionName } = useSelector((store: any) => store.home);
 
   const themeChangeTag = useSelector(
     (store: any) => store.common.themeChangeTag,
@@ -48,6 +50,7 @@ const Index = () => {
 
   const mRef = useRef<any>(null);
   const dRef = useRef<any>(null);
+  const eRef = useRef<any>(null);
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -57,7 +60,7 @@ const Index = () => {
         },
         data: [
           {
-            name: satisfactionNameMap[tabValue],
+            name: '虚假工单数',
             icon: `image://${legendIcon3}`,
           },
           {
@@ -73,7 +76,7 @@ const Index = () => {
       },
       series: [
         {
-          name: satisfactionNameMap[tabValue],
+          name: '虚假工单数',
           type: 'line',
           data: Array(7)
             .fill('')
@@ -139,6 +142,10 @@ const Index = () => {
 
   // useEchartMouseAid(mRef, option, lineIcon5, lineIcon1);
 
+  const { data, run, loading, refresh } = useRequest(getQualityInspectionData, {
+    manual: true,
+  });
+
   // 上传接口
   const { run: uploadFileRun, loading: uploadFileLoading } = useRequest(
     uploadFile,
@@ -146,9 +153,19 @@ const Index = () => {
       manual: true,
       onSuccess: (res) => {
         message.success('导入成功');
+        refresh();
       },
     },
   );
+
+  // useEffect(() => {
+  //   if (!regionName || !latitude?.length) return;
+  //   run({
+  //     branchName,
+  //     regionName,
+  //     latitude: latitude?.toString(),
+  //   });
+  // }, [regionName,regionName,latitude]);
 
   // 上传
   const upLoadFileprops = {
@@ -175,11 +192,21 @@ const Index = () => {
   return (
     <CardWrapper
       extra={
-        <Upload {...upLoadFileprops}>
-          <Button loading={uploadFileLoading} className="export-btn">
-            导入
+        <Space size={4}>
+          <Upload {...upLoadFileprops}>
+            <Button loading={uploadFileLoading} className="export-btn">
+              导入
+            </Button>
+          </Upload>
+          <Button
+            className="export-btn"
+            onClick={() => {
+              eRef?.current?.showModal();
+            }}
+          >
+            查询
           </Button>
-        </Upload>
+        </Space>
       }
       header={
         <Tab
@@ -212,9 +239,10 @@ const Index = () => {
           />
         </Form.Item>
       </Form>
-      <Echarts5 ref={mRef} option={option} />
+      <Echarts5 loading={loading} ref={mRef} option={option} />
 
       <ModalDetail mRef={dRef} />
+      <ExportDetail mRef={eRef} />
     </CardWrapper>
   );
 };

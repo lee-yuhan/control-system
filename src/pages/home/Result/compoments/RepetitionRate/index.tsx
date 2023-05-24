@@ -4,11 +4,13 @@ import Tab from '@/compoments/Tab';
 import { useState } from 'react';
 import Trend from './Trend';
 import Rank from './Rank';
+import { Button } from 'antd';
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('7');
 
   return (
     <CardWrapper
+      extra={<Button className="export-btn">导出</Button>}
       header={
         <Tab
           value={tabValue}

@@ -7,8 +7,7 @@ export default (): {
   customerTypeList: OptionList;
   // 区局下拉列表
   districtBureauList: OptionList;
-  // 权限列表
-  permissionList: IPermissionList;
+
   permissionCodeList: string;
   // 网格下拉列表
   gripList: OptionList;
@@ -18,7 +17,6 @@ export default (): {
       branchList,
       customerTypeList,
       districtBureauList,
-      permissionList,
       permissionCodeList,
       gripList,
     },
@@ -27,7 +25,6 @@ export default (): {
     branchList,
     customerTypeList,
     districtBureauList,
-    permissionList,
     permissionCodeList,
     gripList,
   };
