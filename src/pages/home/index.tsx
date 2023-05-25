@@ -1,9 +1,9 @@
 import BannerCondition from '@/compoments/BannerCondition';
 import Result from './Result';
 import './index.less';
-import { useCallback, useMemo } from 'react';
-import { useDispatch, useRequest, useSelector } from 'umi';
-import { Button, Carousel } from 'antd';
+import { useMemo } from 'react';
+import { useDispatch } from 'umi';
+import { Carousel } from 'antd';
 import { useRef } from 'react';
 import { useAccess } from 'umi';
 
@@ -11,16 +11,8 @@ import prev_btn from '@/assets/prev_btn.png';
 import next_btn from '@/assets/next_btn.png';
 import { useState } from 'react';
 import Main from './Main';
-import useInitialState from '@/hooks/useInitialState';
-import { map } from 'lodash';
-import { loginRecord } from '@/service/commonServices';
-import { useTimeout } from 'ahooks';
 
 const Index = () => {
-  // const { branchName, custType, regionName } = useSelector(
-  //   (store: any) => store.home,
-  // );
-
   const mRef = useRef<any>(null);
   const dispatch = useDispatch();
   const [currPageNum, setCurrPageNum] = useState<number>(0);

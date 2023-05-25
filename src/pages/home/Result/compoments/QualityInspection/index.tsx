@@ -1,6 +1,6 @@
 // 质检
 import { Echarts5 } from '@/compoments/Echarts5';
-import { useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import CardWrapper from '@/compoments/CardWrapper';
 import Tab from '@/compoments/Tab';
 import { useState } from 'react';
@@ -80,7 +80,7 @@ const Index = () => {
         {
           name: '虚假工单数',
           type: 'line',
-          data: map(data, 'satisfaction'),
+          data: map(data, 'value'),
           symbol: `image://${lineIcon2}`,
           symbolSize: 8,
           smooth: true,
@@ -175,13 +175,18 @@ const Index = () => {
     },
   };
 
+  const handleClick = useCallback(
+    (xIndex: number) => {
+      dRef?.current?.showModal(data?.[xIndex]?.date, latitude);
+    },
+    [dRef, data, latitude],
+  );
+
   useEffect(() => {
     const inst = mRef.current;
-    addClickEvent(inst, (xIndex) => {
-      console.log('xIndex', xIndex);
-      dRef?.current?.showModal(data?.[xIndex]?.date, latitude);
-    });
-  }, [mRef]);
+
+    addClickEvent(inst, handleClick);
+  }, [handleClick]);
 
   return (
     <CardWrapper
@@ -236,7 +241,7 @@ const Index = () => {
       <Echarts5 loading={loading} ref={mRef} option={option} />
 
       <ModalDetail mRef={dRef} />
-      <ExportDetail mRef={eRef} />
+      <ExportDetail mRef={eRef} onDel={refresh} />
     </CardWrapper>
   );
 };

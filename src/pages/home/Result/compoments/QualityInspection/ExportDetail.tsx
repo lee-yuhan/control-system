@@ -1,27 +1,25 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Table, message } from 'antd';
 import { FC, useEffect, useImperativeHandle, useState } from 'react';
-import { useAccess, useRequest, useSelector } from 'umi';
+import { useAccess, useRequest } from 'umi';
 import { deleteQualityFileData, getQualityFileData } from '../../service';
 import { compact } from 'lodash';
 
-const Index: FC<{ mRef: any }> = ({ mRef }) => {
+const defaultPage = {
+  current: 1,
+  pageSize: 10,
+  total: 0,
+};
+
+const Index: FC<{ mRef: any; onDel?: () => void }> = ({ mRef, onDel }) => {
   const [visible, setVisible] = useState<boolean>(false);
   const access = useAccess();
-  const { branchName, regionName } = useSelector((store: any) => store.home);
-  const [latitude, setLatitude] = useState<string[]>([]);
-  const [date, setDate] = useState<string>();
 
-  const [pagesData, setPagesData] = useState({
-    current: 1,
-    pageSize: 10,
-    total: 10,
-  });
+  const [pagesData, setPagesData] = useState(defaultPage);
 
   useImperativeHandle(mRef, () => ({
     showModal: () => {
-      // setLatitude(latitudes);
-      // setDate(date);
+      setPagesData(defaultPage);
       setVisible(true);
     },
   }));
@@ -30,20 +28,24 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
     data,
     run: getQualityFileDataRun,
     loading,
+    mutate,
   } = useRequest(getQualityFileData, {
     manual: true,
-    formatResult(res) {
-      return res?.data?.records;
+    onSuccess: (res) => {
+      setPagesData({
+        ...pagesData,
+        total: res.total,
+      });
     },
   });
 
   useEffect(() => {
-    if (!regionName || !latitude?.length) return;
-    getQualityFileDataRun({
-      current: pagesData.current,
-      size: pagesData.pageSize,
-    });
-  }, [regionName, branchName, latitude, pagesData, date]);
+    if (visible)
+      getQualityFileDataRun({
+        current: pagesData.current,
+        size: pagesData.pageSize,
+      });
+  }, [visible, pagesData?.current, pagesData?.pageSize]);
 
   const { run: delRun, loading: delLoading } = useRequest(
     deleteQualityFileData,
@@ -51,6 +53,11 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
       manual: true,
       onSuccess: () => {
         message.success('删除成功');
+        setPagesData({
+          ...pagesData,
+          current: 1,
+        });
+        onDel?.();
       },
     },
   );
@@ -78,7 +85,7 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
       title: '导入时间',
       dataIndex: 'createTime',
     },
-    access.get('"quality_testing_delete') && {
+    access.get('BUTTON_quality_testing_delete') && {
       title: '操作',
       dataIndex: 'id',
       render: (id: string) => {
@@ -104,9 +111,12 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
     <Modal
       open={visible}
       footer={null}
-      width={'70%'}
+      width={'50%'}
+      destroyOnClose
       onCancel={() => {
         setVisible(false);
+        setPagesData(defaultPage);
+        mutate([]);
       }}
       closeIcon={<CloseCircleOutlined />}
     >
@@ -114,7 +124,7 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
         style={{ marginTop: 30 }}
         columns={columns as any}
         loading={loading}
-        dataSource={data}
+        dataSource={data?.records}
         pagination={pagesData}
         onChange={(pagination) => {
           const { pageSize, current, total } = pagination;

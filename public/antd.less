@@ -64,7 +64,8 @@
   }
   .ant-table-cell {
     font-size: 14px;
-    padding: 4px !important;
+    padding: 6px !important;
+    line-height: 14px;
     .ant-progress-outer {
       display: flex !important;
     }
@@ -97,5 +98,24 @@
 
       background: transparent;
     }
+  }
+}
+
+.ant-pagination {
+  .ant-pagination-item {
+    background-color: transparent !important;
+    border: 0;
+    a {
+      color: var(--text-color1) !important;
+    }
+    &.ant-pagination-item-active a {
+      color: var(--text-color2) !important;
+    }
+  }
+  .ant-pagination-item-link {
+    color: var(--text-color2) !important;
+  }
+  .ant-pagination-disabled .ant-pagination-item-link {
+    color: var(--text-color4) !important;
   }
 }

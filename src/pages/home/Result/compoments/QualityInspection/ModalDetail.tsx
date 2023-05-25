@@ -1,8 +1,15 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { Modal, Table } from 'antd';
-import { FC, useEffect, useImperativeHandle, useState } from 'react';
+import { FC, useImperativeHandle, useState } from 'react';
 import { getQualityData } from '../../service';
 import { useRequest, useSelector } from 'umi';
+import { useDebounceEffect } from 'ahooks';
+
+const defaultPage = {
+  current: 1,
+  pageSize: 10,
+  total: 0,
+};
 
 const Index: FC<{ mRef: any }> = ({ mRef }) => {
   const [visible, setVisible] = useState<boolean>(false);
@@ -10,34 +17,46 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
   const [latitude, setLatitude] = useState<string[]>([]);
   const [date, setDate] = useState<string>();
 
-  const [pagesData, setPagesData] = useState({
-    current: 1,
-    pageSize: 10,
-    total: 10,
-  });
+  const [pagesData, setPagesData] = useState(defaultPage);
 
   const {
     data,
     run: getQualityDataRun,
     loading,
+    mutate,
   } = useRequest(getQualityData, {
     manual: true,
-    formatResult(res) {
-      return res?.data?.records;
+    onSuccess: (res) => {
+      setPagesData({
+        ...pagesData,
+        total: res.total,
+      });
     },
   });
 
-  useEffect(() => {
-    if (!regionName || !latitude?.length) return;
-    getQualityDataRun({
-      branchName,
+  useDebounceEffect(
+    () => {
+      if ((!regionName || !latitude?.length) && !visible) return;
+      getQualityDataRun({
+        branchName,
+        regionName,
+        date,
+        latitude: latitude?.toString(),
+        current: pagesData.current,
+        size: pagesData.pageSize,
+      });
+    },
+    [
       regionName,
+      branchName,
+      latitude,
+      pagesData?.current,
+      pagesData?.pageSize,
       date,
-      latitude: latitude?.toString(),
-      current: pagesData.current,
-      size: pagesData.pageSize,
-    });
-  }, [regionName, branchName, latitude, pagesData, date]);
+      visible,
+    ],
+    { wait: 300 },
+  );
 
   useImperativeHandle(mRef, () => ({
     showModal: (date: string, latitudes: string[]) => {
@@ -90,6 +109,8 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
       width={'70%'}
       onCancel={() => {
         setVisible(false);
+        setPagesData(defaultPage);
+        mutate([]);
       }}
       closeIcon={<CloseCircleOutlined />}
     >
@@ -97,7 +118,7 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
         style={{ marginTop: 30 }}
         columns={columns as any}
         loading={loading}
-        dataSource={data}
+        dataSource={data?.records}
         pagination={pagesData}
         onChange={(pagination) => {
           const { pageSize, current, total } = pagination;
