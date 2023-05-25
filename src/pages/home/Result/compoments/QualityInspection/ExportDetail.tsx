@@ -45,7 +45,7 @@ const Index: FC<{ mRef: any; onDel?: () => void }> = ({ mRef, onDel }) => {
         current: pagesData.current,
         size: pagesData.pageSize,
       });
-  }, [visible, pagesData?.current, pagesData?.pageSize]);
+  }, [visible, pagesData?.current, pagesData?.pageSize, pagesData?.total]);
 
   const { run: delRun, loading: delLoading } = useRequest(
     deleteQualityFileData,
@@ -56,6 +56,7 @@ const Index: FC<{ mRef: any; onDel?: () => void }> = ({ mRef, onDel }) => {
         setPagesData({
           ...pagesData,
           current: 1,
+          total: pagesData?.total - 1,
         });
         onDel?.();
       },
