@@ -30,7 +30,7 @@ export function getStatData(params: {
 
 // 文件上传
 export const uploadFile = (data: any) => {
-  return request(`${API_PREFIX}/`, {
+  return request(`${API_PREFIX}/qualityTesting/importData`, {
     data,
     method: 'post',
   });
@@ -38,12 +38,32 @@ export const uploadFile = (data: any) => {
 
 export const getQualityInspectionData = (params: {
   branchName: string;
-
   regionName: string;
   // 纬度 0：日纬度/1：周维度/2：月纬度
   latitude: string;
 }) => {
-  return request(`${API_PREFIX}/`, {
+  return request(`${API_PREFIX}/qualityTesting/latitudeStat`, {
+    params,
+  });
+};
+
+export const deleteQualityFileData = (id: string) => {
+  return request(`${API_PREFIX}/qualityTestingFile/deleteData`, {
+    params: { id },
+    method: 'post',
+  });
+};
+
+// 质检分页列表
+export const getQualityData = (params: any) => {
+  return request(`${API_PREFIX}/qualityTesting/page`, {
+    params,
+  });
+};
+
+// 质检文件分页列表
+export const getQualityFileData = (params: any) => {
+  return request(`${API_PREFIX}/qualityTestingFile/page`, {
     params,
   });
 };

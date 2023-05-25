@@ -8,7 +8,7 @@ import CardCondition from '../CardCondition';
 import { addClickEvent, themeEhcartColor } from '@/utils/ehcart';
 import { baseConfig, satisfactionNameMap } from '../../config';
 import { getLocalStorageTheme } from '@/utils/theme';
-import { merge, random } from 'lodash';
+import { map, merge, random } from 'lodash';
 import { useRequest, useSelector } from 'umi';
 import lineIcon2 from '../../../../../assets/icon_line2.png';
 import lineIcon5 from '../../../../../assets/icon_line5.png';
@@ -52,6 +52,10 @@ const Index = () => {
   const dRef = useRef<any>(null);
   const eRef = useRef<any>(null);
 
+  const { data, run, loading, refresh } = useRequest(getQualityInspectionData, {
+    manual: true,
+  });
+
   const option = useMemo(() => {
     return merge({}, baseConfig, {
       legend: {
@@ -63,26 +67,20 @@ const Index = () => {
             name: '虚假工单数',
             icon: `image://${legendIcon3}`,
           },
-          {
-            name: '环比',
-            icon: `image://${legendIcon10}`,
-          },
+          // {
+          //   name: '环比',
+          //   icon: `image://${legendIcon10}`,
+          // },
         ],
       },
       xAxis: {
-        data: Array(7)
-          .fill('')
-          .map((_, index) => moment().clone().add(index).format('MM-DD')),
+        data: map(data, 'latitude'),
       },
       series: [
         {
           name: '虚假工单数',
           type: 'line',
-          data: Array(7)
-            .fill('')
-            .map((_) => {
-              return { value: random(0, 100) };
-            }),
+          data: map(data, 'satisfaction'),
           symbol: `image://${lineIcon2}`,
           symbolSize: 8,
           smooth: true,
@@ -138,13 +136,9 @@ const Index = () => {
         // },
       ],
     });
-  }, [theme, tabValue]);
+  }, [theme, tabValue, data]);
 
   // useEchartMouseAid(mRef, option, lineIcon5, lineIcon1);
-
-  const { data, run, loading, refresh } = useRequest(getQualityInspectionData, {
-    manual: true,
-  });
 
   // 上传接口
   const { run: uploadFileRun, loading: uploadFileLoading } = useRequest(
@@ -158,14 +152,14 @@ const Index = () => {
     },
   );
 
-  // useEffect(() => {
-  //   if (!regionName || !latitude?.length) return;
-  //   run({
-  //     branchName,
-  //     regionName,
-  //     latitude: latitude?.toString(),
-  //   });
-  // }, [regionName,regionName,latitude]);
+  useEffect(() => {
+    if (!regionName || !latitude?.length) return;
+    run({
+      branchName,
+      regionName,
+      latitude: latitude?.toString(),
+    });
+  }, [regionName, latitude]);
 
   // 上传
   const upLoadFileprops = {
@@ -185,7 +179,7 @@ const Index = () => {
     const inst = mRef.current;
     addClickEvent(inst, (xIndex) => {
       console.log('xIndex', xIndex);
-      dRef?.current?.showModal();
+      dRef?.current?.showModal(data?.[xIndex]?.date, latitude);
     });
   }, [mRef]);
 

@@ -1,12 +1,48 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { Button, Modal, Table } from 'antd';
-import { FC, useImperativeHandle, useState } from 'react';
+import { Modal, Table } from 'antd';
+import { FC, useEffect, useImperativeHandle, useState } from 'react';
+import { getQualityData } from '../../service';
+import { useRequest, useSelector } from 'umi';
 
 const Index: FC<{ mRef: any }> = ({ mRef }) => {
   const [visible, setVisible] = useState<boolean>(false);
+  const { branchName, regionName } = useSelector((store: any) => store.home);
+  const [latitude, setLatitude] = useState<string[]>([]);
+  const [date, setDate] = useState<string>();
+
+  const [pagesData, setPagesData] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 10,
+  });
+
+  const {
+    data,
+    run: getQualityDataRun,
+    loading,
+  } = useRequest(getQualityData, {
+    manual: true,
+    formatResult(res) {
+      return res?.data?.records;
+    },
+  });
+
+  useEffect(() => {
+    if (!regionName || !latitude?.length) return;
+    getQualityDataRun({
+      branchName,
+      regionName,
+      date,
+      latitude: latitude?.toString(),
+      current: pagesData.current,
+      size: pagesData.pageSize,
+    });
+  }, [regionName, branchName, latitude, pagesData, date]);
 
   useImperativeHandle(mRef, () => ({
-    showModal: () => {
+    showModal: (date: string, latitudes: string[]) => {
+      setLatitude(latitudes);
+      setDate(date);
       setVisible(true);
     },
   }));
@@ -14,11 +50,11 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
   const columns = [
     {
       title: 'CRM编号/112流水号',
-      dataIndex: 'index',
+      dataIndex: 'serialNo',
     },
     {
       title: 'P6号/工单号',
-      dataIndex: 'name',
+      dataIndex: 'workNo',
     },
     {
       title: '区局',
@@ -26,21 +62,26 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
     },
     {
       title: '支局',
-      dataIndex: 'repeatNum',
+      dataIndex: 'branchName',
     },
     {
       title: '工单操作类型',
-      dataIndex: 'recordNum',
+      dataIndex: 'operationType',
     },
     {
       title: '完工日期',
-      dataIndex: 'recordNum',
+      dataIndex: 'completeDate',
     },
     {
       title: '核查结果',
-      dataIndex: 'recordNum',
+      dataIndex: 'checkResult',
     },
-  ];
+  ].map((item) => ({
+    render: (value: string) => {
+      return value ?? '-';
+    },
+    ...item,
+  }));
 
   return (
     <Modal
@@ -55,8 +96,17 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
       <Table
         style={{ marginTop: 30 }}
         columns={columns as any}
-        dataSource={[{ name: 123123 }]}
-        pagination={false}
+        loading={loading}
+        dataSource={data}
+        pagination={pagesData}
+        onChange={(pagination) => {
+          const { pageSize, current, total } = pagination;
+          setPagesData({
+            current: current!,
+            pageSize: pageSize!,
+            total: total!,
+          });
+        }}
         scroll={{ x: 'max-content' }}
       />
     </Modal>

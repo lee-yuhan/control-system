@@ -1,5 +1,7 @@
-type Access = Record<string, IPermissionList | undefined>;
+type Access = Map<string, IPermissionList[number] | undefined>;
 
-export default (initialState: any): Access => {
-  return initialState?.permissionList || {};
+export default (initialState: { permissionList: IPermissionList }): Access => {
+  return new Map(
+    initialState?.permissionList?.map((item) => [item.code, item]),
+  );
 };
