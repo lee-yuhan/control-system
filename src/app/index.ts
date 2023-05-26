@@ -116,23 +116,23 @@ export async function getInitialState() {
   if (!isIE && !requestBasePath) {
     try {
       const [
-        branchListResp,
+        // branchListResp,
         customerTypeListResp,
         districtBureauListResp,
         permissionResp,
-        gripListResp,
+        // gripListResp,
       ] = await Promise.all([
-        getBranchList(),
+        // getBranchList(),
         getCustomerTypeList(),
         getDistrictBureauList(),
         getPermission(),
-        getGripList(),
+        // getGripList(),
       ]);
 
-      branchList = map(branchListResp.data, (value) => ({
-        label: value,
-        value,
-      }));
+      // branchList = map(branchListResp.data, (value) => ({
+      //   label: value,
+      //   value,
+      // }));
       customerTypeList = map(customerTypeListResp.data, (value) => ({
         label: value,
         value,
@@ -142,10 +142,10 @@ export async function getInitialState() {
         value,
       }));
 
-      gripList = map(gripListResp.data, (value) => ({
-        label: value,
-        value,
-      }));
+      // gripList = map(gripListResp.data, (value) => ({
+      //   label: value,
+      //   value,
+      // }));
 
       permissionList = permissionResp.data;
       permissionCodeList = map(permissionResp.data, 'code');

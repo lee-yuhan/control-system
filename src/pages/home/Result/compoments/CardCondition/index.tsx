@@ -1,16 +1,19 @@
 import { Form, Select } from 'antd';
 import LabelsView from '@/compoments/LabelsView';
 import { timeOptions } from './config';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import useInitialState from '@/hooks/useInitialState';
-import { useMount } from 'ahooks';
+import { useDebounceEffect, useMount } from 'ahooks';
+import { useSelector } from 'umi';
 const Index: FC<{
+  params: any;
   mode: string;
   onValuesChange: (values: any) => void;
-}> = ({ mode, onValuesChange }) => {
+}> = ({ params, mode, onValuesChange }) => {
   //   const [timeType, setTimeType] = useState<string[]>(['week']);
-  const { customerTypeList, gripList } = useInitialState();
-
+  const { customerTypeList } = useInitialState();
+  const [form] = Form.useForm();
+  const gripList = useSelector((store: any) => store.common.gripList);
   const isSpecial = useMemo(() => {
     return ['1', '2', '4', '5'].includes(mode);
   }, [mode]);
@@ -38,11 +41,26 @@ const Index: FC<{
       custType: isSpecial ? custTypeList?.[0]?.value : undefined,
     };
   }, [custTypeList]);
+
   useMount(() => {
     onValuesChange?.(defaultValues);
   });
+
+  useDebounceEffect(
+    () => {
+      form.setFieldValue('gridName', undefined);
+      onValuesChange?.({
+        ...params,
+        gridName: undefined,
+      });
+    },
+    [gripList],
+    { wait: 300 },
+  );
+
   return (
     <Form
+      form={form}
       layout="inline"
       style={{ gap: 8 }}
       onValuesChange={(_, allValues) => {
@@ -61,6 +79,7 @@ const Index: FC<{
       <Form.Item style={{ marginRight: 0 }} name="gridName">
         <Select
           style={{ minWidth: 120 }}
+          showSearch
           placeholder="请选择网格"
           allowClear
           options={gripList}

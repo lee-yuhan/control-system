@@ -30,7 +30,7 @@ const Index = () => {
   }, [themeChangeTag]);
   const mRef = useRef<any>(null);
 
-  const { data, setParams, loading } = useRequestAid(tabValue);
+  const { data, params, setParams, loading } = useRequestAid(tabValue);
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -130,13 +130,17 @@ const Index = () => {
             },
             {
               id: '9',
-              name: '质差10分满意率',
+              name: '质差十分满意度',
             },
           ]}
         />
       }
     >
-      <CardCondition mode={tabValue} onValuesChange={setParams} />
+      <CardCondition
+        mode={tabValue}
+        params={params}
+        onValuesChange={setParams}
+      />
       <Echarts5 ref={mRef} option={option} />
     </CardWrapper>
   );

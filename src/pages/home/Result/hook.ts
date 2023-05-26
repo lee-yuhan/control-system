@@ -35,10 +35,10 @@ export const useRequestAid = (mode: string) => {
       params?.latitude,
       mode,
     ],
-    { wait: 300 },
+    { wait: 400 },
   );
 
-  return { data, setParams, loading };
+  return { data, params, setParams, loading };
 };
 
 export const useEchartMouseAid = (

@@ -2,6 +2,7 @@ import type { ImmerReducer } from 'umi';
 
 export interface IndexModelState {
   themeChangeTag: number;
+  gripList: OptionList;
 }
 
 export interface IndexModelType {
@@ -17,6 +18,7 @@ const IndexModel: IndexModelType = {
   namespace: 'common',
   state: {
     themeChangeTag: 1,
+    gripList: [],
   },
 
   reducers: {

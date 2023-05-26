@@ -16,7 +16,7 @@ const Index = () => {
         padding: '0 50px',
       }}
     >
-      <Row gutter={40} style={{ marginBottom: 40 }}>
+      <Row gutter={40} style={{ marginBottom: 40, flex: 1 }}>
         <Col span={8}>
           <InstallQuality />
         </Col>

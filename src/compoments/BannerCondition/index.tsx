@@ -2,16 +2,22 @@ import { Button, Col, Form, Row, Select, Space } from 'antd';
 import './index.less';
 import { downloadOption } from './config';
 import useInitialState from '@/hooks/useInitialState';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useMount } from 'ahooks';
+import { getBranchList, getGripList } from '@/service/commonServices';
+import { useDispatch, useRequest, useSelector } from 'umi';
+import { map } from 'lodash';
 
 const Index: FC<{
   onValuesChange: (changeValues: any, values: any) => void;
 }> = ({ onValuesChange }) => {
-  const { districtBureauList, branchList } = useInitialState();
+  const { districtBureauList } = useInitialState();
   const [downloadType, setDownloadType] = useState<number>(
     downloadOption?.[0]?.value,
   );
+  const { branchName, regionName } = useSelector((store: any) => store.home);
+
+  const dispatch = useDispatch();
 
   const defaultValues = useMemo(() => {
     return {
@@ -22,6 +28,67 @@ const Index: FC<{
   useMount(() => {
     onValuesChange?.(defaultValues, defaultValues);
   });
+
+  const {
+    data: branchList,
+    run,
+    loading,
+  } = useRequest(getBranchList, {
+    manual: true,
+    formatResult(res) {
+      return map(res.data, (value) => ({
+        label: value,
+        value,
+      }));
+    },
+
+    // onSuccess: (res) => {
+    //   dispatch({
+    //     type: 'common/update',
+    //     payload: {
+    //       districtBureauList: res,
+    //     },
+    //   });
+    // },
+  });
+
+  const { run: getGripListRun } = useRequest(getGripList, {
+    manual: true,
+    formatResult(res) {
+      return map(res.data, (value) => ({
+        label: value,
+        value,
+      }));
+    },
+
+    onSuccess: (res) => {
+      dispatch({
+        type: 'common/update',
+        payload: {
+          gripList: res,
+        },
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (!regionName) return;
+    run(regionName);
+  }, [regionName]);
+
+  useEffect(() => {
+    if (!branchName) {
+      dispatch({
+        type: 'common/update',
+        payload: {
+          gripList: [],
+        },
+      });
+      return;
+    }
+    getGripListRun(branchName);
+  }, [branchName]);
+
   return (
     <div className="condition-container">
       {/* <div className="condition-box"> */}
@@ -46,11 +113,12 @@ const Index: FC<{
                   style={{ minWidth: 110 }}
                   placeholder="请选择支局"
                   options={branchList}
+                  loading={loading}
                   allowClear
                 >
-                  {branchList?.map((item) => (
+                  {/* {branchList?.map((item) => (
                     <Select.Option key={item.value}>{item.label}</Select.Option>
-                  ))}
+                  ))} */}
                 </Select>
               </Form.Item>
             </Form>

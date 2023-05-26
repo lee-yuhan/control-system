@@ -1,8 +1,12 @@
 import { request } from 'umi';
 
 // 查询支局下拉列表
-export function getBranchList() {
-  return request(`${API_PREFIX}/selection/branch`);
+export function getBranchList(regionName: string) {
+  return request(`${API_PREFIX}/selection/branch`, {
+    params: {
+      regionName,
+    },
+  });
 }
 
 // 查询客户类型下拉列表
@@ -16,8 +20,12 @@ export function getDistrictBureauList() {
 }
 
 // 查询网格下拉列表
-export function getGripList() {
-  return request(`${API_PREFIX}/selection/grip`);
+export function getGripList(branchName: string) {
+  return request(`${API_PREFIX}/selection/grip`, {
+    params: {
+      branchName,
+    },
+  });
 }
 
 // 获取用户权限

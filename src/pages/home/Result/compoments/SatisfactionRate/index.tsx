@@ -18,7 +18,7 @@ const Index = () => {
           options={[
             {
               id: '6',
-              name: '测评',
+              name: '测评满意率',
             },
           ]}
         />

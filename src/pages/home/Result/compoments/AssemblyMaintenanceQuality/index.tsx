@@ -29,7 +29,7 @@ const Index = () => {
   }, [themeChangeTag]);
   const mRef = useRef<any>();
 
-  const { data, setParams, loading } = useRequestAid(tabValue);
+  const { data, params, setParams, loading } = useRequestAid(tabValue);
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -88,6 +88,7 @@ const Index = () => {
           label: {
             show: true,
             position: 'top',
+            offset: [0, -4],
             color: themeEhcartColor[theme]['--text-color2'],
             valueAnimation: true,
             formatter: (p: { value: number }) => {
@@ -111,6 +112,7 @@ const Index = () => {
           label: {
             show: true,
             position: 'top',
+            offset: [0, 0],
             color: themeEhcartColor[theme]['--danger-color'],
             valueAnimation: true,
             formatter: (p: { value: number }) => {
@@ -135,17 +137,21 @@ const Index = () => {
           options={[
             {
               id: '4',
-              name: '装维质量履约率',
+              name: '维修工单履约率',
             },
             {
               id: '5',
-              name: '装维质量预约率',
+              name: '维修工单改约率',
             },
           ]}
         />
       }
     >
-      <CardCondition mode={tabValue} onValuesChange={setParams} />
+      <CardCondition
+        mode={tabValue}
+        params={params}
+        onValuesChange={setParams}
+      />
       <Echarts5 ref={mRef} option={option} />
     </CardWrapper>
   );

@@ -27,7 +27,7 @@ const Index = () => {
     return getLocalStorageTheme();
   }, [themeChangeTag]);
 
-  const { data, setParams, loading } = useRequestAid(tabValue);
+  const { data, params, setParams, loading } = useRequestAid(tabValue);
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -50,26 +50,16 @@ const Index = () => {
       xAxis: {
         data: map(data, 'latitude'),
       },
-      // xAxis: {
-      //   data: Array(7)
-      //     .fill('')
-      //     .map((_, index) => moment().clone().add(index).format('MM-DD')),
-      // },
+
       series: [
         {
           name: satisfactionNameMap[tabValue],
           type: 'line',
-          // lineStyle: {
-          //   color: themeEhcartColor[theme]['--danger-color'],
-          //   width: 3,
-          // },
           symbol: `image://${lineIcon3}`,
           symbolSize: 8,
           smooth: true,
           data: map(data, 'satisfaction'),
-          // data: Array(7)
-          //   .fill('')
-          //   .map((_) => random(0, 100)),
+
           lineStyle: {
             color: themeEhcartColor[theme]['--area-line-color'],
             width: 1,
@@ -87,33 +77,6 @@ const Index = () => {
               },
             ]),
           },
-          // itemStyle: {
-          //   barBorderRadius: [2, 2, 0, 0], //柱体圆角
-          //   color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          //     {
-          //       offset: 0,
-          //       color: 'rgba(25, 75, 252, 0.2)',
-          //     },
-          //     {
-          //       offset: 1,
-          //       color: 'rgba(25, 75, 252, 0.03)',
-          //     },
-          //   ]),
-          // },
-          // emphasis: {
-          //   itemStyle: {
-          //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          //       {
-          //         offset: 0,
-          //         color: 'rgba(25, 75, 252, 0.4)',
-          //       },
-          //       {
-          //         offset: 1,
-          //         color: 'rgba(25, 75, 252, 0.03)',
-          //       },
-          //     ]),
-          //   },
-          // },
 
           label: {
             show: true,
@@ -129,15 +92,14 @@ const Index = () => {
           name: '环比',
           type: 'bar',
           data: map(data, 'rate'),
-          // data: Array(7)
-          //   .fill('')
-          //   .map((_) => random(0, 100)),
           itemStyle: {
             color: themeEhcartColor[theme]['--primary-color'],
           },
+          symbolSize: 8,
           label: {
             show: true,
             position: 'top',
+            offset: [0, -4],
             color: themeEhcartColor[theme]['--primary-color'],
             valueAnimation: true,
             formatter: (p: { value: number }) => {
@@ -150,7 +112,11 @@ const Index = () => {
   }, [theme, tabValue, data]);
   return (
     <Spin spinning={loading}>
-      <CardCondition mode={tabValue} onValuesChange={setParams} />
+      <CardCondition
+        mode={tabValue}
+        params={params}
+        onValuesChange={setParams}
+      />
       <Echarts5 option={option} />
     </Spin>
   );
