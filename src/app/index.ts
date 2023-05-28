@@ -110,7 +110,6 @@ export async function getInitialState() {
   let districtBureauList: OptionList = [];
 
   let permissionList: IPermissionList = [];
-  let permissionCodeList: string[] = [];
   let gripList: OptionList = [];
 
   if (!isIE && !requestBasePath) {
@@ -148,7 +147,6 @@ export async function getInitialState() {
       // }));
 
       permissionList = permissionResp.data;
-      permissionCodeList = map(permissionResp.data, 'code');
     } catch (error: any) {
       console.log('error', error);
       // errorHandle(error);
@@ -160,7 +158,6 @@ export async function getInitialState() {
     customerTypeList,
     districtBureauList,
     permissionList,
-    permissionCodeList,
     gripList,
   };
 }

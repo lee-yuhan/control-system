@@ -1,4 +1,9 @@
-import { useMount, useUpdateEffect, useUpdateLayoutEffect } from 'ahooks';
+import {
+  useEventListener,
+  useMount,
+  useUpdateEffect,
+  useUpdateLayoutEffect,
+} from 'ahooks';
 import { Empty, Spin } from 'antd';
 import * as echarts from 'echarts';
 import { debounce } from 'lodash';
@@ -10,6 +15,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 // import { PpssContext } from '../../PpssContext';
 import './index.less';
@@ -62,6 +68,7 @@ export interface Echarts5Props {
   //  * 取消父元素大小变化监听，暂时没想到使用场景
   //  */
   // disableResizeObserver?: boolean;
+  resizeUpdate?: boolean;
 }
 
 export const Echarts5HeightEnum = {
@@ -74,11 +81,13 @@ export const Echarts5HeightEnum = {
  */
 export const Echarts5 = memo(
   forwardRef((props: Echarts5Props, ref: any) => {
-    const { className = '' } = props;
+    const { className = '', resizeUpdate = true } = props;
+    const [visible, setVisible] = useState(true);
     const style = useMemo(
       () => ({
         width: props.width ?? '100%',
         height: props.height ?? Echarts5HeightEnum.DEFAULT,
+        minHeight: Echarts5HeightEnum.DEFAULT,
         ...props.style,
       }),
       [props.height, props.style, props.width],
@@ -93,6 +102,15 @@ export const Echarts5 = memo(
     // !chartDomRef 与 props.isEmpty 互斥
     const chartDomRef = useRef<HTMLDivElement | null>(null);
     const chartInstRef = useRef<echarts.ECharts | null>(null);
+
+    useEventListener('resize', () => {
+      if (resizeUpdate) {
+        setVisible(false);
+        setTimeout(() => {
+          setVisible(true);
+        }, 0);
+      }
+    });
 
     // 初始化
     useMount(() => {
@@ -124,7 +142,7 @@ export const Echarts5 = memo(
         ref.current = chartInstRef.current;
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.initOpts, props.isEmpty]);
+    }, [props.initOpts, props.isEmpty, visible]);
 
     // 数据变化
     useEffect(() => {
@@ -155,7 +173,7 @@ export const Echarts5 = memo(
       return () => {
         ro.disconnect();
       };
-    }, [props.isEmpty]);
+    }, [props.isEmpty, visible]);
 
     // 图大小变化
     useUpdateLayoutEffect(() => {
@@ -163,19 +181,21 @@ export const Echarts5 = memo(
     }, [style.height, style.width]);
 
     return (
-      <div className="echarts-5-wrapper" style={props.wrapperStyle}>
-        <Spin spinning={!!props.loading}>
-          {props.isEmpty ? (
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={style} />
-          ) : (
-            <div
-              ref={chartDomRef}
-              className={`echarts-5 ${className}`}
-              style={style}
-            />
-          )}
-        </Spin>
-      </div>
+      visible && (
+        <div className="echarts-5-wrapper" style={props.wrapperStyle}>
+          <Spin spinning={!!props.loading}>
+            {props.isEmpty ? (
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} style={style} />
+            ) : (
+              <div
+                ref={chartDomRef}
+                className={`echarts-5 ${className}`}
+                style={style}
+              />
+            )}
+          </Spin>
+        </div>
+      )
     );
   }),
 );

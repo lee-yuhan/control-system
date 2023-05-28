@@ -1,56 +1,124 @@
 import LabelsView from '@/compoments/LabelsView';
-import { Progress, Row, Space, Table } from 'antd';
-import { random } from 'lodash';
-import { useMemo, useState } from 'react';
+import { useDebounceEffect } from 'ahooks';
+import { Progress, Row, Space, Spin, Table } from 'antd';
+import { random, tail } from 'lodash';
+import {
+  useMemo,
+  useState,
+  useImperativeHandle,
+  FC,
+  useRef,
+  useCallback,
+} from 'react';
+import { useRequest, useSelector } from 'umi';
+import { getRankData } from '../../../service';
+import { timeOptions } from '../../CardCondition/config';
 import './index.less';
+import qs from 'qs';
+import ExportTypeModal, { IExportType } from '../../ExportTypeModal';
+import cookie from 'react-cookies';
 
 const topColor = [
   'var(--primary-color)',
   'var(--danger-color)',
   'var(--success-color)',
 ];
-const Index = () => {
-  const [type, setType] = useState<string[]>(['a']);
+const Index: FC<{
+  mRef: any;
+}> = ({ mRef }) => {
+  const [type, setType] = useState<string[]>(['1']);
+  const exRef = useRef<any>(null);
+  const { branchName, regionName } = useSelector((store: any) => store.home);
+
+  const { data, run, loading } = useRequest(getRankData, {
+    manual: true,
+  });
+
+  const [latitude, setLatitude] = useState(['1']);
+
+  const requestParams = useMemo(() => {
+    return {
+      latitude: latitude?.toString(),
+      type: type?.toString(),
+      limit: 10,
+    };
+  }, [latitude, type]);
+
+  const handleExport = useCallback(
+    (type: IExportType) => {
+      if (type === 'ECHART_DATA') {
+        window.open(
+          `${API_PREFIX}/stat/rankExport?${qs.stringify(requestParams)}`,
+        );
+      } else {
+        window.open(
+          `${API_PREFIX}/stat/infoDetailExport?${qs.stringify({
+            latitude: latitude?.toString(),
+            branchName,
+            regionName,
+            mode: '7',
+            token: cookie.load('AuthToken'),
+          })}`,
+        );
+      }
+    },
+    [requestParams, branchName, regionName, latitude],
+  );
+
+  useImperativeHandle(mRef, () => ({
+    exportData: () => {
+      exRef?.current?.showModal();
+    },
+  }));
+
+  useDebounceEffect(
+    () => {
+      run(requestParams);
+    },
+    [latitude, type, run],
+    { wait: 400 },
+  );
 
   const typeOptions = [
     {
-      id: 'a',
+      id: '1',
       name: '支局TOP10',
     },
+    // {
+    //   id: 'b',
+    //   name: '楼宇TOP10',
+    // },
     {
-      id: 'b',
-      name: '楼宇TOP10',
-    },
-    {
-      id: 'c',
+      id: '2',
       name: '网格TOP10',
     },
-    {
-      id: 'd',
-      name: '设备TOP10',
-    },
+    // {
+    //   id: 'd',
+    //   name: '设备TOP10',
+    // },
   ];
 
   const columns = [
     {
       title: '排名',
-      dataIndex: 'index',
-      render: (index: number) => {
+      dataIndex: 'rank',
+      render: (rank: number) => {
         return (
           <div
             className="cs-row"
             style={{
-              color: index < 3 ? topColor[index] : 'var(--background-color3)',
+              color:
+                rank <= 3 ? topColor[rank - 1] : 'var(--background-color3)',
             }}
           >
-            <span style={{ color: '#fff' }}>{index + 1}</span>
+            <span style={{ color: '#fff' }}>{rank}</span>
           </div>
         );
       },
     },
     {
       title: '名称',
-      dataIndex: 'name',
+      dataIndex: 'branchName',
     },
     {
       title: '区局',
@@ -58,22 +126,22 @@ const Index = () => {
     },
     {
       title: '设备重复数',
-      dataIndex: 'repeatNum',
+      dataIndex: 'num',
       align: 'right',
     },
     {
       title: '设备记录数',
-      dataIndex: 'recordNum',
+      dataIndex: 'totalNum',
       align: 'right',
     },
     {
       title: '重复率（%）',
-      dataIndex: 'index',
+      dataIndex: 'rate',
       width: 120,
-      render: (index: number, record: any) => {
-        const rate = (record.repeatNum / record.recordNum) * 100;
+      render: (value: number, record: any, index: number) => {
+        // const rate = (record.repeatNum / record.recordNum) * 100;
         return (
-          <Row align="middle" gutter={[8, 8]}>
+          <Row align="middle" gutter={[8, 8]} style={{ paddingRight: 4 }}>
             <span
               style={{
                 fontWeight: 400,
@@ -82,14 +150,14 @@ const Index = () => {
                 textAlign: 'right',
               }}
             >
-              {rate.toFixed(2)}
+              {value?.toFixed(2)}
             </span>
             <Progress
               strokeColor={
                 index < 3 ? topColor[index] : 'var(--background-color3)'
               }
               style={{ margin: 0, flex: 1 }}
-              percent={rate}
+              percent={value}
               showInfo={false}
             />
           </Row>
@@ -98,30 +166,15 @@ const Index = () => {
     },
   ];
 
-  const dataSource = useMemo(() => {
-    console.log('type', type);
-    const regionNames = ['宝山', '北区', '东区', '崇明', '奉贤'];
-    const names = [
-      '杨行支局',
-      '张庙支局',
-      '北虹口支局',
-      '中虹口支局',
-      '瑞虹支局',
-    ];
-
-    return Array(10)
-      .fill('')
-      ?.map((_, index) => ({
-        index,
-        name: names[random(0, 4)],
-        regionName: regionNames[random(0, 4)],
-        repeatNum: random(0, 50),
-        recordNum: random(50, 100),
-      }));
-  }, [type?.[0]]);
-
   return (
-    <>
+    <Spin spinning={loading}>
+      <LabelsView
+        single
+        value={latitude}
+        dataSource={tail(timeOptions)}
+        onChange={setLatitude as any}
+      />
+
       <LabelsView
         single
         value={type}
@@ -133,11 +186,12 @@ const Index = () => {
       <Table
         rowClassName="cs-row-top-other"
         columns={columns as any}
-        dataSource={dataSource}
+        dataSource={data}
         pagination={false}
         scroll={{ x: 'max-content' }}
       />
-    </>
+      <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
+    </Spin>
   );
 };
 export default Index;

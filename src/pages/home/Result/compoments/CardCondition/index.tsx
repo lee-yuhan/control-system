@@ -10,7 +10,6 @@ const Index: FC<{
   mode: string;
   onValuesChange: (values: any) => void;
 }> = ({ params, mode, onValuesChange }) => {
-  //   const [timeType, setTimeType] = useState<string[]>(['week']);
   const { customerTypeList } = useInitialState();
   const [form] = Form.useForm();
   const gripList = useSelector((store: any) => store.common.gripList);
@@ -78,7 +77,7 @@ const Index: FC<{
       </Form.Item>
       <Form.Item style={{ marginRight: 0 }} name="gridName">
         <Select
-          style={{ minWidth: 120 }}
+          style={{ minWidth: 140 }}
           showSearch
           placeholder="请选择网格"
           allowClear

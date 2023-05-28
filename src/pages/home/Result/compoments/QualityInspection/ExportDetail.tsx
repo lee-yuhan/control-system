@@ -86,26 +86,26 @@ const Index: FC<{ mRef: any; onDel?: () => void }> = ({ mRef, onDel }) => {
       title: '导入时间',
       dataIndex: 'createTime',
     },
-    access.get('BUTTON_quality_testing_delete') && {
-      title: '操作',
-      dataIndex: 'id',
-      render: (id: string) => {
-        return (
-          <Button
-            danger
-            type="link"
-            size="small"
-            loading={delLoading}
-            style={{ padding: 0 }}
-            onClick={() => {
-              handleDel(id);
-            }}
-          >
-            删除
-          </Button>
-        );
-      },
-    },
+    // access.get('BUTTON_quality_testing_delete') && {
+    //   title: '操作',
+    //   dataIndex: 'id',
+    //   render: (id: string) => {
+    //     return (
+    //       <Button
+    //         danger
+    //         type="link"
+    //         size="small"
+    //         loading={delLoading}
+    //         style={{ padding: 0 }}
+    //         onClick={() => {
+    //           handleDel(id);
+    //         }}
+    //       >
+    //         删除
+    //       </Button>
+    //     );
+    //   },
+    // },
   ]);
 
   return (

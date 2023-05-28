@@ -54,6 +54,13 @@ export const deleteQualityFileData = (id: string) => {
   });
 };
 
+export const deleteQualityData = (id: string) => {
+  return request(`${API_PREFIX}/qualityTesting/deleteData`, {
+    params: { id },
+    method: 'post',
+  });
+};
+
 // 质检分页列表
 export const getQualityData = (params: any) => {
   return request(`${API_PREFIX}/qualityTesting/page`, {
@@ -64,6 +71,13 @@ export const getQualityData = (params: any) => {
 // 质检文件分页列表
 export const getQualityFileData = (params: any) => {
   return request(`${API_PREFIX}/qualityTestingFile/page`, {
+    params,
+  });
+};
+
+// 查询装维重复率排名
+export const getRankData = (params: any) => {
+  return request(`${API_PREFIX}/stat/rank`, {
     params,
   });
 };

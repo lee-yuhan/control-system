@@ -1,13 +1,21 @@
 // 满意率
 import { Echarts5 } from '@/compoments/Echarts5';
-import { useMemo } from 'react';
+import { FC, useImperativeHandle, useMemo } from 'react';
 import { themeEhcartColor } from '@/utils/ehcart';
 import { useRequest, useSelector } from 'umi';
 import { getLocalStorageTheme } from '@/utils/theme';
 import { getStatData } from '../../service';
 import { useDebounceEffect } from 'ahooks';
 import { Spin } from 'antd';
-const Index = () => {
+import { useEchartMouseAid, useRequestAid, useStatExportAid } from '../../hook';
+import { map, merge } from 'lodash';
+import { baseConfig } from '../../config';
+import legendIcon3 from '../../../../../assets/icon_legend3.png';
+import lineIcon2 from '../../../../../assets/icon_line2.png';
+import CardCondition from '../CardCondition';
+import ExportTypeModal from '../ExportTypeModal';
+
+const Index: FC<{ mRef: any }> = ({ mRef }) => {
   const themeChangeTag = useSelector(
     (store: any) => store.common.themeChangeTag,
   );
@@ -15,83 +23,64 @@ const Index = () => {
     return getLocalStorageTheme();
   }, [themeChangeTag]);
 
-  const { branchName, regionName } = useSelector((store: any) => store.home);
-  const { data, run, loading } = useRequest(getStatData, {
-    manual: true,
-  });
+  const { data, params, setParams, loading, requestParams } =
+    useRequestAid('10');
 
-  useDebounceEffect(
-    () => {
-      if (!regionName) return;
-      run({
-        branchName,
-        regionName,
-        mode: '6',
-      });
-    },
-    [regionName, branchName],
-    { wait: 300 },
-  );
+  const { exRef, handleExport, beforeExport } = useStatExportAid(requestParams);
+
+  useImperativeHandle(mRef, () => ({
+    exportData: beforeExport,
+  }));
 
   const option = useMemo(() => {
-    return {
+    return merge({}, baseConfig, {
+      legend: {
+        textStyle: {
+          color: themeEhcartColor[theme]['--text-color2'],
+        },
+        data: [
+          {
+            name: '低分工单数',
+            icon: `image://${legendIcon3}`,
+          },
+        ],
+      },
+      xAxis: {
+        data: map(data, 'latitude'),
+      },
       series: [
         {
-          hoverAnimation: false, // 滑动效果隐藏
-          silent: true, // 取消滑动高亮效果
-          name: '测评',
-          type: 'pie',
-          radius: [90, 120],
-          avoidLabelOverlap: false,
+          name: '低分工单数',
+          type: 'line',
+          data: map(data, 'satisfaction'),
+          symbol: `image://${lineIcon2}`,
+          symbolSize: 8,
+          smooth: true,
+          lineStyle: {
+            color: themeEhcartColor[theme]['--danger-color'],
+            width: 3,
+          },
           label: {
-            normal: {
-              show: true,
-              position: 'center',
-              formatter:
-                '{total|' +
-                (data?.satisfaction ?? 0) +
-                '%' +
-                '}' +
-                '\n\r' +
-                '{active|总数}',
-              rich: {
-                total: {
-                  fontSize: 42,
-                  color: themeEhcartColor[theme]['--text-color2'],
-                },
-                active: {
-                  fontSize: 18,
-                  color: themeEhcartColor[theme]['--text-color1'],
-                },
-              },
-            },
-            emphasis: {
-              //中间文字显示
-              show: true,
+            show: true,
+            position: 'top',
+            color: themeEhcartColor[theme]['--danger-color'],
+            formatter: (p: { value: number }) => {
+              return `${p.value ?? ''}`;
             },
           },
-          data: [
-            {
-              value: 100 * (data?.satisfaction ?? 0),
-              name: '满意比例',
-              itemStyle: { color: themeEhcartColor[theme]['--primary-color'] },
-            },
-            {
-              value: 100 * (1 - data?.satisfaction ?? 0),
-              name: '其他比例',
-              itemStyle: {
-                color: themeEhcartColor[theme]['--background-color1'],
-              },
-              label: { show: false },
-            },
-          ],
         },
       ],
-    };
+    });
   }, [theme, data]);
+
   return (
     <Spin spinning={loading}>
-      <Echarts5 style={{ height: '100%' }} option={option} />
+      <CardCondition params={params} mode="10" onValuesChange={setParams} />
+
+      <div style={{ flex: 1 }}>
+        <Echarts5 option={option} style={{ height: '100%' }} />
+      </div>
+      <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
     </Spin>
   );
 };

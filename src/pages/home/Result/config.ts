@@ -21,7 +21,7 @@ export const baseConfig = {
   },
   legend: {
     left: 2,
-    top: 20,
+    top: 10,
     itemWidth: 18,
     itemHeight: 8,
     textStyle: {

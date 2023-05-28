@@ -1,9 +1,10 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { Modal, Table } from 'antd';
+import { Button, message, Modal, Table } from 'antd';
 import { FC, useImperativeHandle, useState } from 'react';
-import { getQualityData } from '../../service';
-import { useRequest, useSelector } from 'umi';
+import { deleteQualityData, getQualityData } from '../../service';
+import { useAccess, useRequest, useSelector } from 'umi';
 import { useDebounceEffect } from 'ahooks';
+import { compact } from 'lodash';
 
 const defaultPage = {
   current: 1,
@@ -11,11 +12,12 @@ const defaultPage = {
   total: 0,
 };
 
-const Index: FC<{ mRef: any }> = ({ mRef }) => {
+const Index: FC<{ mRef: any; onDel?: () => void }> = ({ mRef, onDel }) => {
   const [visible, setVisible] = useState<boolean>(false);
   const { branchName, regionName } = useSelector((store: any) => store.home);
   const [latitude, setLatitude] = useState<string[]>([]);
   const [date, setDate] = useState<string>();
+  const access = useAccess();
 
   const [pagesData, setPagesData] = useState(defaultPage);
 
@@ -24,6 +26,8 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
     run: getQualityDataRun,
     loading,
     mutate,
+    params,
+    refresh,
   } = useRequest(getQualityData, {
     manual: true,
     onSuccess: (res) => {
@@ -66,7 +70,37 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
     },
   }));
 
-  const columns = [
+  const { run: delRun, loading: delLoading } = useRequest(deleteQualityData, {
+    manual: true,
+    onSuccess: () => {
+      message.success('删除成功');
+
+      if (params?.[0]?.current === 1) {
+        refresh();
+      } else {
+        setPagesData({
+          ...pagesData,
+          current: 1,
+        });
+      }
+
+      console.log('params');
+
+      onDel?.();
+    },
+  });
+
+  const handleDel = (id: string) => {
+    Modal.confirm({
+      title: '提示',
+      content: `您确定要删除?`,
+      onOk: async () => {
+        delRun(id);
+      },
+    });
+  };
+
+  const columns = compact([
     {
       title: 'CRM编号/112流水号',
       dataIndex: 'serialNo',
@@ -95,7 +129,27 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
       title: '核查结果',
       dataIndex: 'checkResult',
     },
-  ].map((item) => ({
+    access?.get('BUTTON_quality_testing_delete') && {
+      title: '操作',
+      dataIndex: 'id',
+      render: (id: string) => {
+        return (
+          <Button
+            danger
+            type="link"
+            size="small"
+            loading={delLoading}
+            style={{ padding: 0 }}
+            onClick={() => {
+              handleDel(id);
+            }}
+          >
+            删除
+          </Button>
+        );
+      },
+    },
+  ]).map((item) => ({
     render: (value: string) => {
       return value ?? '-';
     },

@@ -7,8 +7,6 @@ export default (): {
   customerTypeList: OptionList;
   // // 区局下拉列表
   districtBureauList: OptionList;
-
-  permissionCodeList: string;
   // 网格下拉列表
   // gripList: OptionList;
 } => {
@@ -17,7 +15,6 @@ export default (): {
       // branchList,
       customerTypeList,
       districtBureauList,
-      permissionCodeList,
       // gripList,
     },
   } = useModel('@@initialState') as any;
@@ -25,7 +22,6 @@ export default (): {
     // branchList,
     customerTypeList,
     districtBureauList,
-    permissionCodeList,
     // gripList,
   };
 };

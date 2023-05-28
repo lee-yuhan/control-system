@@ -15,12 +15,18 @@ import { useSelector } from 'umi';
 import * as echarts from 'echarts';
 import { map, merge } from 'lodash';
 import { baseConfig, satisfactionNameMap } from '../../config';
-import { useEchartMouseAid, useRequestAid } from '../../hook';
+import {
+  useEchartHeightAid,
+  useEchartMouseAid,
+  useRequestAid,
+  useStatExportAid,
+} from '../../hook';
 import { Button } from 'antd';
+import { useEventListener } from 'ahooks';
+import ExportTypeModal from '../ExportTypeModal';
 
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('1');
-
   const themeChangeTag = useSelector(
     (store: any) => store.common.themeChangeTag,
   );
@@ -29,7 +35,14 @@ const Index = () => {
   }, [themeChangeTag]);
   const mRef = useRef<any>();
 
-  const { data, params, setParams, loading } = useRequestAid(tabValue);
+  const { data, params, setParams, loading, requestParams } =
+    useRequestAid(tabValue);
+
+  const { exRef, handleExport, beforeExport } = useStatExportAid(requestParams);
+
+  useEventListener('resize', () => {
+    mRef.current.resize();
+  });
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -127,7 +140,11 @@ const Index = () => {
   return (
     <CardWrapper
       loading={loading}
-      extra={<Button className="export-btn">导出</Button>}
+      extra={
+        <Button className="export-btn" onClick={beforeExport}>
+          导出
+        </Button>
+      }
       header={
         <Tab
           value={tabValue}
@@ -154,7 +171,10 @@ const Index = () => {
         mode={tabValue}
         onValuesChange={setParams}
       />
-      <Echarts5 ref={mRef} option={option} />
+      <div style={{ flex: 1 }}>
+        <Echarts5 ref={mRef} option={option} style={{ height: '100%' }} />
+        <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
+      </div>
     </CardWrapper>
   );
 };

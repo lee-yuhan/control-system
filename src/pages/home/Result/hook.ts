@@ -1,8 +1,18 @@
-import { useDebounceEffect } from 'ahooks';
-import { useEffect, useState } from 'react';
+import { useDebounceEffect, useSize } from 'ahooks';
+import {
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useRequest, useSelector } from 'umi';
 import { getLatitudeStatData } from './service';
 import { cloneDeep, isNaN, isNil } from 'lodash';
+import qs from 'qs';
+import { IExportType } from './compoments/ExportTypeModal';
+import cookie from 'react-cookies';
 
 export const useRequestAid = (mode: string) => {
   const [params, setParams] = useState({
@@ -15,30 +25,65 @@ export const useRequestAid = (mode: string) => {
     manual: true,
   });
 
+  const requestParams = useMemo(() => {
+    return {
+      branchName,
+      custType: params?.custType,
+      regionName,
+      latitude: params?.latitude?.toString(),
+      gridName: params?.gridName,
+      mode,
+    };
+  }, [
+    branchName,
+    params?.custType,
+    params?.gridName,
+    regionName,
+    params?.latitude,
+    mode,
+  ]);
+
   useDebounceEffect(
     () => {
       if (!mode || !regionName) return;
-      run({
-        branchName,
-        custType: params?.custType,
-        regionName,
-        latitude: params?.latitude?.toString(),
-        gridName: params?.gridName,
-        mode,
-      });
+      run(requestParams);
     },
-    [
-      branchName,
-      params?.custType,
-      params?.gridName,
-      regionName,
-      params?.latitude,
-      mode,
-    ],
+    [regionName, requestParams, mode],
     { wait: 400 },
   );
 
-  return { data, params, setParams, loading };
+  return { data, params, setParams, loading, requestParams };
+};
+
+export const useStatExportAid = (params: any) => {
+  const exRef = useRef<any>();
+
+  const formatParams = useMemo(() => {
+    return {
+      ...params,
+      latitude: params?.latitude?.toString(),
+      token: cookie.load('AuthToken'),
+    };
+  }, [params]);
+
+  const handleExport = useCallback(
+    (type: IExportType) => {
+      if (type === 'ECHART_DATA') {
+        window.open(`${API_PREFIX}/stat/export?${qs.stringify(formatParams)}`);
+      } else {
+        window.open(
+          `${API_PREFIX}/stat/infoDetailExport?${qs.stringify(formatParams)}`,
+        );
+      }
+    },
+    [formatParams],
+  );
+
+  const beforeExport = () => {
+    exRef?.current?.showModal();
+  };
+
+  return { handleExport, exRef, beforeExport };
 };
 
 export const useEchartMouseAid = (
@@ -118,4 +163,13 @@ export const useEchartMouseAid = (
   //   [mRef],
   //   { wait: 300 },
   // );
+};
+
+export const useEchartHeightAid = () => {
+  const dRef = useRef<any>();
+  const size = useSize(dRef);
+  const height = useMemo(() => {
+    return size?.height;
+  }, [size?.height]);
+  return { height, dRef };
 };

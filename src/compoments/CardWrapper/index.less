@@ -14,6 +14,13 @@
     padding: 10px 20px;
     border: 1px solid var(--card-content-border-color);
     background-color: var(--background-color4);
+    display: flex;
+    flex-direction: column;
+    > .ant-spin-nested-loading > .ant-spin-container {
+      display: flex;
+      flex-direction: column;
+      // justify-content: space-around;
+    }
   }
   .export-btn {
     border: 0;

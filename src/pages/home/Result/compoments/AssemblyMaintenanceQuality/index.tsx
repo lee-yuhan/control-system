@@ -15,8 +15,9 @@ import lineIcon1 from '../../../../../assets/icon_line1.png';
 import lineIcon2 from '../../../../../assets/icon_line2.png';
 import legendIcon3 from '../../../../../assets/icon_legend3.png';
 import legendIcon5 from '../../../../../assets/icon_legend5.png';
-import { useEchartMouseAid, useRequestAid } from '../../hook';
+import { useEchartMouseAid, useRequestAid, useStatExportAid } from '../../hook';
 import { Button } from 'antd';
+import ExportTypeModal from '../ExportTypeModal';
 
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('4');
@@ -29,7 +30,10 @@ const Index = () => {
   }, [themeChangeTag]);
   const mRef = useRef<any>();
 
-  const { data, params, setParams, loading } = useRequestAid(tabValue);
+  const { data, params, setParams, loading, requestParams } =
+    useRequestAid(tabValue);
+
+  const { exRef, handleExport, beforeExport } = useStatExportAid(requestParams);
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -129,7 +133,11 @@ const Index = () => {
   return (
     <CardWrapper
       loading={loading}
-      extra={<Button className="export-btn">导出</Button>}
+      extra={
+        <Button className="export-btn" onClick={beforeExport}>
+          导出
+        </Button>
+      }
       header={
         <Tab
           value={tabValue}
@@ -152,7 +160,10 @@ const Index = () => {
         params={params}
         onValuesChange={setParams}
       />
-      <Echarts5 ref={mRef} option={option} />
+      <div style={{ flex: 1 }}>
+        <Echarts5 ref={mRef} option={option} style={{ height: '100%' }} />
+      </div>
+      <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
     </CardWrapper>
   );
 };

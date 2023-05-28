@@ -24,6 +24,10 @@ import { obj2FormData } from '@/utils/tool';
 import { getQualityInspectionData, uploadFile } from '../../service';
 import ModalDetail from './ModalDetail';
 import ExportDetail from './ExportDetail';
+import qs from 'qs';
+import cookie from 'react-cookies';
+import { useEventListener } from 'ahooks';
+import ExportTypeModal, { IExportType } from '../ExportTypeModal';
 
 export const timeOptions = [
   {
@@ -51,10 +55,19 @@ const Index = () => {
   const mRef = useRef<any>(null);
   const dRef = useRef<any>(null);
   const eRef = useRef<any>(null);
+  const exRef = useRef<any>(null);
 
   const { data, run, loading, refresh } = useRequest(getQualityInspectionData, {
     manual: true,
   });
+
+  const requestParams = useMemo(() => {
+    return {
+      branchName,
+      regionName,
+      latitude: latitude?.toString(),
+    };
+  }, [branchName, regionName, latitude]);
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -67,10 +80,6 @@ const Index = () => {
             name: '虚假工单数',
             icon: `image://${legendIcon3}`,
           },
-          // {
-          //   name: '环比',
-          //   icon: `image://${legendIcon10}`,
-          // },
         ],
       },
       xAxis: {
@@ -97,48 +106,9 @@ const Index = () => {
             },
           },
         },
-        // {
-        //   name: '环比',
-        //   type: 'line',
-        //   smooth: true,
-        //   data: Array(7)
-        //     .fill('')
-        //     .map((_) => {
-        //       return { value: random(0, 100) };
-        //     }),
-        //   symbol: `image://${lineIcon5}`,
-        //   symbolSize: 8,
-        //   lineStyle: {
-        //     width: 0,
-        //   },
-        //   areaStyle: {
-        //     opacity: 1,
-        //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        //       {
-        //         offset: 0,
-        //         color: themeEhcartColor[theme]['--area-primary-color-start'],
-        //       },
-        //       {
-        //         offset: 1,
-        //         color: themeEhcartColor[theme]['--area-primary-color-end'],
-        //       },
-        //     ]),
-        //   },
-        //   label: {
-        //     show: true,
-        //     position: 'top',
-        //     color: themeEhcartColor[theme]['--primary-color'],
-        //     valueAnimation: true,
-        //     // formatter: (p: { value: number }) => {
-        //     //   return `${p.value ?? ''}`;
-        //     // },
-        //   },
-        // },
       ],
     });
   }, [theme, tabValue, data]);
-
-  // useEchartMouseAid(mRef, option, lineIcon5, lineIcon1);
 
   // 上传接口
   const { run: uploadFileRun, loading: uploadFileLoading } = useRequest(
@@ -154,12 +124,8 @@ const Index = () => {
 
   useEffect(() => {
     if (!regionName || !latitude?.length) return;
-    run({
-      branchName,
-      regionName,
-      latitude: latitude?.toString(),
-    });
-  }, [regionName, latitude]);
+    run(requestParams);
+  }, [requestParams]);
 
   // 上传
   const upLoadFileprops = {
@@ -182,14 +148,37 @@ const Index = () => {
     [dRef, data, latitude],
   );
 
-  useEffect(() => {
-    const inst = mRef.current;
+  const inst = mRef.current;
+  addClickEvent(inst, handleClick);
 
-    addClickEvent(inst, handleClick);
-  }, [handleClick]);
+  const handleExport = useCallback(
+    (type: IExportType) => {
+      if (type === 'ECHART_DATA') {
+        window.open(
+          `${API_PREFIX}/qualityTesting/export?${qs.stringify({
+            ...requestParams,
+            ...{
+              token: cookie.load('AuthToken'),
+            },
+          })}`,
+        );
+      } else {
+        window.open(
+          `${API_PREFIX}/qualityTesting/exportDetail?${qs.stringify({
+            ...requestParams,
+            ...{
+              token: cookie.load('AuthToken'),
+            },
+          })}`,
+        );
+      }
+    },
+    [requestParams],
+  );
 
   return (
     <CardWrapper
+      loading={loading}
       extra={
         <Space size={4}>
           <Upload {...upLoadFileprops}>
@@ -197,6 +186,14 @@ const Index = () => {
               导入
             </Button>
           </Upload>
+
+          <Button
+            className="export-btn"
+            onClick={() => exRef?.current?.showModal()}
+          >
+            导出
+          </Button>
+
           <Button
             className="export-btn"
             onClick={() => {
@@ -238,10 +235,12 @@ const Index = () => {
           />
         </Form.Item>
       </Form>
-      <Echarts5 loading={loading} ref={mRef} option={option} />
-
-      <ModalDetail mRef={dRef} />
-      <ExportDetail mRef={eRef} onDel={refresh} />
+      <div style={{ flex: 1 }}>
+        <Echarts5 ref={mRef} option={option} style={{ height: '100%' }} />
+      </div>
+      <ModalDetail mRef={dRef} onDel={refresh} />
+      <ExportDetail mRef={eRef} />
+      <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
     </CardWrapper>
   );
 };

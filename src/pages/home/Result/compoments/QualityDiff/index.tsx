@@ -16,9 +16,10 @@ import { getLocalStorageTheme } from '@/utils/theme';
 import { baseConfig, satisfactionNameMap } from '../../config';
 import { map, merge } from 'lodash';
 import * as echarts from 'echarts';
-import { useEchartMouseAid, useRequestAid } from '../../hook';
+import { useEchartMouseAid, useRequestAid, useStatExportAid } from '../../hook';
 import moment from 'moment';
 import { Button } from 'antd';
+import ExportTypeModal from '../ExportTypeModal';
 
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('8');
@@ -30,7 +31,9 @@ const Index = () => {
   }, [themeChangeTag]);
   const mRef = useRef<any>(null);
 
-  const { data, params, setParams, loading } = useRequestAid(tabValue);
+  const { data, params, setParams, loading, requestParams } =
+    useRequestAid(tabValue);
+  const { exRef, handleExport, beforeExport } = useStatExportAid(requestParams);
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -118,7 +121,11 @@ const Index = () => {
   return (
     <CardWrapper
       loading={loading}
-      extra={<Button className="export-btn">导出</Button>}
+      extra={
+        <Button className="export-btn" onClick={beforeExport}>
+          导出
+        </Button>
+      }
       header={
         <Tab
           value={tabValue}
@@ -141,7 +148,11 @@ const Index = () => {
         params={params}
         onValuesChange={setParams}
       />
-      <Echarts5 ref={mRef} option={option} />
+      <div style={{ flex: 1 }}>
+        <Echarts5 ref={mRef} option={option} style={{ height: '100%' }} />
+      </div>
+
+      <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
     </CardWrapper>
   );
 };

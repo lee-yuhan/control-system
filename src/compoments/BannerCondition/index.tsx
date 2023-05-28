@@ -110,7 +110,7 @@ const Index: FC<{
               </Form.Item>
               <Form.Item name="branchName">
                 <Select
-                  style={{ minWidth: 110 }}
+                  style={{ minWidth: 140 }}
                   placeholder="请选择支局"
                   options={branchList}
                   loading={loading}

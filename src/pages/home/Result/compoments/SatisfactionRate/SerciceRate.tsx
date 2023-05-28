@@ -1,20 +1,20 @@
 // 满意率
 import { Echarts5 } from '@/compoments/Echarts5';
-import { useMemo } from 'react';
-import CardWrapper from '@/compoments/CardWrapper';
-import Tab from '@/compoments/Tab';
-import { useState } from 'react';
+import { FC, useImperativeHandle, useMemo } from 'react';
 import CardCondition from '../CardCondition';
-import { hiddenXAxis, hiddenYAxis, themeEhcartColor } from '@/utils/ehcart';
+import { themeEhcartColor } from '@/utils/ehcart';
 import legendIcon4 from '../../../../../assets/icon_legend4.png';
-import legendIcon7 from '../../../../../assets/icon_legend7.png';
+import legendIcon8 from '../../../../../assets/icon_legend8.png';
 import * as echarts from 'echarts';
-import { merge } from 'lodash';
+import { map, merge } from 'lodash';
 import lineIcon3 from '../../../../../assets/icon_line3.png';
 import { useSelector } from 'umi';
 import { getLocalStorageTheme } from '@/utils/theme';
 import { baseConfig } from '../../config';
-const Index = () => {
+import { useRequestAid, useStatExportAid } from '../../hook';
+import { Spin } from 'antd';
+import ExportTypeModal from '../ExportTypeModal';
+const Index: FC<{ mRef: any }> = ({ mRef }) => {
   const themeChangeTag = useSelector(
     (store: any) => store.common.themeChangeTag,
   );
@@ -22,10 +22,19 @@ const Index = () => {
     return getLocalStorageTheme();
   }, [themeChangeTag]);
 
+  const { data, params, setParams, loading, requestParams } =
+    useRequestAid('6');
+
+  const { exRef, handleExport, beforeExport } = useStatExportAid(requestParams);
+
+  useImperativeHandle(mRef, () => ({
+    exportData: beforeExport,
+  }));
+
   const option = useMemo(() => {
     return merge({}, baseConfig, {
       legend: {
-        itemHeight: 20,
+        itemHeight: 18,
         textStyle: {
           color: themeEhcartColor[theme]['--text-color2'],
         },
@@ -36,14 +45,12 @@ const Index = () => {
           },
           {
             name: '环比',
-            icon: `image://${legendIcon7}`,
+            icon: `image://${legendIcon8}`,
           },
         ],
       },
       xAxis: {
-        data: Array(6)
-          .fill('')
-          .map((_, index) => index),
+        data: map(data, 'latitude'),
       },
       series: [
         {
@@ -55,7 +62,8 @@ const Index = () => {
           // },
           symbol: `image://${lineIcon3}`,
           symbolSize: 8,
-          data: [5, 20, 36, 10, 10, 20],
+          data: map(data, 'satisfaction'),
+
           lineStyle: {
             color: themeEhcartColor[theme]['--area-line-color'],
             width: 1,
@@ -87,7 +95,9 @@ const Index = () => {
         {
           name: '环比',
           type: 'bar',
-          data: [5, 20, 36, 10, 10, 20],
+          data: map(data, ({ rate }) => ({
+            value: rate,
+          })),
 
           itemStyle: {
             color: themeEhcartColor[theme]['--danger-color'],
@@ -95,18 +105,22 @@ const Index = () => {
           label: {
             show: true,
             position: 'top',
+            offset: [0, -4],
             color: themeEhcartColor[theme]['--danger-color'],
             valueAnimation: true,
           },
         },
       ],
     });
-  }, [theme]);
+  }, [theme, data]);
   return (
-    <>
-      {/* <CardCondition /> */}
-      <Echarts5 option={option} />
-    </>
+    <Spin spinning={loading}>
+      <CardCondition params={params} mode="6" onValuesChange={setParams} />
+      <div style={{ flex: 1 }}>
+        <Echarts5 option={option} style={{ height: '100%' }} />
+      </div>
+      <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
+    </Spin>
   );
 };
 

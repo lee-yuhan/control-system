@@ -1,6 +1,6 @@
 // 重复率
 import { Echarts5 } from '@/compoments/Echarts5';
-import { useMemo } from 'react';
+import { FC, useImperativeHandle, useMemo, useRef } from 'react';
 import CardWrapper from '@/compoments/CardWrapper';
 import Tab from '@/compoments/Tab';
 import { useState } from 'react';
@@ -15,10 +15,13 @@ import lineIcon3 from '../../../../../assets/icon_line3.png';
 import { useSelector } from 'umi';
 import { getLocalStorageTheme } from '@/utils/theme';
 import { baseConfig, satisfactionNameMap } from '../../config';
-import { useRequestAid } from '../../hook';
+import { useRequestAid, useStatExportAid } from '../../hook';
 import moment from 'moment';
 import { Spin } from 'antd';
-const Index = () => {
+import ExportTypeModal from '../ExportTypeModal';
+const Index: FC<{
+  mRef: any;
+}> = ({ mRef }) => {
   const [tabValue] = useState<string>('7');
   const themeChangeTag = useSelector(
     (store: any) => store.common.themeChangeTag,
@@ -27,7 +30,14 @@ const Index = () => {
     return getLocalStorageTheme();
   }, [themeChangeTag]);
 
-  const { data, params, setParams, loading } = useRequestAid(tabValue);
+  const { data, params, setParams, loading, requestParams } =
+    useRequestAid(tabValue);
+
+  const { exRef, handleExport, beforeExport } = useStatExportAid(requestParams);
+
+  useImperativeHandle(mRef, () => ({
+    exportData: beforeExport,
+  }));
 
   const option = useMemo(() => {
     return merge({}, baseConfig, {
@@ -117,7 +127,10 @@ const Index = () => {
         params={params}
         onValuesChange={setParams}
       />
-      <Echarts5 option={option} />
+      <div style={{ flex: 1 }}>
+        <Echarts5 option={option} style={{ height: '100%' }} />
+      </div>
+      <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
     </Spin>
   );
 };

@@ -1,6 +1,6 @@
 import CardWrapper from '@/compoments/CardWrapper';
 import Tab from '@/compoments/Tab';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import SerciceRate from './SerciceRate';
 import EvaluationRate from './EvaluationRate';
 import { Button } from 'antd';
@@ -8,9 +8,20 @@ import { Button } from 'antd';
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('6');
 
+  const mRef = useRef<any>();
+
   return (
     <CardWrapper
-      extra={<Button className="export-btn">导出</Button>}
+      extra={
+        <Button
+          className="export-btn"
+          onClick={() => {
+            mRef?.current?.exportData();
+          }}
+        >
+          导出
+        </Button>
+      }
       header={
         <Tab
           value={tabValue}
@@ -18,13 +29,18 @@ const Index = () => {
           options={[
             {
               id: '6',
-              name: '测评满意率',
+              name: '服务十分满意度',
+            },
+            {
+              id: '10',
+              name: '测评低分工单数',
             },
           ]}
         />
       }
     >
-      {tabValue === '6' && <EvaluationRate />}
+      {tabValue === '10' && <EvaluationRate mRef={mRef} />}
+      {tabValue === '6' && <SerciceRate mRef={mRef} />}
     </CardWrapper>
   );
 };
