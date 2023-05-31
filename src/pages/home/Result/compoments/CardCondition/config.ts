@@ -12,3 +12,5 @@ export const timeOptions = [
     name: '月维度',
   },
 ];
+
+export const hideCustTypeMode = ['6', '7', '8', '9', '10'];

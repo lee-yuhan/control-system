@@ -1,6 +1,6 @@
 import { Form, Select } from 'antd';
 import LabelsView from '@/compoments/LabelsView';
-import { timeOptions } from './config';
+import { hideCustTypeMode, timeOptions } from './config';
 import { FC, useEffect, useMemo, useState } from 'react';
 import useInitialState from '@/hooks/useInitialState';
 import { useDebounceEffect, useMount } from 'ahooks';
@@ -67,14 +67,16 @@ const Index: FC<{
       }}
       initialValues={defaultValues}
     >
-      <Form.Item style={{ marginRight: 0 }} name="custType">
-        <Select
-          placeholder="请选择客户类型"
-          style={{ minWidth: 120 }}
-          allowClear={!isSpecial}
-          options={custTypeList}
-        />
-      </Form.Item>
+      {!hideCustTypeMode?.includes(mode) && (
+        <Form.Item style={{ marginRight: 0 }} name="custType">
+          <Select
+            placeholder="请选择客户类型"
+            style={{ minWidth: 120 }}
+            allowClear={!isSpecial}
+            options={custTypeList}
+          />
+        </Form.Item>
+      )}
       <Form.Item style={{ marginRight: 0 }} name="gridName">
         <Select
           style={{ minWidth: 140 }}
