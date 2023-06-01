@@ -15,18 +15,14 @@ import { useSelector } from 'umi';
 import * as echarts from 'echarts';
 import { map, merge } from 'lodash';
 import { baseConfig, satisfactionNameMap } from '../../config';
-import {
-  useEchartHeightAid,
-  useEchartMouseAid,
-  useRequestAid,
-  useStatExportAid,
-} from '../../hook';
+import { useEchartMouseAid, useRequestAid, useStatExportAid } from '../../hook';
 import { Button } from 'antd';
 import { useEventListener } from 'ahooks';
 import ExportTypeModal from '../ExportTypeModal';
 
 const Index = () => {
-  const [tabValue, setTabValue] = useState<string>('1');
+  const [tabValue, setTabValue] =
+    useState<keyof typeof satisfactionNameMap>('1');
   const themeChangeTag = useSelector(
     (store: any) => store.common.themeChangeTag,
   );
@@ -148,7 +144,7 @@ const Index = () => {
       header={
         <Tab
           value={tabValue}
-          onChange={setTabValue}
+          onChange={setTabValue as any}
           options={[
             {
               id: '1',

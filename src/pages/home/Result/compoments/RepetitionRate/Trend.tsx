@@ -1,28 +1,24 @@
 // 重复率
 import { Echarts5 } from '@/compoments/Echarts5';
 import { FC, useImperativeHandle, useMemo, useRef } from 'react';
-import CardWrapper from '@/compoments/CardWrapper';
-import Tab from '@/compoments/Tab';
 import { useState } from 'react';
 import CardCondition from '../CardCondition';
-import { hiddenXAxis, hiddenYAxis, themeEhcartColor } from '@/utils/ehcart';
+import { themeEhcartColor } from '@/utils/ehcart';
 import legendIcon4 from '../../../../../assets/icon_legend4.png';
 import legendIcon7 from '../../../../../assets/icon_legend7.png';
 import * as echarts from 'echarts';
-import { map, merge, random } from 'lodash';
+import { map, merge } from 'lodash';
 import lineIcon3 from '../../../../../assets/icon_line3.png';
-
 import { useSelector } from 'umi';
 import { getLocalStorageTheme } from '@/utils/theme';
 import { baseConfig, satisfactionNameMap } from '../../config';
 import { useRequestAid, useStatExportAid } from '../../hook';
-import moment from 'moment';
 import { Spin } from 'antd';
 import ExportTypeModal from '../ExportTypeModal';
 const Index: FC<{
   mRef: any;
 }> = ({ mRef }) => {
-  const [tabValue] = useState<string>('7');
+  const [tabValue] = useState<keyof typeof satisfactionNameMap>('7');
   const themeChangeTag = useSelector(
     (store: any) => store.common.themeChangeTag,
   );

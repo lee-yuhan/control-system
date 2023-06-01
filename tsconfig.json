@@ -23,12 +23,6 @@
       "@@/*": ["./src/.umi/*", "src/.umi-production/*"]
     }
   },
-  "include": [
-    "mock/**/*",
-    "src/**/*",
-    "config/**/*",
-    "typings.d.ts",
-    "color.js"
-  ],
+  "include": ["src/**/*", "config/**/*", "typings.d.ts"],
   "exclude": ["src/assets/**/*"]
 }

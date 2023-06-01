@@ -35,7 +35,6 @@ export const getLocalStorageTheme = (
  */
 export const setTheme = async (myTheme?: ThemeType) => {
   const theme = getLocalStorageTheme(myTheme);
-  await setPrimaryColor();
   changeTheme(theme);
 };
 
@@ -78,26 +77,4 @@ export const changeTheme = (theme: ThemeType = 'light') => {
 export const setLocalStorageTheme = (theme: ThemeType) => {
   localStorage.setItem(`${PROJECT_KEY}_theme`, theme);
   // localStorage.setItem(`theme`, theme);
-};
-
-const setPrimaryColor = async () => {
-  const publicPath = `${API_PREFIX}`; // 项目的publicPath，没有配置的可以置空
-  const lessConfigNode = document.createElement('script');
-  const lessScriptNode = document.createElement('script');
-  const lessStyleNode = document.createElement('link');
-  lessStyleNode.setAttribute('rel', 'stylesheet/less');
-  lessStyleNode.setAttribute('href', `${publicPath}/color.less`);
-
-  lessConfigNode.innerHTML = `
-        less = {
-          async: true,
-          env: 'development',
-        };
-      `;
-  lessScriptNode.src = `${publicPath}/less.min.js`;
-  lessScriptNode.async = true;
-  // 引入顺序不能改变
-  await document.body.appendChild(lessStyleNode);
-  await document.body.appendChild(lessConfigNode);
-  await document.body.appendChild(lessScriptNode);
 };

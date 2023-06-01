@@ -1,7 +1,7 @@
 import LabelsView from '@/compoments/LabelsView';
 import { useDebounceEffect } from 'ahooks';
-import { Progress, Row, Space, Spin, Table } from 'antd';
-import { random, tail } from 'lodash';
+import { Progress, Row, Spin, Table } from 'antd';
+import { tail } from 'lodash';
 import {
   useMemo,
   useState,

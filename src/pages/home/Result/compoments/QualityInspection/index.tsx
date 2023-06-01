@@ -4,21 +4,16 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import CardWrapper from '@/compoments/CardWrapper';
 import Tab from '@/compoments/Tab';
 import { useState } from 'react';
-import CardCondition from '../CardCondition';
 import { addClickEvent, themeEhcartColor } from '@/utils/ehcart';
-import { baseConfig, satisfactionNameMap } from '../../config';
+import { baseConfig } from '../../config';
 import { getLocalStorageTheme } from '@/utils/theme';
-import { map, merge, random } from 'lodash';
+import { map, merge } from 'lodash';
 import { useRequest, useSelector } from 'umi';
 import lineIcon2 from '../../../../../assets/icon_line2.png';
-import lineIcon5 from '../../../../../assets/icon_line5.png';
-import lineIcon1 from '../../../../../assets/icon_line1.png';
-import legendIcon10 from '../../../../../assets/icon_legend10.png';
+
 import legendIcon3 from '../../../../../assets/icon_legend3.png';
-import * as echarts from 'echarts';
 import { Button, Form, message, Space, Upload } from 'antd';
-import moment from 'moment';
-import { useEchartMouseAid } from '../../hook';
+
 import LabelsView from '@/compoments/LabelsView';
 import { obj2FormData } from '@/utils/tool';
 import { getQualityInspectionData, uploadFile } from '../../service';
@@ -26,7 +21,6 @@ import ModalDetail from './ModalDetail';
 import ExportDetail from './ExportDetail';
 import qs from 'qs';
 import cookie from 'react-cookies';
-import { useEventListener } from 'ahooks';
 import ExportTypeModal, { IExportType } from '../ExportTypeModal';
 
 export const timeOptions = [

@@ -22,7 +22,8 @@ import { Button } from 'antd';
 import ExportTypeModal from '../ExportTypeModal';
 
 const Index = () => {
-  const [tabValue, setTabValue] = useState<string>('8');
+  const [tabValue, setTabValue] =
+    useState<keyof typeof satisfactionNameMap>('8');
   const themeChangeTag = useSelector(
     (store: any) => store.common.themeChangeTag,
   );
@@ -129,7 +130,7 @@ const Index = () => {
       header={
         <Tab
           value={tabValue}
-          onChange={setTabValue}
+          onChange={setTabValue as any}
           options={[
             {
               id: '8',
