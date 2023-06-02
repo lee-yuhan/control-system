@@ -33,7 +33,7 @@ export const baseConfig = {
       // // 图例与文字上下居中
       padding: [0, 0, 0, 0],
     },
-    selectedMode: false,
+    // selectedMode: false,
   },
 };
 

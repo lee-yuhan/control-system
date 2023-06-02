@@ -2,12 +2,10 @@
 import { Echarts5 } from '@/compoments/Echarts5';
 import { FC, useImperativeHandle, useMemo } from 'react';
 import { themeEhcartColor } from '@/utils/ehcart';
-import { useRequest, useSelector } from 'umi';
+import { useSelector } from 'umi';
 import { getLocalStorageTheme } from '@/utils/theme';
-import { getStatData } from '../../service';
-import { useDebounceEffect } from 'ahooks';
 import { Spin } from 'antd';
-import { useEchartMouseAid, useRequestAid, useStatExportAid } from '../../hook';
+import { useRequestAid, useStatExportAid } from '../../hook';
 import { map, merge } from 'lodash';
 import { baseConfig } from '../../config';
 import legendIcon3 from '../../../../../assets/icon_legend3.png';

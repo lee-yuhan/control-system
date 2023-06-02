@@ -36,7 +36,7 @@ const Index: FC<{
 
   const defaultValues = useMemo(() => {
     return {
-      latitude: ['0'],
+      latitude: ['1'],
       custType: isSpecial ? custTypeList?.[0]?.value : undefined,
     };
   }, [custTypeList]);
