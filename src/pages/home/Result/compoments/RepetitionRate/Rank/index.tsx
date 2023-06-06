@@ -45,24 +45,28 @@ const Index: FC<{
   }, [latitude, type]);
 
   const handleExport = useCallback(
-    (type: IExportType) => {
-      if (type === 'ECHART_DATA') {
+    (exportType: IExportType) => {
+      if (exportType === 'ECHART_DATA') {
         window.open(
           `${API_PREFIX}/stat/rankExport?${qs.stringify(requestParams)}`,
         );
       } else {
+        const params = {
+          latitude: latitude?.toString(),
+          branchName,
+          regionName,
+          mode: '7',
+          token: cookie.load('AuthToken'),
+        } as any;
+        if (type.includes('3')) {
+          params.type = type?.toString();
+        }
         window.open(
-          `${API_PREFIX}/stat/infoDetailExport?${qs.stringify({
-            latitude: latitude?.toString(),
-            branchName,
-            regionName,
-            mode: '7',
-            token: cookie.load('AuthToken'),
-          })}`,
+          `${API_PREFIX}/stat/infoDetailExport?${qs.stringify(params)}`,
         );
       }
     },
-    [requestParams, branchName, regionName, latitude],
+    [requestParams, branchName, regionName, latitude, type],
   );
 
   useImperativeHandle(mRef, () => ({
@@ -92,10 +96,10 @@ const Index: FC<{
       id: '2',
       name: '网格TOP10',
     },
-    // {
-    //   id: 'd',
-    //   name: '设备TOP10',
-    // },
+    {
+      id: '3',
+      name: '设备TOP10',
+    },
   ];
 
   const columns = [
@@ -168,20 +172,22 @@ const Index: FC<{
 
   return (
     <Spin spinning={loading}>
-      <LabelsView
-        single
-        value={latitude}
-        dataSource={tail(timeOptions)}
-        onChange={setLatitude as any}
-      />
+      <Row gutter={[4, 4]}>
+        <LabelsView
+          single
+          value={latitude}
+          dataSource={tail(timeOptions)}
+          onChange={setLatitude as any}
+        />
 
-      <LabelsView
-        single
-        value={type}
-        dataSource={typeOptions}
-        onChange={setType as any}
-        style={{ marginBottom: 4 }}
-      />
+        <LabelsView
+          single
+          value={type}
+          dataSource={typeOptions}
+          onChange={setType as any}
+          style={{ marginBottom: 4 }}
+        />
+      </Row>
 
       <Table
         rowClassName="cs-row-top-other"
