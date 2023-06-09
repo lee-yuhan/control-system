@@ -17,12 +17,8 @@ import './index.less';
 import qs from 'qs';
 import ExportTypeModal, { IExportType } from '../../ExportTypeModal';
 import cookie from 'react-cookies';
+import { branchConfig, equipConfig, gridConfig } from './config';
 
-const topColor = [
-  'var(--primary-color)',
-  'var(--danger-color)',
-  'var(--success-color)',
-];
 const Index: FC<{
   mRef: any;
 }> = ({ mRef }) => {
@@ -30,7 +26,7 @@ const Index: FC<{
   const exRef = useRef<any>(null);
   const { branchName, regionName } = useSelector((store: any) => store.home);
 
-  const { data, run, loading } = useRequest(getRankData, {
+  const { data, run, loading, mutate } = useRequest(getRankData, {
     manual: true,
   });
 
@@ -102,73 +98,18 @@ const Index: FC<{
     },
   ];
 
-  const columns = [
-    {
-      title: '排名',
-      dataIndex: 'rank',
-      render: (rank: number) => {
-        return (
-          <div
-            className="cs-row"
-            style={{
-              color:
-                rank <= 3 ? topColor[rank - 1] : 'var(--background-color3)',
-            }}
-          >
-            <span style={{ color: '#fff' }}>{rank}</span>
-          </div>
-        );
-      },
-    },
-    {
-      title: '名称',
-      dataIndex: 'branchName',
-    },
-    {
-      title: '区局',
-      dataIndex: 'regionName',
-    },
-    {
-      title: '设备重复数',
-      dataIndex: 'num',
-      align: 'right',
-    },
-    {
-      title: '设备记录数',
-      dataIndex: 'totalNum',
-      align: 'right',
-    },
-    {
-      title: '重复率（%）',
-      dataIndex: 'rate',
-      width: 120,
-      render: (value: number, record: any, index: number) => {
-        // const rate = (record.repeatNum / record.recordNum) * 100;
-        return (
-          <Row align="middle" gutter={[8, 8]} style={{ paddingRight: 4 }}>
-            <span
-              style={{
-                fontWeight: 400,
-                marginRight: 8,
-                width: 45,
-                textAlign: 'right',
-              }}
-            >
-              {value?.toFixed(2)}
-            </span>
-            <Progress
-              strokeColor={
-                index < 3 ? topColor[index] : 'var(--background-color3)'
-              }
-              style={{ margin: 0, flex: 1 }}
-              percent={value}
-              showInfo={false}
-            />
-          </Row>
-        );
-      },
-    },
-  ];
+  const columns = useMemo(() => {
+    if (type.includes('1')) {
+      return branchConfig;
+    }
+    if (type.includes('2')) {
+      return gridConfig;
+    }
+    if (type.includes('3')) {
+      return equipConfig;
+    }
+    return [];
+  }, [type]);
 
   return (
     <Spin spinning={loading}>
@@ -184,7 +125,10 @@ const Index: FC<{
           single
           value={type}
           dataSource={typeOptions}
-          onChange={setType as any}
+          onChange={(val) => {
+            mutate([]);
+            setType(val as string[]);
+          }}
           style={{ marginBottom: 4 }}
         />
       </Row>
