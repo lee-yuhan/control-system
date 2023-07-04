@@ -1,0 +1,86 @@
+.cascader-active {
+  .ant-select-selector {
+    .ant-select-selection-placeholder,
+    .ant-select-arrow,
+    .ant-select-selection-item {
+      color: #047bde !important;
+    }
+  }
+}
+
+.range-picker-box {
+  .ant-picker-range-separator + .ant-picker-input,
+  .ant-picker-active-bar {
+    display: none;
+  }
+
+  .ant-picker-input > input {
+    color: transparent !important;
+  }
+}
+
+.main-container {
+  background-color: rgb(2, 13, 34);
+  color: #fff;
+  height: 100%;
+
+  .ant-select {
+    background-color: transparent;
+    border-radius: 5px;
+    // -webkit-tap-highlight-color:transparent !important;
+    .ant-select-selection-placeholder,
+    .ant-select-arrow,
+    .ant-select-selection-item {
+      color: #c9e4ff !important;
+    }
+
+    .ant-select-selector {
+      background-color: transparent !important;
+      // border: 1px solid #2676b7 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      .ant-select-selection-search input {
+        color: #fff !important;
+      }
+    }
+
+    .ant-select-clear {
+      border-radius: 50%;
+    }
+  }
+
+  .ant-select-dropdown {
+    background: #030b39;
+    border: 1px solid #047bde;
+    // padding: 8px;
+
+    .rc-virtual-list-holder-inner {
+      // gap: 4px;
+    }
+
+    .ant-select-item-option {
+      color: var(--text-color2) !important;
+
+      + .ant-select-item-option {
+        // margin-top: 4px;
+      }
+
+      &:hover:not(.ant-select-item-option-selected),
+      &.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+        background: var(--select-dropdown-item-bg);
+      }
+    }
+  }
+
+  .ant-select-item {
+    color: #fff !important;
+    &.ant-select-item-option-selected {
+      background-color: #0034b7 !important;
+    }
+
+    .ant-select-item-option-content {
+      // background-color: #0034b7 !important;
+      color: #fff !important;
+    }
+  }
+}

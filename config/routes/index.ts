@@ -19,4 +19,14 @@ export default [
       },
     ],
   },
+  {
+    title: 'content',
+    component: '@/newLayouts',
+    routes: [
+      {
+        path: '/main',
+        component: '@/pages/home/Main',
+      },
+    ],
+  },
 ];
