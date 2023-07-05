@@ -3,6 +3,9 @@ import SelectWrapper from '@/compoments/SelectWrapper';
 import { CaretDownOutlined } from '@ant-design/icons';
 import './index.less';
 import HomeCard from '@/compoments/HomeCard';
+import Rank from './components/Rank';
+import InSaleTrend from './components/InSaleTrend';
+import AfterSaleOverview from './components/AfterSaleOverview';
 
 const Index = () => {
   return (
@@ -56,19 +59,34 @@ const Index = () => {
 
       {/* 内容 */}
       <div>
-        <Row>
-          <Col span={8}>
-            <HomeCard title="12">
+        <Row gutter={[20, 20]}>
+          <Col span={7}>
+            <HomeCard title="售中概况">
               <>12</>
             </HomeCard>
+
+            {/* <HomeCard title="售中工单趋势">
+              <>34</>
+            </HomeCard> */}
+            <InSaleTrend />
           </Col>
-          <Col span={8}>
+          <Col span={10}>
             <Row style={{ flexDirection: 'column' }}>
-              <Col>12</Col>
-              <Col>12</Col>
+              <Col style={{ flex: 1 }}>
+                <div style={{ height: 500 }}></div>
+              </Col>
+              <Col>
+                <Rank />
+              </Col>
             </Row>
           </Col>
-          <Col span={8}></Col>
+          <Col span={7}>
+            <AfterSaleOverview />
+
+            <HomeCard title="售后工单趋势">
+              <>34</>
+            </HomeCard>
+          </Col>
         </Row>
       </div>
     </div>

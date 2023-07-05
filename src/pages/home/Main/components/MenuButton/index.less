@@ -1,0 +1,44 @@
+.menu-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  .btn {
+    padding: 20px 8px;
+    background: linear-gradient(180deg, #020d44 0%, #041049 50%, #0a1865 100%);
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    position: relative;
+    // border: 1px solid #537FFF;
+
+    &.active {
+      background: linear-gradient(
+        180deg,
+        #051a87 0%,
+        #041856 50%,
+        #12604d 100%
+      );
+    }
+
+    &::before,
+    &::after {
+      position: absolute;
+      left: 0;
+      content: '';
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(
+        244deg,
+        rgba(0, 139, 226, 0) 0%,
+        #537fff 50%,
+        rgba(0, 139, 226, 0) 100%
+      );
+    }
+    &::before {
+      top: 0;
+    }
+    &::after {
+      bottom: 0;
+    }
+  }
+}

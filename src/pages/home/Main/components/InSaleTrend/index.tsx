@@ -4,14 +4,8 @@ import LabelsView from '@/compoments/LabelsView';
 import { Progress, Table } from 'antd';
 import { random } from 'lodash';
 import { useMemo, useState } from 'react';
-import './index.less';
 import * as echarts from 'echarts';
 
-const topColor = [
-  'var(--danger-color)',
-  'var(--danger-color)',
-  'var(--danger-color)',
-];
 const Index = () => {
   const option = useMemo(() => {
     return {
@@ -51,18 +45,8 @@ const Index = () => {
       },
       series: [
         {
-          type: 'bar',
-          barWidth: 8,
-          label: {
-            normal: {
-              show: true,
-              position: 'top',
-              fontSize: 12,
-              color: '#fff',
-            },
-          },
-          itemStyle: {
-            // barBorderRadius: [2, 2, 0, 0], //柱体圆角
+          type: 'line',
+          areaStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
@@ -74,6 +58,28 @@ const Index = () => {
               },
             ]),
           },
+          barWidth: 8,
+          label: {
+            normal: {
+              show: true,
+              position: 'top',
+              fontSize: 12,
+              color: '#fff',
+            },
+          },
+          // itemStyle: {
+          //   // barBorderRadius: [2, 2, 0, 0], //柱体圆角
+          //   color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          //     {
+          //       offset: 0,
+          //       color: '#52CE74',
+          //     },
+          //     {
+          //       offset: 1,
+          //       color: '#379450',
+          //     },
+          //   ]),
+          // },
 
           data: Array(13)
             .fill(null)
@@ -92,12 +98,8 @@ const Index = () => {
         onChange={setType as any}
         style={{ marginBottom: 4 }}
       /> */}
-      <HomeCard title="区局总评分排名" style={{ height: 300 }}>
-        <Echarts5
-          option={option}
-          minHeight={200}
-          style={{ height: 200 }}
-        ></Echarts5>
+      <HomeCard title="售中工单趋势">
+        <Echarts5 option={option}></Echarts5>
       </HomeCard>
     </>
   );

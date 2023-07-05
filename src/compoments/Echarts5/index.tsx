@@ -26,6 +26,7 @@ export interface Echarts5Props {
   className?: string;
   width?: number;
   height?: number;
+  minHeight?: number;
   /**
    * echart style
    */
@@ -87,7 +88,7 @@ export const Echarts5 = memo(
       () => ({
         width: props.width ?? '100%',
         height: props.height ?? Echarts5HeightEnum.DEFAULT,
-        minHeight: Echarts5HeightEnum.DEFAULT,
+        minHeight: props.minHeight ?? Echarts5HeightEnum.DEFAULT,
         ...props.style,
       }),
       [props.height, props.style, props.width],
