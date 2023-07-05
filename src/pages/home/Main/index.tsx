@@ -1,12 +1,8 @@
-import { Row, Col, Input, DatePicker as TDatePicker, Select } from 'antd';
+import { Row, Col, Select } from 'antd';
 import SelectWrapper from '@/compoments/SelectWrapper';
 import { CaretDownOutlined } from '@ant-design/icons';
-
-import type { Moment } from 'moment';
 import './index.less';
-
-import momentGenerateConfig from 'rc-picker/lib/generate/moment';
-import Header from './components/Header';
+import HomeCard from '@/compoments/HomeCard';
 
 const Index = () => {
   return (
@@ -57,6 +53,24 @@ const Index = () => {
           ></Input> */}
         </Col>
       </Row>
+
+      {/* 内容 */}
+      <div>
+        <Row>
+          <Col span={8}>
+            <HomeCard title="12">
+              <>12</>
+            </HomeCard>
+          </Col>
+          <Col span={8}>
+            <Row style={{ flexDirection: 'column' }}>
+              <Col>12</Col>
+              <Col>12</Col>
+            </Row>
+          </Col>
+          <Col span={8}></Col>
+        </Row>
+      </div>
     </div>
   );
 };
