@@ -2,8 +2,10 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  border-right: 1px solid rgba(83, 127, 255, 1);
+  padding: 0 20px;
   .btn {
-    padding: 20px 8px;
+    padding: 10px 8px;
     background: linear-gradient(180deg, #020d44 0%, #041049 50%, #0a1865 100%);
     border-radius: 4px;
     font-size: 16px;
@@ -18,6 +20,20 @@
         #041856 50%,
         #12604d 100%
       );
+      .btn-content {
+        &::after {
+          position: absolute;
+          right: -100;
+          content: '';
+          width: 10px;
+          height: 10px;
+          border-top: 10px solid transparent;
+          border-left: 10px solid #4d4dff;
+          border-bottom: 10px solid transparent;
+          border-right: 10px solid transparent;
+          background: linear-gradient(to top, #4d4dff, #00ccff);
+        }
+      }
     }
 
     &::before,

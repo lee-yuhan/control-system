@@ -44,42 +44,160 @@ const Index = () => {
         axisLabel: { show: false },
       },
       series: [
+        // 红色
         {
+          symbolSize: 0,
+          name: '工单量',
           type: 'line',
-          areaStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              {
-                offset: 0,
-                color: '#52CE74',
-              },
-              {
-                offset: 1,
-                color: '#379450',
-              },
-            ]),
+          smooth: true,
+
+          itemStyle: {
+            color: 'rgba(255, 0, 0, 1)',
           },
-          barWidth: 8,
-          label: {
+          lineStyle: {
+            shadowOffsetY: -5,
+            shadowBlur: 8,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(205, 55, 45, 1)',
+          },
+          areaStyle: {
             normal: {
-              show: true,
-              position: 'top',
-              fontSize: 12,
-              color: '#fff',
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgba(205, 55, 45, 0.6)',
+                },
+                /*柱图渐变色*/
+                {
+                  offset: 1,
+                  color: 'rgba(205, 55, 45, 0)',
+                },
+                /*柱图渐变色*/
+              ]),
+              // shadowOffsetY: -10,
+              // shadowOffsetX: 0,
+              // shadowBlur:10,
+              // shadowColor: "rgba(205, 55, 45, 1)",
             },
           },
-          // itemStyle: {
-          //   // barBorderRadius: [2, 2, 0, 0], //柱体圆角
-          //   color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          //     {
-          //       offset: 0,
-          //       color: '#52CE74',
-          //     },
-          //     {
-          //       offset: 1,
-          //       color: '#379450',
-          //     },
-          //   ]),
-          // },
+
+          data: Array(13)
+            .fill(null)
+            .map((item) => random(100, 500)),
+        },
+        // 绿色
+        {
+          symbolSize: 0,
+
+          name: '生成订单量',
+          type: 'line',
+          smooth: true,
+
+          itemStyle: {
+            color: 'rgba(0, 193, 114, 1)',
+          },
+          lineStyle: {
+            shadowOffsetY: -5,
+            shadowBlur: 8,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 193, 114, 1)',
+          },
+          areaStyle: {
+            normal: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgba(67, 209, 74, 1)',
+                },
+                /*柱图渐变色*/
+                {
+                  offset: 1,
+                  color: 'rgba(67, 209, 74, 0)',
+                },
+                /*柱图渐变色*/
+              ]),
+            },
+          },
+
+          data: Array(13)
+            .fill(null)
+            .map((item) => random(100, 500)),
+        },
+        // 黄色
+        {
+          name: '完工定单量',
+          type: 'line',
+          smooth: true,
+          symbolSize: 0,
+
+          itemStyle: {
+            color: 'rgba(228, 203, 84, 1)',
+          },
+          lineStyle: {
+            shadowOffsetY: -5,
+            shadowBlur: 8,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(88, 64, 7, 0.73)',
+          },
+          areaStyle: {
+            normal: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgba(88, 64, 7, 0.73)',
+                },
+                /*柱图渐变色*/
+                {
+                  offset: 1,
+                  color: 'rgba(88, 64, 7, 0)',
+                },
+                /*柱图渐变色*/
+              ]),
+            },
+          },
+
+          data: Array(13)
+            .fill(null)
+            .map((item) => random(100, 500)),
+        },
+        // 蓝色
+        {
+          name: '工单量2',
+          type: 'line',
+          smooth: true,
+          symbolSize: 0,
+
+          itemStyle: {
+            color: 'rgba(17, 119, 245, 1)',
+          },
+          lineStyle: {
+            shadowOffsetY: -5,
+            shadowBlur: 8,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(17, 119, 245, 1)',
+          },
+          areaStyle: {
+            opacity: 1,
+            normal: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: 'rgba(17, 119, 245, 0.4)',
+                },
+                /*柱图渐变色*/
+                {
+                  offset: 1,
+                  color: 'rgba(17, 119, 245, 0)',
+                },
+                /*柱图渐变色*/
+              ]),
+              // shadowOffsetY: -10,
+              // shadowOffsetX: 0,
+              // shadowBlur:10,
+              // shadowBlur:10,
+              // shadowColor: "rgba(205, 55, 45, 1)",
+            },
+          },
 
           data: Array(13)
             .fill(null)

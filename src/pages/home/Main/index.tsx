@@ -6,6 +6,7 @@ import HomeCard from '@/compoments/HomeCard';
 import Rank from './components/Rank';
 import InSaleTrend from './components/InSaleTrend';
 import AfterSaleOverview from './components/AfterSaleOverview';
+import InSaleOverview from './components/InSaleOverview';
 
 const Index = () => {
   return (
@@ -61,13 +62,8 @@ const Index = () => {
       <div>
         <Row gutter={[20, 20]}>
           <Col span={7}>
-            <HomeCard title="售中概况">
-              <>12</>
-            </HomeCard>
+            <InSaleOverview />
 
-            {/* <HomeCard title="售中工单趋势">
-              <>34</>
-            </HomeCard> */}
             <InSaleTrend />
           </Col>
           <Col span={10}>
