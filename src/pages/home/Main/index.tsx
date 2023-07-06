@@ -7,6 +7,7 @@ import Rank from './components/Rank';
 import InSaleTrend from './components/InSaleTrend';
 import AfterSaleOverview from './components/AfterSaleOverview';
 import InSaleOverview from './components/InSaleOverview';
+import mapImg from '@/newAssets/map.png';
 
 const Index = () => {
   return (
@@ -61,22 +62,24 @@ const Index = () => {
       {/* 内容 */}
       <div>
         <Row gutter={[20, 20]}>
-          <Col span={7}>
+          <Col span={8}>
             <InSaleOverview />
 
             <InSaleTrend />
           </Col>
-          <Col span={10}>
-            <Row style={{ flexDirection: 'column' }}>
-              <Col style={{ flex: 1 }}>
-                <div style={{ height: 500 }}></div>
-              </Col>
+          <Col span={8}>
+            <Row style={{ flexDirection: 'column' }} gutter={[20, 20]}>
               <Col>
+                <div style={{ height: 500, padding: 20, textAlign: 'center' }}>
+                  <img src={mapImg} style={{ width: '100%', margin: 'auto' }} />
+                </div>
+              </Col>
+              <Col flex={1}>
                 <Rank />
               </Col>
             </Row>
           </Col>
-          <Col span={7}>
+          <Col span={8}>
             <AfterSaleOverview />
 
             <HomeCard title="售后工单趋势">

@@ -6,15 +6,22 @@ import { random } from 'lodash';
 import { useMemo, useState } from 'react';
 import * as echarts from 'echarts';
 import MenuButton from '../MenuButton';
+import { typeOptions } from './config';
 
 const Index = () => {
   const option = {
-    // legend: {
-    //   bottom: 20,
-    //   textStyle: {
-    //     color: '#fff'
-    //   },
-    // },
+    grid: {
+      top: 0,
+      height: 200,
+      with: 10,
+    },
+    legend: {
+      bottom: 0,
+
+      textStyle: {
+        color: '#fff',
+      },
+    },
     series: [
       {
         name: '情况统计',
@@ -27,28 +34,28 @@ const Index = () => {
         data: [
           {
             value: 67,
-            name: '4',
+            name: '装',
             itemStyle: {
               color: 'rgba(40, 69, 233, 0.6)',
             },
           },
           {
             value: 67,
-            name: '3',
+            name: '拆',
             itemStyle: {
               color: 'rgba(61, 215, 177, 0.6)',
             },
           },
           {
             value: 67,
-            name: '2',
+            name: '移',
             itemStyle: {
               color: 'rgba(12, 164, 208, 0.6)',
             },
           },
           {
             value: 67,
-            name: '1',
+            name: '改',
             itemStyle: {
               color: 'rgba(245, 100, 100, 0.6)',
             },
@@ -66,28 +73,28 @@ const Index = () => {
         data: [
           {
             value: 67,
-            name: '4',
+            name: '装',
             itemStyle: {
               color: 'rgba(40, 69, 233, 1)',
             },
           },
           {
             value: 67,
-            name: '3',
+            name: '拆',
             itemStyle: {
               color: 'rgba(61, 215, 177, 1)',
             },
           },
           {
             value: 67,
-            name: '2',
+            name: '移',
             itemStyle: {
               color: 'rgba(12, 164, 208, 1)',
             },
           },
           {
             value: 67,
-            name: '1',
+            name: '改',
             itemStyle: {
               color: 'rgba(245, 100, 100,1)',
             },
@@ -158,10 +165,10 @@ const Index = () => {
       <HomeCard title="售中概况">
         <Row>
           <Col span={8}>
-            <MenuButton />
+            <MenuButton dataSource={typeOptions} onChange={() => {}} />
           </Col>
           <Col span={16}>
-            <Echarts5 option={option} height={200} minHeight={200}></Echarts5>
+            <Echarts5 option={option}></Echarts5>
           </Col>
         </Row>
       </HomeCard>

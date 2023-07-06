@@ -3,16 +3,16 @@
   flex-direction: column;
   gap: 10px;
   border-right: 1px solid rgba(83, 127, 255, 1);
-  padding: 0 20px;
+  padding: 0 20px 0 0;
   .btn {
-    padding: 10px 8px;
+    padding: 20px 8px;
     background: linear-gradient(180deg, #020d44 0%, #041049 50%, #0a1865 100%);
     border-radius: 4px;
     font-size: 16px;
     text-align: center;
     position: relative;
     // border: 1px solid #537FFF;
-
+    cursor: pointer;
     &.active {
       background: linear-gradient(
         180deg,
@@ -23,15 +23,16 @@
       .btn-content {
         &::after {
           position: absolute;
-          right: -100;
+          right: -28px;
           content: '';
-          width: 10px;
+          width: 8px;
           height: 10px;
-          border-top: 10px solid transparent;
-          border-left: 10px solid #4d4dff;
-          border-bottom: 10px solid transparent;
-          border-right: 10px solid transparent;
-          background: linear-gradient(to top, #4d4dff, #00ccff);
+          background-image: url(../../../../../newAssets/4_active.png);
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          background-color: #010a31;
+          top: 50%;
+          transform: translateY(-50%);
         }
       }
     }
