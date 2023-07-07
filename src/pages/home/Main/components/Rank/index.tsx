@@ -92,7 +92,14 @@ const Index = () => {
         onChange={setType as any}
         style={{ marginBottom: 4 }}
       /> */}
-      <HomeCard title="区局总评分排名" style={{ height: 300 }} hiddenSelect>
+      <HomeCard
+        title="区局总评分排名"
+        style={{
+          height: 300,
+          backgroundImage: 'url(../../../../../newAssets/6_bg.png)',
+        }}
+        hiddenSelect
+      >
         <Echarts5
           option={option}
           minHeight={200}
