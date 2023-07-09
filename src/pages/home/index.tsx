@@ -10,7 +10,7 @@ import { useAccess } from 'umi';
 import prev_btn from '@/assets/prev_btn.png';
 import next_btn from '@/assets/next_btn.png';
 import { useState } from 'react';
-import Main from './Main';
+// import Main from '../Main';
 
 const Index = () => {
   const mRef = useRef<any>(null);
@@ -56,7 +56,7 @@ const Index = () => {
             setCurrPageNum(value);
           }}
         >
-          {menuPermission.includes('first-screen') && <Main />}
+          {/* {menuPermission.includes('first-screen') && <Main />} */}
           {menuPermission.includes('second-screen') && <Result />}
         </Carousel>
         {menuPermission?.length > 1 && currPageNum === 0 && (

@@ -16,11 +16,12 @@ import cookie from 'react-cookies';
 
 export const useRequestAid = (mode: string) => {
   const [params, setParams] = useState({
-    latitude: [],
     custType: '',
-    gridName: '',
   });
-  const { branchName, regionName } = useSelector((store: any) => store.home);
+
+  const { branchName, regionName, latitude, gridName } = useSelector(
+    (store: any) => store.home,
+  );
   const { data, run, loading } = useRequest(getLatitudeStatData, {
     manual: true,
   });
@@ -30,18 +31,11 @@ export const useRequestAid = (mode: string) => {
       branchName,
       custType: params?.custType,
       regionName,
-      latitude: params?.latitude?.toString(),
-      gridName: params?.gridName,
+      latitude: latitude?.toString(),
+      gridName,
       mode,
     };
-  }, [
-    branchName,
-    params?.custType,
-    params?.gridName,
-    regionName,
-    params?.latitude,
-    mode,
-  ]);
+  }, [branchName, params?.custType, gridName, regionName, latitude, mode]);
 
   useDebounceEffect(
     () => {

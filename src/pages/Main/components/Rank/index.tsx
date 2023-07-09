@@ -1,17 +1,11 @@
 import { Echarts5 } from '@/compoments/Echarts5';
 import HomeCard from '@/compoments/HomeCard';
-import LabelsView from '@/compoments/LabelsView';
-import { Progress, Table } from 'antd';
 import { random } from 'lodash';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import './index.less';
 import * as echarts from 'echarts';
+import bg from '../../../../newAssets/6_bg.png';
 
-const topColor = [
-  'var(--danger-color)',
-  'var(--danger-color)',
-  'var(--danger-color)',
-];
 const Index = () => {
   const option = useMemo(() => {
     return {
@@ -96,7 +90,10 @@ const Index = () => {
         title="区局总评分排名"
         style={{
           height: 300,
-          backgroundImage: 'url(../../../../../newAssets/6_bg.png)',
+          backgroundImage: `url(${bg})`,
+        }}
+        titleStyle={{
+          top: 16,
         }}
         hiddenSelect
       >

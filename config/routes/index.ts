@@ -8,7 +8,22 @@ export default [
     path: '/Login',
     component: '@/pages/login',
   },
-
+  {
+    title: 'content',
+    path: '/main',
+    component: '@/pages/Main',
+  },
+  // {
+  //   title: 'content',
+  //   path: '/new',
+  //   component: '@/newLayouts',
+  //   routes: [
+  //     {
+  //       path: '/new/main',
+  //       component: '@/pages/home/Main',
+  //     },
+  //   ],
+  // },
   {
     title: 'content',
     component: '@/layouts',
@@ -16,16 +31,6 @@ export default [
       {
         path: '/home',
         component: '@/pages/home',
-      },
-    ],
-  },
-  {
-    title: 'content',
-    component: '@/newLayouts',
-    routes: [
-      {
-        path: '/main',
-        component: '@/pages/home/Main',
       },
     ],
   },

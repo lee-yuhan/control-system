@@ -1,14 +1,14 @@
 import type { ImmerReducer } from 'umi';
 
 export interface IndexModelState {
-  branchName: string;
-  regionName: string;
+  branchName: string | undefined;
+  regionName: string | undefined;
   latitude: string[];
   gridName: string | undefined;
 }
 
 export interface IndexModelType {
-  namespace: 'home';
+  namespace: 'main';
   state: IndexModelState;
   reducers: {
     update: ImmerReducer<IndexModelState>;
@@ -16,10 +16,10 @@ export interface IndexModelType {
 }
 
 const IndexModel: IndexModelType = {
-  namespace: 'home',
+  namespace: 'main',
   state: {
-    branchName: '',
-    regionName: '',
+    branchName: undefined,
+    regionName: undefined,
     latitude: ['1'],
     gridName: undefined,
   },

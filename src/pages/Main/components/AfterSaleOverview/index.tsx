@@ -1,37 +1,55 @@
 import { Echarts5 } from '@/compoments/Echarts5';
 import HomeCard from '@/compoments/HomeCard';
-import LabelsView from '@/compoments/LabelsView';
 import { Col, Progress, Row, Table } from 'antd';
-import { random } from 'lodash';
-import { useMemo, useState } from 'react';
 import * as echarts from 'echarts';
 import MenuButton from '../MenuButton';
 import { typeOptions } from './config';
-import { hiddenXAxis, hiddenYAxis } from '@/utils/ehcart';
 
 const Index = () => {
   const option = {
-    color: ['#2845E9', '#3DD7B1', '#0CA4D0'],
+    grid: {
+      right: 0,
+      top: 10,
+      height: 180,
+    },
     legend: {
-      bottom: 0,
+      top: 210,
+      itemGap: 15,
+      left: 20,
+      formatter: (name: string) => {
+        const [name1, value] = name?.split('_');
+
+        return `{a| ${name1}}` + `{b| ${value}}`;
+        //  'Legend ' + name1 + value;
+      },
       textStyle: {
         color: '#fff',
+        rich: {
+          a: {
+            fontSize: 18,
+            color: '#0DB1EE',
+          },
+          b: {
+            fontSize: 25,
+            color: '#67DDFF',
+          },
+        },
       },
       data: [
         {
-          name: '宽带',
+          name: '宽带_200',
           itemStyle: {
             color: '#2845E9',
           },
         },
         {
-          name: '语音',
+          name: '语音_200',
           itemStyle: {
             color: '#3DD7B1',
           },
         },
         {
-          name: 'IPTV',
+          name: 'IPTV_200',
           itemStyle: {
             color: '#0CA4D0',
           },
@@ -64,7 +82,7 @@ const Index = () => {
     },
     series: [
       {
-        name: '宽带',
+        name: '宽带_200',
         type: 'bar',
         data: [18203],
         barWidth: 18,
@@ -84,7 +102,7 @@ const Index = () => {
         },
       },
       {
-        name: '语音',
+        name: '语音_200',
         type: 'bar',
         barWidth: 18,
         barGap: 2,
@@ -105,7 +123,7 @@ const Index = () => {
         },
       },
       {
-        name: 'IPTV',
+        name: 'IPTV_200',
         type: 'bar',
         barWidth: 18,
         data: [18203],
@@ -135,12 +153,12 @@ const Index = () => {
         style={{ marginBottom: 4 }}
       /> */}
       <HomeCard title="售后概况">
-        <Row>
-          <Col span={8}>
+        <Row style={{ height: '100%' }}>
+          <Col span={9}>
             <MenuButton dataSource={typeOptions} onChange={() => {}} />
           </Col>
-          <Col span={16}>
-            <Echarts5 option={option}></Echarts5>
+          <Col span={15}>
+            <Echarts5 style={{ height: '100%' }} option={option}></Echarts5>
           </Col>
         </Row>
       </HomeCard>

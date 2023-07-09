@@ -77,7 +77,7 @@ const Index: FC<{
           />
         </Form.Item>
       )}
-      <Form.Item style={{ marginRight: 0 }} name="gridName">
+      {/* <Form.Item style={{ marginRight: 0 }} name="gridName">
         <Select
           style={{ minWidth: 140 }}
           showSearch
@@ -93,7 +93,7 @@ const Index: FC<{
           dataSource={timeOptions}
           //   onChange={setTimeType as any}
         />
-      </Form.Item>
+      </Form.Item> */}
     </Form>
   );
 };

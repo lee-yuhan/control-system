@@ -7,7 +7,8 @@ const Index: FC<{
   children: React.ReactElement;
   style?: React.CSSProperties;
   hiddenSelect?: boolean;
-}> = ({ title, children, style, hiddenSelect }) => {
+  titleStyle?: React.CSSProperties;
+}> = ({ title, children, style, hiddenSelect, titleStyle }) => {
   return (
     <div className="home-card-box" style={style}>
       {!hiddenSelect && (
@@ -15,18 +16,20 @@ const Index: FC<{
           layout="inline"
           style={{ position: 'absolute', top: 8, right: 0 }}
         >
-          <Form.Item>
+          {/* <Form.Item>
             <Select placeholder="网格" options={[{}]}></Select>
           </Form.Item>
           <Form.Item>
             <Select placeholder="渠道" options={[{}]}></Select>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item>
             <Select placeholder="标签" options={[{}]}></Select>
           </Form.Item>
         </Form>
       )}
-      <div className="title">{title}</div>
+      <div className="title" style={titleStyle}>
+        {title}
+      </div>
       <div className="content">{children}</div>
     </div>
   );

@@ -1,12 +1,13 @@
 import { Button, Col, Form, Row, Select, Space } from 'antd';
 import './index.less';
-import { downloadOption } from './config';
+import { downloadOption, timeOptions } from './config';
 import useInitialState from '@/hooks/useInitialState';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useMount } from 'ahooks';
 import { getBranchList, getGripList } from '@/service/commonServices';
 import { useDispatch, useRequest, useSelector } from 'umi';
 import { map } from 'lodash';
+import LabelsView from '../LabelsView';
 
 const Index: FC<{
   onValuesChange: (changeValues: any, values: any) => void;
@@ -16,6 +17,7 @@ const Index: FC<{
     downloadOption?.[0]?.value,
   );
   const { branchName, regionName } = useSelector((store: any) => store.home);
+  const gripList = useSelector((store: any) => store.common.gripList);
 
   const dispatch = useDispatch();
 
@@ -23,6 +25,8 @@ const Index: FC<{
     return {
       regionName: districtBureauList?.[0]?.value,
       // branchName: branchList?.[0]?.value,
+      gripList: undefined,
+      latitude: ['1'],
     };
   }, [districtBureauList]);
   useMount(() => {
@@ -95,7 +99,14 @@ const Index: FC<{
       <Row align="middle" justify="space-between">
         <Col className="left">
           <Space align="center">
-            <span className="condition-title">{SYSTEM_NAME}</span>
+            <span
+              onClick={() => {
+                window.open(`${window.location.origin}/main`);
+              }}
+              className="condition-title"
+            >
+              {SYSTEM_NAME}
+            </span>
             <Form
               layout="inline"
               onValuesChange={onValuesChange}
@@ -120,6 +131,24 @@ const Index: FC<{
                     <Select.Option key={item.value}>{item.label}</Select.Option>
                   ))} */}
                 </Select>
+              </Form.Item>
+
+              <Form.Item name="gridName">
+                <Select
+                  style={{ minWidth: 140 }}
+                  showSearch
+                  placeholder="请选择网格"
+                  allowClear
+                  options={gripList}
+                />
+              </Form.Item>
+              <Form.Item style={{ marginRight: 0 }} name="latitude">
+                <LabelsView
+                  single
+                  //   value={timeType}
+                  dataSource={timeOptions}
+                  //   onChange={setTimeType as any}
+                />
               </Form.Item>
             </Form>
           </Space>

@@ -34,25 +34,25 @@ const Index = () => {
     <div className="result-container">
       <Row gutter={40} style={{ marginBottom: 40, ...minHeightStyle }}>
         <Col span={8}>
-          <InstallQuality />
-        </Col>
-        <Col span={8}>
           <SatisfactionRate />
         </Col>
         <Col span={8}>
-          <QualityDiff />
+          <InstallQuality />
+        </Col>
+        <Col span={8}>
+          <AssemblyMaintenanceQuality />
         </Col>
       </Row>
 
       <Row gutter={40} style={{ ...minHeightStyle }}>
         <Col span={8}>
-          <AssemblyMaintenanceQuality />
-        </Col>
-        <Col span={8}>
-          <RepetitionRate />
+          <QualityDiff />
         </Col>
         <Col span={8}>
           <QualityInspection />
+        </Col>
+        <Col span={8}>
+          <RepetitionRate />
         </Col>
       </Row>
     </div>
