@@ -5,13 +5,14 @@ import { themeEhcartColor } from '@/utils/ehcart';
 import { useSelector } from 'umi';
 import { getLocalStorageTheme } from '@/utils/theme';
 import { Spin } from 'antd';
-import { useRequestAid, useStatExportAid } from '../../hook';
+import { useEchartClick, useRequestAid, useStatExportAid } from '../../hook';
 import { map, merge } from 'lodash';
 import { baseConfig } from '../../config';
 import legendIcon3 from '../../../../../assets/icon_legend3.png';
 import lineIcon2 from '../../../../../assets/icon_line2.png';
 import CardCondition from '../CardCondition';
 import ExportTypeModal from '../ExportTypeModal';
+import DetailModal from '../DetailModal';
 
 const Index: FC<{ mRef: any }> = ({ mRef }) => {
   const themeChangeTag = useSelector(
@@ -25,6 +26,8 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
     useRequestAid('10');
 
   const { exRef, handleExport, beforeExport } = useStatExportAid(requestParams);
+
+  const [eRef, dRef] = useEchartClick(map(data, 'latitude'));
 
   useImperativeHandle(mRef, () => ({
     exportData: beforeExport,
@@ -76,9 +79,10 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
       <CardCondition params={params} mode="10" onValuesChange={setParams} />
 
       <div style={{ flex: 1 }}>
-        <Echarts5 option={option} style={{ height: '100%' }} />
+        <Echarts5 ref={eRef} option={option} style={{ height: '100%' }} />
       </div>
       <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
+      <DetailModal mRef={dRef} />
     </Spin>
   );
 };

@@ -1,10 +1,14 @@
+import moment from 'moment';
 import type { ImmerReducer } from 'umi';
+import type { Moment } from 'moment';
 
 export interface IndexModelState {
   branchName: string;
   regionName: string;
   latitude: string[];
   gridName: string | undefined;
+  step: number;
+  date: Moment;
 }
 
 export interface IndexModelType {
@@ -22,6 +26,8 @@ const IndexModel: IndexModelType = {
     regionName: '',
     latitude: ['1'],
     gridName: undefined,
+    step: 7,
+    date: moment(),
   },
 
   reducers: {

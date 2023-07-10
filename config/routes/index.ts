@@ -1,7 +1,7 @@
 import { ExceptionToIndex } from './common';
 
 export default [
-  { exact: true, path: '/', redirect: '/home' },
+  { exact: true, path: '/', redirect: '/main' },
   // ...ExceptionToIndex,
   {
     title: '登录',
@@ -12,6 +12,11 @@ export default [
     title: '装维管控平台',
     path: '/main',
     component: '@/pages/Main',
+  },
+  {
+    title: '装维管控平台',
+    path: '/overview',
+    component: '@/pages/overview',
   },
   // {
   //   title: 'content',

@@ -13,7 +13,7 @@ const Login = () => {
     manual: true,
     onSuccess: (res) => {
       cookie.save('AuthToken', res.token);
-      window.location.href = '/home';
+      window.location.href = '/';
     },
   });
 

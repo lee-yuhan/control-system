@@ -1,9 +1,10 @@
 import CardWrapper from '@/compoments/CardWrapper';
 import Tab from '@/compoments/Tab';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import SerciceRate from './SerciceRate';
 import EvaluationRate from './EvaluationRate';
 import { Button } from 'antd';
+import { addClickEvent } from '@/utils/ehcart';
 
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('6');

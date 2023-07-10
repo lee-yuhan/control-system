@@ -79,34 +79,38 @@ const Index = () => {
         ],
       },
     ];
-  }, [data]);
+  }, [data, currSelectItem]);
 
   const option = {
     animation: false,
-    legend: {
-      bottom: 50,
-      width: 250,
-      itemGap: 30,
-      formatter: (name: string) => {
-        const [name1, value] = name?.split('_');
+    legend: [
+      {
+        bottom: 50,
+        width: 280,
+        itemGap: 30,
+        // data:[`装_${data?.[currSelectItem!.key1] ?? 0}`],
+        formatter: (name: string) => {
+          const [name1, value] = name?.split('_');
 
-        return `{a| ${name1}}` + `{b| ${value}}`;
-        //  'Legend ' + name1 + value;
-      },
-      textStyle: {
-        color: '#fff',
-        rich: {
-          a: {
-            fontSize: 18,
-            color: '#0DB1EE',
-          },
-          b: {
-            fontSize: 25,
-            color: '#67DDFF',
+          return `{a| ${name1}}` + `{b| ${value}}`;
+          //  'Legend ' + name1 + value;
+        },
+        textStyle: {
+          color: '#fff',
+          rich: {
+            a: {
+              fontSize: 18,
+              color: '#0DB1EE',
+            },
+            b: {
+              fontSize: 25,
+              color: '#67DDFF',
+              width: 100,
+            },
           },
         },
       },
-    },
+    ],
     series: baseSeries
       ?.map((item) => {
         return [

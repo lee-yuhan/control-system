@@ -5,8 +5,11 @@ import { useMemo } from 'react';
 import './index.less';
 import * as echarts from 'echarts';
 import bg from '../../../../newAssets/6_bg.png';
+import useInitialState from '@/hooks/useInitialState';
 
 const Index = () => {
+  const { districtBureauList } = useInitialState();
+
   const option = useMemo(() => {
     return {
       grid: {
@@ -18,7 +21,7 @@ const Index = () => {
       xAxis: {
         data: Array(13)
           .fill(null)
-          .map((item) => '漯河'),
+          .map((item, index) => districtBureauList?.[index]?.label),
         axisTick: { show: false },
         splitLine: { show: false },
         axisLabel: {
@@ -75,7 +78,7 @@ const Index = () => {
         },
       ],
     };
-  }, []);
+  }, [districtBureauList]);
 
   return (
     <>

@@ -1,4 +1,12 @@
-import { Button, Col, Form, Row, Select, Space } from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker as TDatePicker,
+  Form,
+  Row,
+  Select,
+  Space,
+} from 'antd';
 import './index.less';
 import { downloadOption, timeOptions } from './config';
 import useInitialState from '@/hooks/useInitialState';
@@ -8,7 +16,13 @@ import { getBranchList, getGripList } from '@/service/commonServices';
 import { useDispatch, useRequest, useSelector } from 'umi';
 import { map } from 'lodash';
 import LabelsView from '../LabelsView';
+import moment from 'moment';
+import momentGenerateConfig from 'rc-picker/lib/generate/moment';
+import { Moment } from 'moment';
 
+const MyDatePicker = TDatePicker.generatePicker<Moment>(momentGenerateConfig);
+
+const DatePicker: any = MyDatePicker;
 const Index: FC<{
   onValuesChange: (changeValues: any, values: any) => void;
 }> = ({ onValuesChange }) => {
@@ -16,7 +30,9 @@ const Index: FC<{
   const [downloadType, setDownloadType] = useState<number>(
     downloadOption?.[0]?.value,
   );
-  const { branchName, regionName } = useSelector((store: any) => store.home);
+  const { branchName, regionName, step, date } = useSelector(
+    (store: any) => store.home,
+  );
   const gripList = useSelector((store: any) => store.common.gripList);
 
   const dispatch = useDispatch();
@@ -27,6 +43,8 @@ const Index: FC<{
       // branchName: branchList?.[0]?.value,
       gripList: undefined,
       latitude: ['1'],
+      step: 7,
+      date: moment(),
     };
   }, [districtBureauList]);
   useMount(() => {
@@ -45,16 +63,11 @@ const Index: FC<{
         value,
       }));
     },
-
-    // onSuccess: (res) => {
-    //   dispatch({
-    //     type: 'common/update',
-    //     payload: {
-    //       districtBureauList: res,
-    //     },
-    //   });
-    // },
   });
+  useEffect(() => {
+    if (!regionName) return;
+    run(regionName);
+  }, [regionName]);
 
   const { run: getGripListRun } = useRequest(getGripList, {
     manual: true,
@@ -74,11 +87,6 @@ const Index: FC<{
       });
     },
   });
-
-  useEffect(() => {
-    if (!regionName) return;
-    run(regionName);
-  }, [regionName]);
 
   useEffect(() => {
     if (!branchName) {
@@ -142,12 +150,26 @@ const Index: FC<{
                   options={gripList}
                 />
               </Form.Item>
-              <Form.Item style={{ marginRight: 0 }} name="latitude">
+              <Form.Item name="date">
+                <DatePicker allowClear={false} />
+              </Form.Item>
+              <Form.Item name="latitude">
                 <LabelsView
                   single
                   //   value={timeType}
                   dataSource={timeOptions}
                   //   onChange={setTimeType as any}
+                />
+              </Form.Item>
+              <Form.Item name="step" style={{ marginRight: 0 }}>
+                <Select
+                  style={{ width: 80 }}
+                  options={Array(12)
+                    .fill(null)
+                    ?.map((_, index) => ({
+                      label: index + 1,
+                      value: index + 1,
+                    }))}
                 />
               </Form.Item>
             </Form>

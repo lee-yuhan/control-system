@@ -68,6 +68,9 @@ const Index = () => {
   );
 
   useEffect(() => {
+    handleChange({
+      branchName: undefined,
+    });
     if (!regionName) return;
     run(regionName);
     getHistoryChannelListRun(regionName);

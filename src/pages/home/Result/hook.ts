@@ -13,6 +13,7 @@ import { cloneDeep, isNaN, isNil } from 'lodash';
 import qs from 'qs';
 import { IExportType } from './compoments/ExportTypeModal';
 import cookie from 'react-cookies';
+import { addClickEvent } from '@/utils/ehcart';
 
 export const useRequestAid = (mode: string) => {
   const [params, setParams] = useState({
@@ -166,4 +167,27 @@ export const useEchartHeightAid = () => {
     return size?.height;
   }, [size?.height]);
   return { height, dRef };
+};
+
+export const useEchartClick = (xAxisDatas: any) => {
+  const mRef = useRef<any>();
+  const dRef = useRef<any>();
+  console.log('1113', xAxisDatas);
+
+  const handleClick = useCallback(
+    (xIndex: number) => {
+      const r = xAxisDatas?.[xIndex];
+      console.log('!11', r);
+
+      // const [start, end] = r.split('-');
+      dRef?.current?.showModal(r);
+    },
+    [xAxisDatas],
+  );
+  const inst = mRef.current;
+
+  console.log('inst?.getZr()', inst?.getZr());
+
+  addClickEvent(inst, handleClick);
+  return [mRef, dRef];
 };

@@ -68,7 +68,7 @@ export default ({ theme, onThemeChange }: Props) => {
       <div
         className="header-title"
         onClick={() => {
-          window.open(`${window.location.origin}/score`);
+          window.open(`${window.location.origin}/home`);
         }}
       >
         {SYSTEM_NAME}
