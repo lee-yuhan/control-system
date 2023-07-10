@@ -22,9 +22,9 @@ const Index: FC<{
           <Form.Item>
             <Select placeholder="渠道" options={[{}]}></Select>
           </Form.Item> */}
-          <Form.Item>
+          {/* <Form.Item>
             <Select placeholder="标签" options={[{}]}></Select>
-          </Form.Item>
+          </Form.Item> */}
         </Form>
       )}
       <div className="title" style={titleStyle}>

@@ -5,6 +5,8 @@ export interface IndexModelState {
   regionName: string | undefined;
   latitude: string[];
   gridName: string | undefined;
+  channelName: string | undefined;
+  tagName: string | undefined;
 }
 
 export interface IndexModelType {
@@ -22,6 +24,8 @@ const IndexModel: IndexModelType = {
     regionName: undefined,
     latitude: ['1'],
     gridName: undefined,
+    channelName: undefined,
+    tagName: undefined,
   },
 
   reducers: {

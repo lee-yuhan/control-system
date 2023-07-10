@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'umi';
 import HeaderBase from './Header';
 import './index.less';
 import { getLocalStorageTheme } from '@/utils/theme';
+import './antd.less';
 
 export type Props = {
   /**

@@ -15,13 +15,30 @@ import { map } from 'lodash';
 import { useEffect } from 'react';
 import useInitialState from '@/hooks/useInitialState';
 import SaleMap from './components/SaleMap';
+import {
+  getHistoryAreaList,
+  getHistoryChannelList,
+  getHistoryTagList,
+} from './services';
 
 const Index = () => {
-  const { districtBureauList } = useInitialState();
-  const { branchName, regionName, gridName } = useSelector(
-    (store: any) => store.main,
-  );
+  const { branchName, regionName, gridName, channelName, tagName } =
+    useSelector((store: any) => store.main);
   const dispatch = useDispatch();
+
+  const { data: districtBureauList } = useRequest(getHistoryAreaList, {
+    formatResult(res) {
+      return map(res.data, (value) => ({
+        label: value,
+        value,
+      }));
+    },
+    onSuccess: (res) => {
+      handleChange({
+        regionName: res?.[0]?.value,
+      });
+    },
+  });
 
   const {
     data: branchList,
@@ -37,16 +54,44 @@ const Index = () => {
     },
   });
 
+  const { data: channelList, run: getHistoryChannelListRun } = useRequest(
+    getHistoryChannelList,
+    {
+      manual: true,
+      formatResult(res) {
+        return map(res.data, (value) => ({
+          label: value,
+          value,
+        }));
+      },
+    },
+  );
+
   useEffect(() => {
     if (!regionName) return;
     run(regionName);
+    getHistoryChannelListRun(regionName);
   }, [regionName]);
 
+  // const {
+  //   run: getGripListRun,
+  //   data: gripList,
+  //   mutate,
+  // } = useRequest(getGripList, {
+  //   manual: true,
+  //   formatResult(res) {
+  //     return map(res.data, (value) => ({
+  //       label: value,
+  //       value,
+  //     }));
+  //   },
+  // });
+
   const {
-    run: getGripListRun,
-    data: gripList,
+    run: getHistoryTagListRun,
+    data: tagList,
     mutate,
-  } = useRequest(getGripList, {
+  } = useRequest(getHistoryTagList, {
     manual: true,
     formatResult(res) {
       return map(res.data, (value) => ({
@@ -57,21 +102,12 @@ const Index = () => {
   });
 
   useEffect(() => {
-    if (!regionName) return;
-    run(regionName);
-  }, [regionName]);
-
-  useEffect(() => {
-    handleChange({
-      gridName: undefined,
-    });
-    if (!branchName) {
+    if (!channelName) {
       mutate([]);
       return;
     }
-
-    getGripListRun(branchName);
-  }, [branchName]);
+    getHistoryTagListRun(channelName);
+  }, [channelName]);
 
   const handleChange = (changeValues: any) => {
     dispatch({
@@ -80,15 +116,10 @@ const Index = () => {
     });
   };
 
-  // branchName: '',
-  // regionName: '',
-  // latitude: ['1'],
-  // gridName: undefined,
-
   return (
     <BaseLayout>
-      <div className="main-container">
-        <Row>
+      <div id="main-container" className="main-container">
+        <Row style={{ height: 40 }}>
           <Col flex={1}></Col>
           <Col
             span={8}
@@ -105,7 +136,11 @@ const Index = () => {
                 placeholder="区局"
                 options={districtBureauList}
                 value={regionName}
+                showSearch
                 popupMatchSelectWidth={false}
+                getPopupContainer={() =>
+                  document.getElementById('main-container') || document.body
+                }
                 onChange={(value) => {
                   handleChange({
                     regionName: value,
@@ -118,8 +153,12 @@ const Index = () => {
                 suffixIcon={<CaretDownOutlined />}
                 placeholder="支局"
                 options={branchList}
+                showSearch
                 popupMatchSelectWidth={false}
                 value={branchName}
+                getPopupContainer={() =>
+                  document.getElementById('main-container') || document.body
+                }
                 onChange={(value) => {
                   handleChange({
                     branchName: value,
@@ -128,10 +167,11 @@ const Index = () => {
               />
             </SelectWrapper>
 
-            <SelectWrapper beforeBorder position="right">
+            {/* <SelectWrapper beforeBorder position="right">
               <Select
                 suffixIcon={<CaretDownOutlined />}
                 placeholder="网格"
+                showSearch
                 popupMatchSelectWidth={false}
                 options={gripList}
                 value={gridName}
@@ -141,15 +181,43 @@ const Index = () => {
                   });
                 }}
               />
-            </SelectWrapper>
+            </SelectWrapper> */}
             <SelectWrapper beforeBorder afterBorder position="right">
               <Select
                 suffixIcon={<CaretDownOutlined />}
                 placeholder="渠道"
+                showSearch
                 popupMatchSelectWidth={false}
+                options={channelList}
+                getPopupContainer={() =>
+                  document.getElementById('main-container') || document.body
+                }
+                value={channelName}
+                onChange={(value) => {
+                  handleChange({
+                    channelName: value,
+                  });
+                }}
               />
             </SelectWrapper>
-
+            <SelectWrapper beforeBorder afterBorder position="right">
+              <Select
+                suffixIcon={<CaretDownOutlined />}
+                placeholder="标签"
+                value={tagName}
+                popupMatchSelectWidth={false}
+                options={tagList}
+                showSearch
+                getPopupContainer={() =>
+                  document.getElementById('main-container') || document.body
+                }
+                onChange={(value) => {
+                  handleChange({
+                    tagName: value,
+                  });
+                }}
+              />
+            </SelectWrapper>
             {/* <Input
       style={{
         border: '1px solid #387AFF',
@@ -164,30 +232,45 @@ const Index = () => {
         </Row>
 
         {/* 内容 */}
-        <div>
-          <Row gutter={[20, 20]}>
-            <Col span={8}>
-              <InSaleOverview />
-
-              <InSaleTrend />
-            </Col>
-            <Col span={8}>
-              <Row style={{ flexDirection: 'column' }} gutter={[20, 20]}>
-                <Col>
-                  <SaleMap />
-                </Col>
-                <Col flex={1}>
-                  <Rank />
-                </Col>
-              </Row>
-            </Col>
-            <Col span={8}>
-              <AfterSaleOverview />
-
-              <AfterSaleTrend />
-            </Col>
-          </Row>
-        </div>
+        <Row gutter={[20, 20]} style={{ height: '100%' }}>
+          <Col span={8}>
+            <Row
+              gutter={[20, 20]}
+              style={{ height: '100%', flexDirection: 'column' }}
+            >
+              <Col>
+                <InSaleOverview />
+              </Col>
+              <Col flex={1}>
+                <InSaleTrend />
+              </Col>
+            </Row>
+          </Col>
+          <Col span={8}>
+            <Row
+              gutter={[20, 20]}
+              style={{ height: '100%', flexDirection: 'column' }}
+            >
+              <SaleMap />
+              <Col flex={1}>
+                <Rank />
+              </Col>
+            </Row>
+          </Col>
+          <Col span={8}>
+            <Row
+              gutter={[20, 20]}
+              style={{ height: '100%', flexDirection: 'column' }}
+            >
+              <Col>
+                <AfterSaleOverview />
+              </Col>
+              <Col flex={1}>
+                <AfterSaleTrend />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       </div>
     </BaseLayout>
   );

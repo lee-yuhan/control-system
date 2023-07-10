@@ -74,10 +74,10 @@ const Index: React.FC<Props<string | number>> = (props) => {
   return (
     <div
       className={classNames(
-        'tsie-tags-view',
+        'tsie-labels-view',
         {
-          'tsie-tags-view-noLeftRadius': noLeftRadius,
-          'tsie-tags-view-noRightRadius': noRightRadius,
+          'tsie-labels-view-noLeftRadius': noLeftRadius,
+          'tsie-labels-view-noRightRadius': noRightRadius,
         },
         className,
       )}

@@ -2,11 +2,13 @@ import { Echarts5 } from '@/compoments/Echarts5';
 import HomeCard from '@/compoments/HomeCard';
 import { Progress, Row, Table } from 'antd';
 import { random } from 'lodash';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import * as echarts from 'echarts';
 import { timeOptions } from '../../config';
 import TagsView from '@/compoments/TagsView';
 import bottomBg from '../../../../newAssets/4_bg.png';
+import { useRequest, useSelector } from 'umi';
+import { getLatitudeStat } from '../../services';
 
 // 顺序绿、 红、黄、蓝。跟系列顺序一致
 const stackColor = [
@@ -18,6 +20,23 @@ const stackColor = [
 
 const Index = () => {
   const [latitude, setLatitude] = useState<string[]>([timeOptions?.[0].id]);
+  const { branchName, regionName, gridName, channelName, tagName } =
+    useSelector((store: any) => store.main);
+
+  const { run, data, loading } = useRequest(getLatitudeStat, {
+    manual: true,
+  });
+
+  useEffect(() => {
+    if (!latitude?.length || !regionName) return;
+    run({
+      appId: 3,
+      areaName: regionName,
+      channelName,
+      latitude: latitude?.[0], // 纬度 0：日纬度/1：周维度/2：月纬度
+      tagName,
+    });
+  }, [regionName, channelName, latitude, tagName]);
 
   const baseSeries = useMemo(() => {
     return [
@@ -56,14 +75,12 @@ const Index = () => {
           },
         },
 
-        data: Array(13)
-          .fill(null)
-          .map((item) => random(100, 500)),
+        data: data?.map((item: any) => item.value1),
       },
       // 红色
       {
         symbolSize: 0,
-        name: '工单量',
+        name: '生成工单量',
         type: 'line',
         emphasis: { disabled: true },
         stack: '1',
@@ -91,9 +108,7 @@ const Index = () => {
           },
         },
 
-        data: Array(13)
-          .fill(null)
-          .map((item) => random(100, 500)),
+        data: data?.map((item: any) => item.value3),
       },
       // 黄色
       {
@@ -129,13 +144,11 @@ const Index = () => {
           },
         },
 
-        data: Array(13)
-          .fill(null)
-          .map((item) => random(100, 500)),
+        data: data?.map((item: any) => item.value2),
       },
       // 蓝色
       {
-        name: '工单量2',
+        name: '完工工单量',
         type: 'line',
 
         symbolSize: 0,
@@ -165,26 +178,19 @@ const Index = () => {
               },
               /*柱图渐变色*/
             ]),
-            // shadowOffsetY: -10,
-            // shadowOffsetX: 0,
-            // shadowBlur:10,
-            // shadowBlur:10,
-            // shadowColor: "rgba(205, 55, 45, 1)",
           },
         },
 
-        data: Array(13)
-          .fill(null)
-          .map((item) => random(100, 500)),
+        data: data?.map((item: any) => item.value4),
       },
     ];
-  }, []);
+  }, [data]);
 
   const option = useMemo(() => {
     return {
       legend: {
         textStyle: {
-          color: '#fff',
+          color: '#39C9FF',
         },
         left: 20,
         top: 0,
@@ -199,10 +205,10 @@ const Index = () => {
         right: 0,
       },
       xAxis: {
+        type: 'category',
         offset: 35,
-        data: Array(13)
-          .fill(null)
-          .map((item) => '漯河'),
+        data: data?.map((item: any) => item.latitude),
+
         axisTick: { show: false },
         splitLine: { show: false },
         axisLabel: {
@@ -243,12 +249,12 @@ const Index = () => {
               },
             },
 
-            data: item.data.map((item) => item * 0.1),
+            data: item?.data?.map((item) => item * 0.1),
           },
         ])
         .flat(),
     };
-  }, [baseSeries]);
+  }, [baseSeries, data]);
 
   return (
     <>
@@ -265,7 +271,7 @@ const Index = () => {
           </Row>
 
           <div style={{ position: 'relative' }}>
-            <Echarts5 option={option}></Echarts5>
+            <Echarts5 loading={loading} option={option}></Echarts5>
             <img
               style={{
                 position: 'absolute',

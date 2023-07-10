@@ -113,9 +113,11 @@ const BaseLayout = (props: Props) => {
       autoInsertSpaceInButton={false}
     >
       <PpssContext.Provider value={ppssContext}>
-        <Layout className={`BaseLayout  ${className ?? ''}`}>
+        <Layout className={`new-baseLayout  ${className ?? ''}`}>
           {Header}
-          <div style={{ height: '100%', padding: '0 10px 20px 10px' }}>
+          <div
+            style={{ height: 'calc(100 - 20px)', padding: '0 10px 20px 10px' }}
+          >
             {props.children}
           </div>
         </Layout>

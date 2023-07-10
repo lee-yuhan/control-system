@@ -89,7 +89,6 @@ const Index = () => {
       <HomeCard
         title="区局总评分排名"
         style={{
-          height: 300,
           backgroundImage: `url(${bg})`,
         }}
         titleStyle={{
@@ -100,7 +99,7 @@ const Index = () => {
         <Echarts5
           option={option}
           minHeight={200}
-          style={{ height: 200 }}
+          style={{ height: 260 }}
         ></Echarts5>
       </HomeCard>
     </>

@@ -9,7 +9,7 @@ export default [
     component: '@/pages/login',
   },
   {
-    title: 'content',
+    title: '装维管控平台',
     path: '/main',
     component: '@/pages/Main',
   },
@@ -25,7 +25,7 @@ export default [
   //   ],
   // },
   {
-    title: 'content',
+    title: '装维管控平台',
     component: '@/layouts',
     routes: [
       {

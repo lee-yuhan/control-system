@@ -17,7 +17,7 @@ export default ({ theme, onThemeChange }: Props) => {
   }, 1000);
 
   return (
-    <div className="layoutHeader">
+    <div className="new-layout-header">
       <Row>
         <Col span={10}>
           <div className="header-left">

@@ -2,16 +2,89 @@ import { Echarts5 } from '@/compoments/Echarts5';
 import HomeCard from '@/compoments/HomeCard';
 import LabelsView from '@/compoments/LabelsView';
 import { Col, Progress, Row, Table } from 'antd';
-import { random } from 'lodash';
-import { useMemo, useState } from 'react';
+import { merge, random } from 'lodash';
+import { useEffect, useMemo, useState } from 'react';
 import * as echarts from 'echarts';
 import MenuButton from '../MenuButton';
 import { typeOptions } from './config';
+import { useRequest, useSelector } from 'umi';
+import { getSumarryStat } from '../../services';
 
 const Index = () => {
+  const { branchName, regionName, gridName, channelName, tagName } =
+    useSelector((store: any) => store.main);
+  const [selectKey, setSelectKey] = useState('1');
+  const currSelectItem = useMemo(() => {
+    return typeOptions?.find((item) => item.id === selectKey);
+  }, [selectKey]);
+
+  const { run, data, loading } = useRequest(getSumarryStat, {
+    manual: true,
+  });
+
+  useEffect(() => {
+    if (!regionName) return;
+    run({
+      appId: 1,
+      areaName: regionName,
+      channelName,
+      tagName,
+    });
+  }, [regionName, channelName, tagName]);
+
+  const baseSeries = useMemo(() => {
+    return [
+      {
+        name: '情况统计',
+        type: 'pie',
+        startAngle: 0,
+        radius: ['50%', '75%'],
+        center: ['50%', 120],
+        emphasis: { disabled: true },
+        height: 300,
+        label: {
+          show: false,
+          position: 'center',
+        },
+        data: [
+          {
+            value: data?.[currSelectItem!.key1] ?? 0,
+            name: `装_${data?.[currSelectItem!.key1] ?? 0}`,
+            itemStyle: {
+              color: 'rgba(40, 69, 233, 1)',
+            },
+          },
+          {
+            value: data?.[currSelectItem!.key2] ?? 0,
+            name: `拆_${data?.[currSelectItem!.key2] ?? 0}`,
+
+            itemStyle: {
+              color: 'rgba(61, 215, 177, 1)',
+            },
+          },
+          {
+            value: data?.[currSelectItem!.key3] ?? 0,
+            name: `移_${data?.[currSelectItem!.key3] ?? 0}`,
+            itemStyle: {
+              color: 'rgba(12, 164, 208, 1)',
+            },
+          },
+          {
+            value: data?.[currSelectItem!.key4] ?? 0,
+            name: `改_${data?.[currSelectItem!.key4] ?? 0}`,
+            itemStyle: {
+              color: 'rgba(245, 100, 100,1)',
+            },
+          },
+        ],
+      },
+    ];
+  }, [data]);
+
   const option = {
+    animation: false,
     legend: {
-      bottom: 40,
+      bottom: 50,
       width: 250,
       itemGap: 30,
       formatter: (name: string) => {
@@ -34,174 +107,31 @@ const Index = () => {
         },
       },
     },
-    series: [
-      {
-        name: '情况统计',
-        center: ['76%', '30%'],
-        width: '65%',
-        type: 'pie',
-        emphasis: { disabled: true },
-        radius: ['35%', '60%'],
-
-        label: {
-          show: false,
-          position: 'center',
-        },
-        data: [
+    series: baseSeries
+      ?.map((item) => {
+        return [
+          item,
           {
-            value: 67,
-            name: '装_2',
-            itemStyle: {
-              color: 'rgba(40, 69, 233, 0.6)',
-            },
+            ...item,
+            radius: ['35%', '60%'],
+            data: item?.data?.map((sitem) =>
+              merge({}, sitem, {
+                itemStyle: {
+                  opacity: 0.6,
+                },
+              }),
+            ),
           },
           {
-            value: 67,
-            name: '拆_3',
-            itemStyle: {
-              color: 'rgba(61, 215, 177, 0.6)',
-            },
+            ...item,
+            height: 255,
+            radius: ['35%', 46],
           },
-          {
-            value: 67,
-            name: '移_5',
-            itemStyle: {
-              color: 'rgba(12, 164, 208, 0.6)',
-            },
-          },
-          {
-            value: 67,
-            name: '改_6',
-            itemStyle: {
-              color: 'rgba(245, 100, 100, 0.6)',
-            },
-          },
-        ],
-      },
-      {
-        name: '情况统计',
-        type: 'pie',
-        radius: ['50%', '75%'],
-        center: ['76%', '30%'],
-        emphasis: { disabled: true },
-
-        width: '65%',
-
-        label: {
-          show: false,
-          position: 'center',
-        },
-        data: [
-          {
-            value: 67,
-            name: '装_2',
-            itemStyle: {
-              color: 'rgba(40, 69, 233, 1)',
-            },
-          },
-          {
-            value: 67,
-            name: '拆_3',
-            itemStyle: {
-              color: 'rgba(61, 215, 177, 1)',
-            },
-          },
-          {
-            value: 67,
-            name: '移_5',
-            itemStyle: {
-              color: 'rgba(12, 164, 208, 1)',
-            },
-          },
-          {
-            value: 67,
-            name: '改_6',
-            itemStyle: {
-              color: 'rgba(245, 100, 100,1)',
-            },
-          },
-        ],
-      },
-
-      {
-        type: 'gauge',
-        center: ['49.5%', '30%'],
-        emphasis: { disabled: true },
-
-        radius: '20%',
-        startAngle: 0,
-        endAngle: 360,
-
-        splitLine: {
-          show: false,
-        },
-        axisTick: {
-          show: false,
-        },
-        axisLabel: {
-          show: false,
-          distance: 50,
-        },
-        axisLine: {
-          lineStyle: {
-            width: 2,
-            color: [
-              [
-                1,
-                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
-                  // {
-                  //   offset: 0,
-                  //   color: '#31AE97',
-                  // },
-                  {
-                    offset: 0.25,
-                    color: '#0CA4D0',
-                  },
-                  {
-                    offset: 0.5,
-                    color: '#F36364',
-                  },
-                  {
-                    offset: 0.75,
-                    color: '#2845E9',
-                  },
-                  {
-                    offset: 1,
-                    color: '#31AE97',
-                  },
-                ]),
-              ],
-            ],
-          },
-        },
-        pointer: {
-          show: false,
-        },
-        // detail: {
-        //   valueAnimation: true,
-        //   width: '100%',
-        //   lineHeight: 40,
-        //   offsetCenter: [0, 0],
-        //   fontSize: 34,
-        //   fontWeight: 'normal',
-        //   color: 'rgba(102, 255, 255, 1)',
-        //   formatter: '{b|总数}\n{value}{a|个}',
-        //   rich: {
-        //     a: {
-        //       fontSize: 18,
-        //     },
-        //     b: {
-        //       fontSize: 15,
-        //       color: '#fff',
-        //     },
-        //   },
-        // },
-        // data: [{
-        //   value: 89,
-        // },],
-      },
-    ],
+        ];
+      })
+      .flat(),
   };
+
   return (
     <>
       {/* <LabelsView
@@ -212,12 +142,16 @@ const Index = () => {
         style={{ marginBottom: 4 }}
       /> */}
       <HomeCard title="售中概况">
-        <Row style={{ height: '100%' }}>
+        <Row style={{ height: '100%', marginTop: 20 }}>
           <Col span={9}>
-            <MenuButton dataSource={typeOptions} onChange={() => {}} />
+            <MenuButton dataSource={typeOptions} onChange={setSelectKey} />
           </Col>
           <Col span={15}>
-            <Echarts5 style={{ height: '100%' }} option={option}></Echarts5>
+            <Echarts5
+              loading={loading}
+              style={{ height: '100%' }}
+              option={option}
+            ></Echarts5>
           </Col>
         </Row>
       </HomeCard>
