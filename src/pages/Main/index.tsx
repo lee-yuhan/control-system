@@ -10,12 +10,12 @@ import InSaleOverview from './components/InSaleOverview';
 import AfterSaleTrend from './components/AfterSaleTrend';
 import BaseLayout from '@/newLayouts';
 import { useDispatch, useRequest, useSelector } from 'umi';
-import { getBranchList, getGripList } from '@/service/commonServices';
 import { map } from 'lodash';
 import { useEffect } from 'react';
 import useInitialState from '@/hooks/useInitialState';
 import SaleMap from './components/SaleMap';
 import {
+  getBranchList,
   getHistoryAreaList,
   getHistoryChannelList,
   getHistoryTagList,

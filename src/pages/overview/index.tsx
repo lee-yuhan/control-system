@@ -49,22 +49,22 @@ const Index = () => {
   }, [params?.regionName]);
 
   const handleRequest = useCallback(async () => {
-    return;
     setLoading(true);
-    const res = await getList({
+    const resParams = {
       ...omit(params, 'dates'),
       start: params?.dates?.[0]?.clone(),
       end: params?.dates?.[1]?.clone(),
       page: pageInfo?.current,
       pageSize: pageInfo?.pageSize,
-    });
+    };
+    const res = await getList(resParams);
     setLoading(false);
 
     setPageInfo({
       ...pageInfo,
-      total: res?.total ?? (0 as any),
+      total: res?.data?.total ?? (0 as any),
     });
-    setList(res.data);
+    setList(res?.data?.records);
   }, [pageInfo.pageSize, params, pageInfo.current]);
 
   useEffect(() => {

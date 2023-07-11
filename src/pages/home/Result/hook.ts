@@ -20,9 +20,8 @@ export const useRequestAid = (mode: string) => {
     custType: '',
   });
 
-  const { branchName, regionName, latitude, gridName } = useSelector(
-    (store: any) => store.home,
-  );
+  const { branchName, regionName, latitude, gridName, step, date } =
+    useSelector((store: any) => store.home);
   const { data, run, loading } = useRequest(getLatitudeStatData, {
     manual: true,
   });
@@ -35,8 +34,19 @@ export const useRequestAid = (mode: string) => {
       latitude: latitude?.toString(),
       gridName,
       mode,
+      queryNum: step,
+      date,
     };
-  }, [branchName, params?.custType, gridName, regionName, latitude, mode]);
+  }, [
+    branchName,
+    step,
+    date,
+    params?.custType,
+    gridName,
+    regionName,
+    latitude,
+    mode,
+  ]);
 
   useDebounceEffect(
     () => {

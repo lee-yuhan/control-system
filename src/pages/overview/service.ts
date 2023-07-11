@@ -6,10 +6,11 @@ import { omit } from 'lodash';
 // import { IAvgScore, IAllCount, IGroupBy, IStoreList } from "./types";
 
 export type IListItem = typeof data;
-interface IList extends AjaxRes<IListItem[]> {
+interface IList {
+  records: IListItem[];
   total: number;
   current: number;
-  page_size: number;
+  size: number;
 }
 
 export const getList = (params: {
@@ -20,11 +21,13 @@ export const getList = (params: {
   regionName?: string;
   branchName?: string;
 }): Promise<IList> => {
-  return request(`${API_PREFIX}/kpi/score`, {
+  return request(`${API_PREFIX}/stat/rawData`, {
     params: {
-      ...omit(params, ['start', 'end']),
-      start: moment(params.start).format('YYYY-MM-DD'),
-      end: moment(params.end).format('YYYY-MM-DD'),
+      ...omit(params, ['start', 'end', 'pageSize', 'page']),
+      startDate: moment(params?.start)?.format('YYYY-MM-DD'),
+      size: params?.pageSize,
+      current: params?.page,
+      endDate: moment(params?.end)?.format('YYYY-MM-DD'),
     },
   });
 };

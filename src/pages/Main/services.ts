@@ -2,7 +2,21 @@ import { request } from 'umi';
 
 // 查询历史区域下拉列表
 export function getHistoryAreaList() {
-  return request(`${API_PREFIX}/selection/his_area`);
+  return request(`${API_PREFIX}/selection/his_area`, {
+    params: {
+      areaTpId: 1,
+    },
+  });
+}
+
+// 查询历史支局下拉列表
+export function getBranchList(regionName: string) {
+  return request(`${API_PREFIX}/selection/his_area`, {
+    params: {
+      areaTpId: 2,
+      regionName,
+    },
+  });
 }
 
 // 查询历史渠道名称下拉列表

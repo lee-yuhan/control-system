@@ -1,4 +1,5 @@
 import { request } from 'umi';
+import type { Moment } from 'moment';
 
 // 通用统计接口
 export function getLatitudeStatData(params: {
@@ -11,9 +12,14 @@ export function getLatitudeStatData(params: {
   mode: string;
   // 网格名称
   gridName: string;
+  date: Moment;
+  queryNum: number;
 }) {
   return request(`${API_PREFIX}/stat/latitude`, {
-    params,
+    params: {
+      ...params,
+      date: params?.date?.format('YYYY-MM-DD'),
+    },
   });
 }
 
