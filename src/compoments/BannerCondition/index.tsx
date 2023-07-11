@@ -122,6 +122,7 @@ const Index: FC<{
             >
               <Form.Item name="regionName">
                 <Select
+                  size="small"
                   style={{ width: 110 }}
                   placeholder="请选择区局"
                   options={districtBureauList}
@@ -151,9 +152,17 @@ const Index: FC<{
                 />
               </Form.Item>
               <Form.Item name="date">
-                <DatePicker allowClear={false} />
+                <DatePicker
+                  getPopupContainer={(triggerNode: any) => {
+                    return triggerNode.parentNode as HTMLElement;
+                  }}
+                  allowClear={false}
+                />
               </Form.Item>
-              <Form.Item name="latitude">
+              <Form.Item
+                name="latitude"
+                style={{ display: 'flex', alignItems: 'center' }}
+              >
                 <LabelsView
                   single
                   //   value={timeType}
@@ -163,6 +172,7 @@ const Index: FC<{
               </Form.Item>
               <Form.Item name="step" style={{ marginRight: 0 }}>
                 <Select
+                  size="middle"
                   style={{ width: 80 }}
                   options={Array(12)
                     .fill(null)

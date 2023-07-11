@@ -26,8 +26,12 @@ const Index: FC<{ mRef: any }> = ({ mRef }) => {
     useRequestAid('10');
 
   const { exRef, handleExport, beforeExport } = useStatExportAid(requestParams);
-
-  const [eRef, dRef] = useEchartClick(map(data, 'latitude'));
+  // mode:string,params: string,custType?:string
+  const [eRef, dRef] = useEchartClick({
+    mode: '10',
+    xAxisDatas: map(data, 'date'),
+    custType: params?.custType,
+  });
 
   useImperativeHandle(mRef, () => ({
     exportData: beforeExport,

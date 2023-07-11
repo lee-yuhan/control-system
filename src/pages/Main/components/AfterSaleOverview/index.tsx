@@ -8,6 +8,23 @@ import { getSumarryStat } from '../../services';
 import { useRequest, useSelector } from 'umi';
 import { useEffect, useMemo, useState } from 'react';
 
+const basicLegend = {
+  itemGap: 20,
+  textStyle: {
+    color: '#fff',
+    rich: {
+      a: {
+        fontSize: 18,
+        color: '#0DB1EE',
+      },
+      b: {
+        fontSize: 25,
+        color: '#67DDFF',
+      },
+    },
+  },
+};
+
 const Index = () => {
   const { branchName, regionName, gridName, channelName, tagName } =
     useSelector((store: any) => store.main);
@@ -35,49 +52,45 @@ const Index = () => {
       top: 40,
       height: 180,
     },
-    legend: {
-      top: 250,
-      itemGap: 20,
-      formatter: (name: string) => {
-        const [name1, value] = name?.split('_');
 
-        return `{a| ${name1}}` + `{b| ${value}}`;
-        //  'Legend ' + name1 + value;
-      },
-      textStyle: {
-        color: '#fff',
-        rich: {
-          a: {
-            fontSize: 18,
-            color: '#0DB1EE',
-          },
-          b: {
-            fontSize: 25,
-            color: '#67DDFF',
-          },
+    legend: [
+      {
+        ...basicLegend,
+        bottom: 120,
+        left: 20,
+        data: ['宽带'],
+        itemStyle: {
+          color: '#2845E9',
+        },
+        formatter: (name: string) => {
+          return `{a| ${name}}` + `{b| ${data?.[currSelectItem!.key1] ?? 0}}`;
         },
       },
-      data: [
-        {
-          name: `宽带_${data?.[currSelectItem!.key1] ?? 0}`,
-          itemStyle: {
-            color: '#2845E9',
-          },
+      {
+        ...basicLegend,
+        bottom: 120,
+        left: '55%',
+        data: ['语音'],
+        itemStyle: {
+          color: '#3DD7B1',
         },
-        {
-          name: `语音_${data?.[currSelectItem!.key2] ?? 0}`,
-          itemStyle: {
-            color: '#3DD7B1',
-          },
+        formatter: (name: string) => {
+          return `{a| ${name}}` + `{b| ${data?.[currSelectItem!.key2] ?? 0}}`;
         },
-        {
-          name: `IPTV_${data?.[currSelectItem!.key3] ?? 0}`,
-          itemStyle: {
-            color: '#0CA4D0',
-          },
+      },
+      {
+        ...basicLegend,
+        bottom: 70,
+        left: 20,
+        data: ['IPTV'],
+        itemStyle: {
+          color: '#0CA4D0',
         },
-      ],
-    },
+        formatter: (name: string) => {
+          return `{a| ${name}}` + `{b| ${data?.[currSelectItem!.key3] ?? 0}}`;
+        },
+      },
+    ],
 
     xAxis: {
       type: 'value',
@@ -100,11 +113,11 @@ const Index = () => {
       },
       type: 'category',
       // show:false,
-      data: ['宽带'],
+      data: ['值'],
     },
     series: [
       {
-        name: `宽带_${data?.[currSelectItem!.key1] ?? 0}`,
+        name: '宽带',
         type: 'bar',
         data: [data?.[currSelectItem!.key1] ?? 0],
         barWidth: 18,
@@ -123,7 +136,7 @@ const Index = () => {
         },
       },
       {
-        name: `语音_${data?.[currSelectItem!.key2] ?? 0}`,
+        name: '语音',
         type: 'bar',
         barWidth: 18,
         barGap: 2,
@@ -144,7 +157,7 @@ const Index = () => {
         },
       },
       {
-        name: `IPTV_${data?.[currSelectItem!.key3] ?? 0}`,
+        name: 'IPTV',
         type: 'bar',
         barWidth: 18,
         data: [data?.[currSelectItem!.key3] ?? 0],

@@ -10,6 +10,24 @@ import { typeOptions } from './config';
 import { useRequest, useSelector } from 'umi';
 import { getSumarryStat } from '../../services';
 
+const basicLegend = {
+  itemGap: 20,
+  textStyle: {
+    color: '#fff',
+    rich: {
+      a: {
+        fontSize: 18,
+        color: '#0DB1EE',
+      },
+      b: {
+        fontSize: 25,
+        color: '#67DDFF',
+        width: 80,
+      },
+    },
+  },
+};
+
 const Index = () => {
   const { branchName, regionName, gridName, channelName, tagName } =
     useSelector((store: any) => store.main);
@@ -49,29 +67,28 @@ const Index = () => {
         data: [
           {
             value: data?.[currSelectItem!.key1] ?? 0,
-            name: `装_${data?.[currSelectItem!.key1] ?? 0}`,
+            name: '装',
             itemStyle: {
               color: 'rgba(40, 69, 233, 1)',
             },
           },
           {
             value: data?.[currSelectItem!.key2] ?? 0,
-            name: `拆_${data?.[currSelectItem!.key2] ?? 0}`,
-
+            name: '拆',
             itemStyle: {
               color: 'rgba(61, 215, 177, 1)',
             },
           },
           {
             value: data?.[currSelectItem!.key3] ?? 0,
-            name: `移_${data?.[currSelectItem!.key3] ?? 0}`,
+            name: '移',
             itemStyle: {
               color: 'rgba(12, 164, 208, 1)',
             },
           },
           {
             value: data?.[currSelectItem!.key4] ?? 0,
-            name: `改_${data?.[currSelectItem!.key4] ?? 0}`,
+            name: '改',
             itemStyle: {
               color: 'rgba(245, 100, 100,1)',
             },
@@ -85,29 +102,39 @@ const Index = () => {
     animation: false,
     legend: [
       {
-        bottom: 50,
-        width: 280,
-        itemGap: 30,
-        // data:[`装_${data?.[currSelectItem!.key1] ?? 0}`],
+        ...basicLegend,
+        bottom: 100,
+        left: 10,
+        data: ['装'],
         formatter: (name: string) => {
-          const [name1, value] = name?.split('_');
-
-          return `{a| ${name1}}` + `{b| ${value}}`;
-          //  'Legend ' + name1 + value;
+          return `{a| ${name}}` + `{b| ${data?.[currSelectItem!.key1] ?? 0}}`;
         },
-        textStyle: {
-          color: '#fff',
-          rich: {
-            a: {
-              fontSize: 18,
-              color: '#0DB1EE',
-            },
-            b: {
-              fontSize: 25,
-              color: '#67DDFF',
-              width: 100,
-            },
-          },
+      },
+      {
+        ...basicLegend,
+        bottom: 100,
+        left: '55%',
+        data: ['拆'],
+        formatter: (name: string) => {
+          return `{a| ${name}}` + `{b| ${data?.[currSelectItem!.key2] ?? 0}}`;
+        },
+      },
+      {
+        ...basicLegend,
+        bottom: 50,
+        left: 10,
+        data: ['移'],
+        formatter: (name: string) => {
+          return `{a| ${name}}` + `{b| ${data?.[currSelectItem!.key3] ?? 0}}`;
+        },
+      },
+      {
+        ...basicLegend,
+        bottom: 50,
+        left: '55%',
+        data: ['改'],
+        formatter: (name: string) => {
+          return `{a| ${name}}` + `{b| ${data?.[currSelectItem!.key4] ?? 0}}`;
         },
       },
     ],

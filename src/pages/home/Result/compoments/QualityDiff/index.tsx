@@ -16,10 +16,16 @@ import { getLocalStorageTheme } from '@/utils/theme';
 import { baseConfig, satisfactionNameMap } from '../../config';
 import { map, merge } from 'lodash';
 import * as echarts from 'echarts';
-import { useEchartMouseAid, useRequestAid, useStatExportAid } from '../../hook';
+import {
+  useEchartClick,
+  useEchartMouseAid,
+  useRequestAid,
+  useStatExportAid,
+} from '../../hook';
 import moment from 'moment';
 import { Button } from 'antd';
 import ExportTypeModal from '../ExportTypeModal';
+import DetailModal from '../DetailModal';
 
 const Index = () => {
   const [tabValue, setTabValue] =
@@ -119,6 +125,15 @@ const Index = () => {
 
   useEchartMouseAid(mRef, option, lineIcon4, lineIcon2);
 
+  const [_, dRef] = useEchartClick(
+    {
+      mode: tabValue,
+      xAxisDatas: map(data, 'date'),
+      custType: params?.custType,
+    },
+    mRef,
+  );
+
   return (
     <CardWrapper
       loading={loading}
@@ -154,6 +169,7 @@ const Index = () => {
       </div>
 
       <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
+      <DetailModal mRef={dRef} />
     </CardWrapper>
   );
 };

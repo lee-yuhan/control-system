@@ -19,6 +19,7 @@
   // background-image: var(--banner-img);
   background-repeat: no-repeat;
   background-size: 100%;
+
   .left {
     .condition-title {
       font-size: 40px;
@@ -37,5 +38,45 @@
       }
     }
   }
+
+  .ant-picker {
+    background-color: var(--select-bg);
+    border: 0;
+    height: 40px;
+    line-height: 40px;
+    .ant-picker-input > input {
+      color: var(--text-color3) !important;
+    }
+  }
+
+  .ant-picker-panel {
+    background-color: var(--background-color2) !important;
+
+    .ant-picker-header {
+      color: var(--text-color2) !important;
+
+      button {
+        color: var(--text-color2) !important;
+      }
+    }
+
+    .ant-picker-cell {
+      color: var(--text-color3) !important;
+
+      &.ant-picker-cell-disabled {
+        background-color: #cdcdcd6f !important;
+        color: rgba(0, 0, 0, 0.68) !important;
+
+        &::before {
+          background: transparent !important;
+        }
+      }
+    }
+
+    .ant-picker-content th {
+      color: var(--text-color2) !important;
+    }
+  }
+
   // }
 }

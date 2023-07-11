@@ -12,9 +12,10 @@ import lineIcon3 from '../../../../../assets/icon_line3.png';
 import { useSelector } from 'umi';
 import { getLocalStorageTheme } from '@/utils/theme';
 import { baseConfig, satisfactionNameMap } from '../../config';
-import { useRequestAid, useStatExportAid } from '../../hook';
+import { useEchartClick, useRequestAid, useStatExportAid } from '../../hook';
 import { Spin } from 'antd';
 import ExportTypeModal from '../ExportTypeModal';
+import DetailModal from '../DetailModal';
 const Index: FC<{
   mRef: any;
 }> = ({ mRef }) => {
@@ -30,6 +31,12 @@ const Index: FC<{
     useRequestAid(tabValue);
 
   const { exRef, handleExport, beforeExport } = useStatExportAid(requestParams);
+
+  const [eRef, dRef] = useEchartClick({
+    mode: tabValue,
+    xAxisDatas: map(data, 'date'),
+    custType: params?.custType,
+  });
 
   useImperativeHandle(mRef, () => ({
     exportData: beforeExport,
@@ -124,9 +131,11 @@ const Index: FC<{
         onValuesChange={setParams}
       />
       <div style={{ flex: 1 }}>
-        <Echarts5 option={option} style={{ height: '100%' }} />
+        <Echarts5 ref={eRef} option={option} style={{ height: '100%' }} />
       </div>
       <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
+
+      <DetailModal mRef={dRef} />
     </Spin>
   );
 };

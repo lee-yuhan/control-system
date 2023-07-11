@@ -1,4 +1,4 @@
-import { useDebounceEffect, useSize } from 'ahooks';
+import { useDebounceEffect, useMount, useSize } from 'ahooks';
 import {
   useCallback,
   useEffect,
@@ -179,25 +179,30 @@ export const useEchartHeightAid = () => {
   return { height, dRef };
 };
 
-export const useEchartClick = (xAxisDatas: any) => {
+export const useEchartClick = (
+  params: {
+    mode: string;
+    xAxisDatas: string[];
+    custType: string;
+  },
+  ref?: any,
+) => {
+  const { xAxisDatas, custType, mode } = params;
   const mRef = useRef<any>();
   const dRef = useRef<any>();
-  console.log('1113', xAxisDatas);
 
   const handleClick = useCallback(
     (xIndex: number) => {
       const r = xAxisDatas?.[xIndex];
-      console.log('!11', r);
-
+      // mode: string, params: string, custType?: string
       // const [start, end] = r.split('-');
-      dRef?.current?.showModal(r);
+      dRef?.current?.showModal(mode, r, custType);
     },
-    [xAxisDatas],
+    [xAxisDatas, custType, mode],
   );
-  const inst = mRef.current;
-
-  console.log('inst?.getZr()', inst?.getZr());
+  const inst = (ref ?? mRef)?.current;
 
   addClickEvent(inst, handleClick);
+
   return [mRef, dRef];
 };

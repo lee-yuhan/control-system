@@ -90,7 +90,18 @@ const Index = () => {
         style={{ marginBottom: 4 }}
       /> */}
       <HomeCard
-        title="区局总评分排名"
+        title={
+          <span
+            style={{
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              window.open(`${window.location.origin}/home`);
+            }}
+          >
+            区局总评分排名
+          </span>
+        }
         style={{
           backgroundImage: `url(${bg})`,
         }}

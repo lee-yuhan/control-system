@@ -15,10 +15,16 @@ import { useSelector } from 'umi';
 import * as echarts from 'echarts';
 import { map, merge } from 'lodash';
 import { baseConfig, satisfactionNameMap } from '../../config';
-import { useEchartMouseAid, useRequestAid, useStatExportAid } from '../../hook';
+import {
+  useEchartClick,
+  useEchartMouseAid,
+  useRequestAid,
+  useStatExportAid,
+} from '../../hook';
 import { Button } from 'antd';
 import { useEventListener } from 'ahooks';
 import ExportTypeModal from '../ExportTypeModal';
+import DetailModal from '../DetailModal';
 
 const Index = () => {
   const [tabValue, setTabValue] =
@@ -133,6 +139,15 @@ const Index = () => {
 
   useEchartMouseAid(mRef, option, lineIcon1, lineIcon2);
 
+  const [_, dRef] = useEchartClick(
+    {
+      mode: tabValue,
+      xAxisDatas: map(data, 'date'),
+      custType: params?.custType,
+    },
+    mRef,
+  );
+
   return (
     <CardWrapper
       loading={loading}
@@ -171,6 +186,7 @@ const Index = () => {
         <Echarts5 ref={mRef} option={option} style={{ height: '100%' }} />
         <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
       </div>
+      <DetailModal mRef={dRef} />
     </CardWrapper>
   );
 };

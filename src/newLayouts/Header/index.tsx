@@ -65,14 +65,7 @@ export default ({ theme, onThemeChange }: Props) => {
           </div>
         </Col>
       </Row>
-      <div
-        className="header-title"
-        onClick={() => {
-          window.open(`${window.location.origin}/home`);
-        }}
-      >
-        {SYSTEM_NAME}
-      </div>
+      <div className="header-title">{SYSTEM_NAME}</div>
     </div>
   );
 };

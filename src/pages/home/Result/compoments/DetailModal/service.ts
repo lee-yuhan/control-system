@@ -1,7 +1,13 @@
 import { request } from 'umi';
+import type { Moment } from 'moment';
 
-export const getDetailData = (params: any) => {
-  return request(`${API_PREFIX}/x`, {
+export const getDetailData = (params: {
+  custType?: string;
+  date: string;
+  latitude: string;
+  mode: string;
+}) => {
+  return request(`${API_PREFIX}/stat/branch_contrast`, {
     params,
   });
 };

@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import './index.less';
 
 const Index: FC<{
-  title: string;
+  title: React.ReactElement | string;
   children: React.ReactElement;
   style?: React.CSSProperties;
   hiddenSelect?: boolean;

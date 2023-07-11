@@ -15,9 +15,15 @@ import lineIcon1 from '../../../../../assets/icon_line1.png';
 import lineIcon2 from '../../../../../assets/icon_line2.png';
 import legendIcon3 from '../../../../../assets/icon_legend3.png';
 import legendIcon5 from '../../../../../assets/icon_legend5.png';
-import { useEchartMouseAid, useRequestAid, useStatExportAid } from '../../hook';
+import {
+  useEchartClick,
+  useEchartMouseAid,
+  useRequestAid,
+  useStatExportAid,
+} from '../../hook';
 import { Button } from 'antd';
 import ExportTypeModal from '../ExportTypeModal';
+import DetailModal from '../DetailModal';
 
 const Index = () => {
   const [tabValue, setTabValue] = useState<string>('4');
@@ -34,7 +40,14 @@ const Index = () => {
     useRequestAid(tabValue);
 
   const { exRef, handleExport, beforeExport } = useStatExportAid(requestParams);
-
+  const [_, dRef] = useEchartClick(
+    {
+      mode: tabValue,
+      xAxisDatas: map(data, 'date'),
+      custType: params?.custType,
+    },
+    mRef,
+  );
   const option = useMemo(() => {
     return merge({}, baseConfig, {
       legend: {
@@ -164,6 +177,7 @@ const Index = () => {
         <Echarts5 ref={mRef} option={option} style={{ height: '100%' }} />
       </div>
       <ExportTypeModal mRef={exRef} onConfirm={handleExport} />
+      <DetailModal mRef={dRef} />
     </CardWrapper>
   );
 };
