@@ -80,40 +80,43 @@ const Index = () => {
         // fixed: 'left',
       },
       {
+        title: '支局',
+        dataIndex: 'branchName',
+        width: 100,
+        // fixed: 'left',
+      },
+      {
         title: '日期',
         dataIndex: 'batch',
         width: 150,
         // fixed: 'left',
       },
       {
-        title: '质差工单数',
-        dataIndex: 'zcAllnum',
+        title: '装维10分满意工单数',
+        dataIndex: 'zw10myNum',
       },
       {
-        title: '质差上门工单数',
-        dataIndex: 'zcSmNum',
-      },
-      {
-        title: '重复维修数',
-        dataIndex: 'wxCfwxNum',
-      },
-      {
-        title: '重复维修总数',
-        dataIndex: 'wxCfwxAllnum',
-      },
-
-      {
-        title: '总评分',
-        dataIndex: 'allScore2',
+        title: '装维1-3分满意工单数',
+        dataIndex: 'zw13myNum',
       },
       {
         title: '装维参评工单数',
         dataIndex: 'zwCpAllnum',
       },
+
+      {
+        title: '质差上门工单数',
+        dataIndex: 'zcSmNum',
+      },
+      {
+        title: '质差工单数',
+        dataIndex: 'zcAllnum',
+      },
       {
         title: '质差10分满意工单数',
         dataIndex: 'zc10myNum',
       },
+
       {
         title: '质差参评工单数',
         dataIndex: 'zcCpAllnum',
@@ -121,6 +124,26 @@ const Index = () => {
       {
         title: '政企维修履约数',
         dataIndex: 'wxZqLyNum',
+      },
+      {
+        title: '政企维修履约总数',
+        dataIndex: 'wxZqLyAllnum',
+      },
+      {
+        title: '公客维修履约数',
+        dataIndex: 'wxGkLyNum',
+      },
+      {
+        title: '公客维修履约总数',
+        dataIndex: 'wxGkLyAllnum',
+      },
+      {
+        title: '政企维修改约数',
+        dataIndex: 'wxZqGyNum',
+      },
+      {
+        title: '政企维修改约总数',
+        dataIndex: 'wxZqGyAllnum',
       },
 
       {
@@ -160,6 +183,7 @@ const Index = () => {
         title: '政企安装改约总数',
         dataIndex: 'azZqGyAllnum',
       },
+
       {
         title: '公客安装改约数',
         dataIndex: 'azGkGyNum',
@@ -167,6 +191,19 @@ const Index = () => {
       {
         title: '公客安装改约总数',
         dataIndex: 'azGkGyAllnum',
+      },
+      {
+        title: '重复维修数',
+        dataIndex: 'wxCfwxNum',
+      },
+      {
+        title: '重复维修总数',
+        dataIndex: 'wxCfwxAllnum',
+      },
+
+      {
+        title: '总评分',
+        dataIndex: 'allScore2',
       },
 
       {

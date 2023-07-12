@@ -156,6 +156,7 @@ const Index = () => {
                 suffixIcon={<CaretDownOutlined />}
                 placeholder="支局"
                 options={branchList}
+                allowClear
                 showSearch
                 popupMatchSelectWidth={false}
                 value={branchName}
