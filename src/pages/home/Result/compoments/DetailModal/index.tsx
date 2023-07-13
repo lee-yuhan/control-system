@@ -26,6 +26,8 @@ const Index: FC<{
     date: any;
     latitude: any;
     mode: string;
+    branchName: string;
+    regionName: string;
   }>();
   const { branchName, regionName, latitude } = useSelector(
     (store: any) => store.home,
@@ -37,6 +39,8 @@ const Index: FC<{
         date,
         latitude: latitude?.toString(),
         mode,
+        branchName,
+        regionName,
       };
 
       setDateStr(date);

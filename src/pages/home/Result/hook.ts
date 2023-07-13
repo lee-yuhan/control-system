@@ -9,7 +9,7 @@ import {
 } from 'react';
 import { useRequest, useSelector } from 'umi';
 import { getLatitudeStatData } from './service';
-import { cloneDeep, isNaN, isNil } from 'lodash';
+import { cloneDeep, isNaN, isNil, omit } from 'lodash';
 import qs from 'qs';
 import { IExportType } from './compoments/ExportTypeModal';
 import cookie from 'react-cookies';
@@ -65,7 +65,8 @@ export const useStatExportAid = (params: any) => {
 
   const formatParams = useMemo(() => {
     return {
-      ...params,
+      ...omit(params, 'date'),
+      date: params?.date?.format('YYYY-MM-DD'),
       latitude: params?.latitude?.toString(),
       token: cookie.load('AuthToken'),
     };

@@ -1,7 +1,6 @@
 import { Col, Row } from 'antd';
 import InstallQuality from './compoments/InstallQuality';
 import QualityDiff from './compoments/QualityDiff';
-import QualityInspection from './compoments/QualityInspection';
 import RepetitionRate from './compoments/RepetitionRate';
 import AssemblyMaintenanceQuality from './compoments/AssemblyMaintenanceQuality';
 import SatisfactionRate from './compoments/SatisfactionRate';
@@ -9,6 +8,7 @@ import { useLoginRecordAid } from '../hooks';
 import { useMemo, useState } from 'react';
 import { useEventListener } from 'ahooks';
 import './index.less';
+import FailureRank from './compoments/FailureRank';
 
 const Index = () => {
   // 记录
@@ -49,7 +49,7 @@ const Index = () => {
           <QualityDiff />
         </Col>
         <Col span={8}>
-          <QualityInspection />
+          <FailureRank />
         </Col>
         <Col span={8}>
           <RepetitionRate />

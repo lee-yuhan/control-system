@@ -6,6 +6,8 @@ export const getDetailData = (params: {
   date: string;
   latitude: string;
   mode: string;
+  branchName?: string;
+  regionName?: string;
 }) => {
   return request(`${API_PREFIX}/stat/branch_contrast`, {
     params,

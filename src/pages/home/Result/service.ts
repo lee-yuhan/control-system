@@ -87,3 +87,10 @@ export const getRankData = (params: any) => {
     params,
   });
 };
+
+// 查询安装故障率排名
+export const getFailureRankData = (params: any) => {
+  return request(`${API_PREFIX}/stat/az_failure_rank`, {
+    params,
+  });
+};

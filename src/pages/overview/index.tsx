@@ -77,19 +77,16 @@ const Index = () => {
         title: '区域',
         dataIndex: 'regionName',
         width: 100,
-        // fixed: 'left',
       },
       {
         title: '支局',
         dataIndex: 'branchName',
         width: 100,
-        // fixed: 'left',
       },
       {
         title: '日期',
         dataIndex: 'batch',
         width: 150,
-        // fixed: 'left',
       },
       {
         title: '装维10分满意工单数',
@@ -200,16 +197,24 @@ const Index = () => {
         title: '重复维修总数',
         dataIndex: 'wxCfwxAllnum',
       },
-
-      {
-        title: '总评分',
-        dataIndex: 'allScore2',
-      },
-
+      // {
+      //   title: '安装局方原因退单数',
+      //   dataIndex: 'azTdAllnum',
+      // },
       {
         title: '安装有原因退单总数',
         dataIndex: 'azTdAllnum',
       },
+
+      // {
+      //   title: '安装工单总数',
+      //   dataIndex: 'azTdAllnum',
+      // },
+      {
+        title: '安装有原因退单总数',
+        dataIndex: 'azTdAllnum',
+      },
+
       {
         title: '装维10分满意度',
         dataIndex: 'zw10myRate',
@@ -233,6 +238,7 @@ const Index = () => {
         title: '质差修复评分',
         dataIndex: 'zcScore',
       },
+
       {
         title: '公客维修履约率',
         dataIndex: 'wxGkLyRate',
@@ -250,9 +256,144 @@ const Index = () => {
         title: '政企维修改约率',
         dataIndex: 'wxZqGyRate',
       },
+
+      {
+        title: '公客安装履约率',
+        dataIndex: 'azGkLyRate',
+      },
+
+      {
+        title: '政企安装履约率',
+        dataIndex: 'azZqLyRate',
+      },
+      {
+        title: '公客安装改约率',
+        dataIndex: 'azGkGyRate',
+      },
+      {
+        title: '政企安装改约率',
+        dataIndex: 'azZqGyRate',
+      },
+
+      {
+        title: '局方原因退单率',
+        dataIndex: 'azTdRate',
+      },
+      {
+        title: '装维日常工作评分',
+        dataIndex: 'zwScore',
+      },
+      {
+        title: '重复维修率',
+        dataIndex: 'wxCfwxRate',
+      },
+
+      {
+        title: '装维其他指标评分',
+        dataIndex: 'zwOtherScore',
+      },
+      {
+        title: '质量评分',
+        dataIndex: 'allScore1',
+      },
+      {
+        title: '质量排名',
+        dataIndex: 'allRanking1',
+      },
+      {
+        title: '装维1-3分占比',
+        dataIndex: 'zw13myRate',
+      },
+      // {
+      //   title: '装维1-3分扣分',
+      //   dataIndex: 'allRanking1',
+      // },
+
+      {
+        title: '总评分',
+        dataIndex: 'allScore2',
+      },
+      {
+        title: '最终排名',
+        dataIndex: 'allRanking2',
+      },
+      // {
+      //   title: '装维不是10分满意工单汇总',
+      //   dataIndex: 'allRanking2',
+      // },
+      {
+        title: '装维1-3分满意工单汇总',
+        dataIndex: 'zw13myGd',
+        width: 200,
+      },
+      {
+        title: '质差没有上门工单汇总',
+        dataIndex: 'zcNoSmGd',
+        width: 200,
+      },
+
+      {
+        title: '质差不是10分满意工单汇总',
+        dataIndex: 'zcNo10myGd',
+        width: 200,
+      },
+      {
+        title: '政企维修没有履约工单汇总',
+        dataIndex: 'wxZqNoLyGd',
+        width: 200,
+      },
+
+      {
+        title: '公客维修没有履约工单汇总',
+        dataIndex: 'wxGkNoLyGd',
+        width: 200,
+      },
+      {
+        title: '政企维修改约工单汇总',
+        dataIndex: 'wxZqGyGd',
+        width: 200,
+      },
+
+      {
+        title: '公客维修改约工单汇总',
+        dataIndex: 'wxGkGyGd',
+        width: 200,
+      },
+      {
+        title: '政企安装没有履约工单汇总',
+        dataIndex: 'azZqNoLyGd',
+        width: 200,
+      },
+
+      {
+        title: '公客安装没有履约工单汇总',
+        dataIndex: 'azGkNoLyGd',
+        width: 200,
+      },
+      {
+        title: '政企安装改约工单汇总',
+        dataIndex: 'azZqGyGd',
+        width: 200,
+      },
+
+      {
+        title: '公客安装改约工单汇总',
+        dataIndex: 'azGkGyGd',
+        width: 200,
+      },
+      {
+        title: '重复维修工单汇总',
+        dataIndex: 'wxCfwxGd',
+        width: 200,
+      },
+      {
+        title: '安装局方原因退单工单汇总',
+        dataIndex: 'azTdGd',
+        width: 200,
+      },
     ].map((item) => ({
       render: (value: string) => {
-        return value ?? '-';
+        return value || '-';
       },
       ...item,
     }));
