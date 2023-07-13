@@ -107,7 +107,7 @@ const Index: FC<{
           setParams(allValue);
         }}
       >
-        <Form.Item style={{ marginRight: 0 }} name="custType">
+        <Form.Item name="custType">
           <Select
             placeholder="请选择客户类型"
             style={{ minWidth: 120 }}

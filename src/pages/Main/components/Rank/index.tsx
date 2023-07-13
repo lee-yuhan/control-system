@@ -1,6 +1,6 @@
 import { Echarts5 } from '@/compoments/Echarts5';
 import HomeCard from '@/compoments/HomeCard';
-import { random } from 'lodash';
+import { orderBy, random } from 'lodash';
 import { useMemo } from 'react';
 import './index.less';
 import * as echarts from 'echarts';
@@ -72,9 +72,13 @@ const Index = () => {
             ]),
           },
 
-          data: Array(13)
-            .fill(null)
-            .map((item) => random(100, 500)),
+          data: orderBy(
+            Array(13)
+              .fill(null)
+              .map((item) => random(0, 100)),
+            (item) => item,
+            ['desc'],
+          ),
         },
       ],
     };

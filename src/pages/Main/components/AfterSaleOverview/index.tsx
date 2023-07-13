@@ -40,11 +40,11 @@ const Index = () => {
     if (!regionName) return;
     run({
       appId: 2,
-      areaName: regionName,
+      areaName: branchName || regionName,
       channelName,
       tagName,
     });
-  }, [regionName, channelName, tagName]);
+  }, [regionName, branchName, channelName, tagName]);
 
   const option = {
     grid: {

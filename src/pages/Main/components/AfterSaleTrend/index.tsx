@@ -31,12 +31,12 @@ const Index = () => {
 
     run({
       appId: 4,
-      areaName: regionName,
+      areaName: branchName || regionName,
       channelName,
       latitude: latitude?.[0], // 纬度 0：日纬度/1：周维度/2：月纬度
       tagName,
     });
-  }, [regionName, channelName, latitude, tagName]);
+  }, [regionName, branchName, channelName, latitude, tagName]);
   const baseSeries = useMemo(() => {
     return [
       // 绿色
