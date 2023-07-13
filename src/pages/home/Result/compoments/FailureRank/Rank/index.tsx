@@ -53,7 +53,8 @@ const Index: FC<{
 
   useImperativeHandle(mRef, () => ({
     exportData: () => {
-      exRef?.current?.showModal();
+      // exRef?.current?.showModal();
+      handleExport('ECHART_DATA');
     },
   }));
 
@@ -72,24 +73,24 @@ const Index: FC<{
 
   const handleExport = useCallback(
     (exportType: IExportType) => {
-      if (exportType === 'ECHART_DATA') {
-        window.open(
-          `${API_PREFIX}/stat/rankExport?${qs.stringify({
-            ...requestParams,
-            type: 4,
-          })}`,
-        );
-      } else {
-        // const resParams = {
-        //   latitude: params?.latitude?.toString(),
-        //   mode: '7',
-        //   custType: params?.custType,
-        //   token: cookie.load('AuthToken'),
-        // } as any;
-        // window.open(
-        //   `${API_PREFIX}/stat/infoDetailExport?${qs.stringify(resParams)}`,
-        // );
-      }
+      // if (exportType === 'ECHART_DATA') {
+      window.open(
+        `${API_PREFIX}/stat/rankExport?${qs.stringify({
+          ...requestParams,
+          type: 4,
+        })}`,
+      );
+      // } else {
+      // const resParams = {
+      //   latitude: params?.latitude?.toString(),
+      //   mode: '7',
+      //   custType: params?.custType,
+      //   token: cookie.load('AuthToken'),
+      // } as any;
+      // window.open(
+      //   `${API_PREFIX}/stat/infoDetailExport?${qs.stringify(resParams)}`,
+      // );
+      // }
     },
     [requestParams, params?.custType, params?.latitude],
   );
